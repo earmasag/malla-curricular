@@ -34,15 +34,24 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
     const isAprobada = estado === "aprobada";
 
     // Obtenemos el color desde nuestro Diccionario usando la llave `areaFormacion`
-    const colorArea = areasColorMap[areaFormacion] || "#bfdbfe"; // "#bfdbfe" es un fallback (azul claro) por defecto
+    const colorArea = areasColorMap[areaFormacion] || "#bfdbfe";
 
-    // El color final va a depender del estado. 
-    // Si queremos preservar el color del área en materias activas usamos `colorArea`.
-    const currentHexColor = isBloqueada ? "#e5e7eb" : isAprobada ? "#dcfce7" : colorArea;
+    // Mantenemos siempre el color del área para los bordes y acentos
+    const currentHexColor = colorArea;
+
+    // Colores del fondo principal del texto
+    const innerBgClass = isAprobada ? "bg-green-50" : "bg-white";
+
+    // Si está bloqueada, le aplicamos una grilla con CSS lineal
+    const gridStyle = isBloqueada ? {
+        backgroundImage: 'linear-gradient(to right, #9ca3af 1px, transparent 1px), linear-gradient(to bottom, #9ca3af 1px, transparent 1px)',
+        backgroundSize: '10px 10px',
+        backgroundColor: '#f3f4f6' // Cambiamos el fondo a un gris un poco más oscuro (gray-100) para que contraste mejor
+    } : {};
 
     // Clases complementarias
     const textClass = isBloqueada ? "text-gray-500" : "text-black";
-    const opacityClass = isBloqueada ? "opacity-60 grayscale filter" : "opacity-100";
+    const opacityClass = isBloqueada ? "opacity-50" : "opacity-100";
 
     return (
         <div
@@ -51,17 +60,20 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
             style={{ backgroundColor: currentHexColor, borderColor: currentHexColor }}
         >
 
-            {/* Cuadro principal blanco */}
-            <div className="absolute left-5 right-1 top-0 bottom-0 flex flex-col bg-white items-start justify-start pr-0 rounded-br-[18px]">
+            {/* Cuadro principal blanco o con grilla */}
+            <div
+                className={`absolute left-5 right-1 top-0 bottom-0 flex flex-col ${innerBgClass} items-start justify-start pr-0 rounded-br-[18px]`}
+                style={gridStyle}
+            >
                 <p
-                    className={`absolute top-1 left-2 right-0 text-left ${textClass} font-bold text-[13px] uppercase leading-tight line-clamp-3 wrap-break-words`}
-                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.5px", lineHeight: "1.1" }}
+                    className={`absolute top-2 left-2 right-0 text-left ${textClass} font-bold text-[12px] uppercase leading-tight line-clamp-3 wrap-break-words`}
+                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "0.5px", lineHeight: "1.1" }}
                 >
                     {nombre}
                 </p>
                 <p
                     className={`absolute bottom-5 left-2 right-0 text-left text-gray-700 font-bold text-[11px] uppercase`}
-                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "0px" }}
+                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.5px" }}
                 >
                     {codigoMateria}
                 </p>

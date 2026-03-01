@@ -36,11 +36,8 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
     // Obtenemos el color desde nuestro Diccionario usando la llave `areaFormacion`
     const colorArea = areasColorMap[areaFormacion] || "#bfdbfe";
 
-    // Mantenemos siempre el color del área para los bordes y acentos
+    // Colores del borde y acento basados puramente en su estado
     const currentHexColor = colorArea;
-
-    // Colores del fondo principal del texto
-    const innerBgClass = isAprobada ? "bg-green-50" : "bg-white";
 
     // Si está bloqueada, le aplicamos una grilla con CSS lineal
     const gridStyle = isBloqueada ? {
@@ -62,7 +59,7 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
 
             {/* Cuadro principal blanco o con grilla */}
             <div
-                className={`absolute left-5 right-1 top-0 bottom-0 flex flex-col ${innerBgClass} items-start justify-start pr-0 rounded-br-[18px]`}
+                className={`absolute left-5 right-1 top-0 bottom-0 flex flex-col bg-white items-start justify-start pr-0 rounded-br-[18px]`}
                 style={gridStyle}
             >
                 <p
@@ -109,7 +106,7 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
                 <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasTotales}
                 </div>
-                <div className={`flex items-center justify-center w-10 h-[16px] bg-white text-[10px] font-semibold ${textClass}`}>
+                <div className={`flex items-center justify-center w-10 h-[16px] bg-white text-[12px] font-semibold ${textClass}`}>
                     {taxonomia}
                 </div>
             </div>
@@ -121,6 +118,13 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
             >
                 {unidadesCredito}
             </div>
+
+            {/* Sello de Aprobado (Círculo verde hueco superpuesto) */}
+            {isAprobada && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30 overflow-hidden rounded-br-[18px]">
+                    <div className="size-18 rounded-full border-8 border-green-500 opacity-40"></div>
+                </div>
+            )}
 
         </div>
     );

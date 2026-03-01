@@ -16,20 +16,62 @@ const calcularUCAcumuladas = (progreso: ProgresoMalla, grafo: MallaCurricularGra
     return total;
 };
 
+// Función pura que reevalúa toda la malla hasta estabilizar todos los bloqueos y desbloqueos
+const evaluarMalla = (progresoBase: ProgresoMalla, grafo: MallaCurricularGraph): ProgresoMalla => {
+    const nuevoProgreso = { ...progresoBase };
+    let cambiado = true;
+
+    // Repetimos hasta que ningún estado cambie (efecto dominó global)
+    while (cambiado) {
+        cambiado = false;
+        const ucActual = calcularUCAcumuladas(nuevoProgreso, grafo);
+
+        for (const materia of grafo.getAllNodes()) {
+            const cod = materia.codigoMateria;
+            const estadoAnterior = nuevoProgreso[cod] || "bloqueada";
+
+            const reqs = grafo.getMateriasRequeridas(cod);
+            const cumpleReqs = reqs.every(req => nuevoProgreso[req] === "aprobada");
+            const cumpleUC = ucActual >= materia.ucRequeridas;
+
+            // Una materia está lista para cursarse si cumple pre-requisitos explícitos Y créditos (UC)
+            const puedeCursarse = cumpleReqs && cumpleUC;
+
+            if (estadoAnterior === "aprobada") {
+                // Si la teníamos aprobada pero perdió los requisitos (ej. perdimos UC o desaprobamos una prelativa)
+                if (!puedeCursarse) {
+                    nuevoProgreso[cod] = "bloqueada";
+                    cambiado = true;
+                }
+            } else if (estadoAnterior === "disponible") {
+                // Si estaba disponible pero ya no cumple los requisitos
+                if (!puedeCursarse) {
+                    nuevoProgreso[cod] = "bloqueada";
+                    cambiado = true;
+                }
+            } else if (estadoAnterior === "bloqueada") {
+                // Si estaba bloqueada pero ahora sí cumple todo
+                if (puedeCursarse) {
+                    nuevoProgreso[cod] = "disponible";
+                    cambiado = true;
+                }
+            }
+        }
+    }
+    return nuevoProgreso;
+};
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
 
     const [progreso, setProgreso] = useState<ProgresoMalla>(
         () => {
             const estadoInicial: ProgresoMalla = {};
+            // Iniciamos todas bloqueadas
             grafo.getAllNodes().forEach((materia) => {
-                if (materia.semestre === 1) {
-                    estadoInicial[materia.codigoMateria] = "disponible";
-                } else {
-                    estadoInicial[materia.codigoMateria] = "bloqueada";
-                }
+                estadoInicial[materia.codigoMateria] = "bloqueada";
             });
-            return estadoInicial;
+            // La función evaluará y liberará automáticamente las que no tengan requisitos (ej. Semestre 1)
+            return evaluarMalla(estadoInicial, grafo);
         }
     );
 
@@ -41,62 +83,25 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         return calcularUCAcumuladas(progreso, grafo);
     }, [progreso, grafo])
 
-
     const toggleAprobacion = useCallback((codigoMateria: string) => {
         setProgreso(progresoActual => {
             const nuevoProgreso = { ...progresoActual };
             const estadoActualDeLaMateria = nuevoProgreso[codigoMateria];
 
             if (estadoActualDeLaMateria === "bloqueada") {
-                return progresoActual;
+                return progresoActual; // No se puede interactuar con bloqueadas
             }
 
             if (estadoActualDeLaMateria === "disponible") {
-                // CORRECCIÓN: Asignación (=), no comparación (===)
                 nuevoProgreso[codigoMateria] = "aprobada";
-
-                const prelaciones = grafo.getMateriasQueDesbloquea(codigoMateria);
-
-                prelaciones.forEach(candidata => {
-                    const reqCandidata = grafo.getMateriasRequeridas(candidata);
-                    const ucActual = calcularUCAcumuladas(nuevoProgreso, grafo);
-
-                    const cumpleTodoLosReq = reqCandidata.every(req => nuevoProgreso[req] === "aprobada");
-
-                    const infoCandidata = grafo.getNode(candidata);
-                    const ucRequeridas = infoCandidata?.ucRequeridas ?? 0;
-
-                    if (cumpleTodoLosReq && ucActual >= ucRequeridas) {
-                        nuevoProgreso[candidata] = "disponible";
-                    }
-                });
-            }
-
-            // --- CASO 3: EL USUARIO QUIERE DESAPROBARLA (Me equivoqué al hacer clic) ---
-            else if (estadoActualDeLaMateria === "aprobada") {
-                // 1. La regresamos a su estado original (disponible para cursarse)
+            } else if (estadoActualDeLaMateria === "aprobada") {
                 nuevoProgreso[codigoMateria] = "disponible";
-
-                // 2. Tumbamos el castillo de naipes (Efecto dominó)
-                const materiasQueBloquear = [...grafo.getMateriasQueDesbloquea(codigoMateria)];
-
-                while (materiasQueBloquear.length > 0) {
-                    const mABloquear = materiasQueBloquear.pop();
-
-                    if (!mABloquear) continue;
-
-                    if (nuevoProgreso[mABloquear] !== "bloqueada") {
-                        nuevoProgreso[mABloquear] = "bloqueada";
-
-                        materiasQueBloquear.push(...grafo.getMateriasQueDesbloquea(mABloquear));
-                    }
-                }
             }
 
-            return nuevoProgreso;
+            // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
+            return evaluarMalla(nuevoProgreso, grafo);
         });
-
-    }, [progreso, grafo]);
+    }, [grafo]);
 
     return {
         progreso,

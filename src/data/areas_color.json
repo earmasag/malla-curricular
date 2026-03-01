@@ -1,0 +1,34 @@
+[
+    {
+        "areaFormacion": "Fundamentos de Ingeniería",
+        "colorCodigo": "#1B9CDE"
+    },
+    {
+        "areaFormacion": "Formación Gerencial",
+        "colorCodigo": "#00A896"
+    },
+    {
+        "areaFormacion": "Lógica y Programación",
+        "colorCodigo": "#8CC63F"
+    },
+    {
+        "areaFormacion": "Formación Integral",
+        "colorCodigo": "#F1C40F"
+    },
+    {
+        "areaFormacion": "Ingeniería de Software",
+        "colorCodigo": "#E91E63"
+    },
+    {
+        "areaFormacion": "Telemática",
+        "colorCodigo": "#F39C12"
+    },
+    {
+        "areaFormacion": "Electivas",
+        "colorCodigo": "#3F51B5"
+    },
+    {
+        "areaFormacion": "Prácticas Profesionales",
+        "colorCodigo": "#7F8C8D"
+    }
+]

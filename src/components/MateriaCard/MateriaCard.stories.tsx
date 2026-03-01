@@ -3,7 +3,7 @@ import MateriaCard from './MateriaCard';
 
 // 1. Configuración principal de Storybook para este componente
 const meta = {
-  title: 'Componentes/MateriaCard', 
+  title: 'Componentes/MateriaCard',
   component: MateriaCard,
   tags: ['autodocs'],
   // Esto es un "truco" para que Storybook envuelva tu tarjeta en un contenedor 
@@ -23,16 +23,23 @@ type Story = StoryObj<typeof meta>;
 // 2. Creación de la historia base (como se verá por defecto)
 export const VistaPorDefecto: Story = {
   args: {
-    nombreMateria: 'Matemática Discreta',
-    codigoMateria: 'MAT-101',
-    creditos: 4,
-    hrTeoria: 2,
-    hrPrac: 2,
-    hrLab: 0,
-    hrInd: 3,
-    totalHoras: 4,
-    tax: 'TX-9',
-    area: 'Ciencias Básicas',
-    modalidad: 'P',
+    materia: {
+      codigoMateria: 'MAT-101',
+      nombre: 'Matemática Discreta',
+      horasTeoricas: 2,
+      horasPracticas: 2,
+      horasLaboratorio: 0,
+      horasPresenciales: 4,
+      horasAutonomas: 3,
+      horasTotales: 7,
+      unidadesCredito: 4,
+      tipo: 'CR',
+      modalidad: 'P',
+      taxonomia: 'TX-9',
+      areaFormacion: 'Ciencias Básicas',
+      estado: 'disponible',
+      semestre: 2,
+      ucRequeridas: 0
+    }
   },
 };

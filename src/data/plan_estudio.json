@@ -248,7 +248,7 @@
             "Identidad, Liderazgo y Compromiso I"
         ],
         "semestre": 2,
-        "areaFormacion": "Sin Asignar",
+        "areaFormacion": "Formación Integral",
         "ucRequeridas": 0
     },
     {
@@ -1186,7 +1186,9 @@
         "tipo": "C",
         "modalidad": "V",
         "taxonomia": "-",
-        "prelacion": [],
+        "prelacion": [
+            "Desarrollo de Software"
+        ],
         "semestre": 8,
         "areaFormacion": "Prácticas Profesionales y TSG",
         "ucRequeridas": 0

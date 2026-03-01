@@ -52,16 +52,26 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
         >
 
             {/* Cuadro principal blanco */}
-            <div className="absolute left-5 right-0 top-0 bottom-0 flex flex-col bg-white items-start justify-start px-2 rounded-br-[18px]">
-                <p className={`absolute top-1 left-2 text-left ${textClass} font-black text-[12px] w-[150px] leading-tight line-clamp-2 wrap-break-words`}>{nombre}</p>
-                <p className={`absolute bottom-6 left-2 text-left ${textClass} font-black text-[11px] mt-1`}>{codigoMateria}</p>
+            <div className="absolute left-5 right-1 top-0 bottom-0 flex flex-col bg-white items-start justify-start pr-0 rounded-br-[18px]">
+                <p
+                    className={`absolute top-1 left-2 right-0 text-left ${textClass} font-bold text-[13px] uppercase leading-tight line-clamp-3 wrap-break-words`}
+                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.5px", lineHeight: "1.1" }}
+                >
+                    {nombre}
+                </p>
+                <p
+                    className={`absolute bottom-5 left-2 right-0 text-left text-gray-700 font-bold text-[11px] uppercase`}
+                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "0px" }}
+                >
+                    {codigoMateria}
+                </p>
             </div>
 
             {/* Símbolo de Modalidad */}
             <div className="absolute w-5 h-7 left-0 bottom-0 z-10 leading-none overflow-hidden">
                 <div className="absolute inset-0 bg-white [clip-path:polygon(50%_0%,100%_30%,100%_100%,0%_100%,0%_30%)]"></div>
                 <div className={`absolute top-[2px] left-0 right-0 bottom-[-2px] ${isBloqueada ? 'bg-gray-400' : 'bg-[#4B4B4B]'} [clip-path:polygon(50%_0%,100%_30%,100%_100%,0%_100%,0%_30%)] flex items-center justify-center`}>
-                    <p className="text-white font-bold text-[9px] pt-1">
+                    <p className="text-white font-bold text-[10px] pt-1" style={{ fontFamily: "'Oswald', sans-serif" }}>
                         {modalidad}
                     </p>
                 </div>
@@ -70,32 +80,32 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
             {/* Fila de horas */}
             <div
                 className={`absolute bottom-0 left-5 flex z-10 border-2 border-b-0 mask-[linear-gradient(to_right,transparent_0%,black_15%,black_85%,transparent_100%)]`}
-                style={{ borderColor: currentHexColor }}
+                style={{ borderColor: currentHexColor, fontFamily: "'Oswald', sans-serif" }}
             >
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[11px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasTeoricas}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[11px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasPracticas}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[11px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasLaboratorio}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[11px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasAutonomas}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[11px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasTotales}
                 </div>
-                <div className={`flex items-center justify-center w-10 h-[16px] bg-white text-[11px] font-semibold ${textClass}`}>
+                <div className={`flex items-center justify-center w-10 h-[16px] bg-white text-[10px] font-semibold ${textClass}`}>
                     {taxonomia}
                 </div>
             </div>
 
             {/* Círculo de Créditos */}
             <div
-                className={`absolute flex items-center justify-center right-0 bottom-0 size-7 rounded-full z-20 ${textClass} font-bold text-[12px] border-2`}
-                style={{ backgroundColor: currentHexColor, borderColor: currentHexColor }}
+                className={`absolute flex items-center justify-center right-0 bottom-0 size-7 rounded-full z-20 ${textClass} font-bold text-[14px] border-2`}
+                style={{ backgroundColor: currentHexColor, borderColor: currentHexColor, fontFamily: "'Oswald', sans-serif" }}
             >
                 {unidadesCredito}
             </div>

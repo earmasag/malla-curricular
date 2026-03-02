@@ -6,6 +6,7 @@ import { SemestreColumn } from '../components/SemestreColumn/SemestreColumn';
 import MallaConnections from '../components/MallaConnections/MallaConnections';
 import React from 'react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Xwrapper, useXarrow } from 'react-xarrows';
 
 
 const builder = new MallaCurricularBuilder();
@@ -13,12 +14,15 @@ const materiaData = planEstudioJSON as unknown as MateriaJSON[];
 const malla = builder.build(materiaData);
 
 
-export const MallaPage = () => {
-    const { progreso, cantidadAprobadas, ucAcumuladas, toggleAprobacion } = useMallaCurricular(malla);
+const MallaContent = () => {
+    const { progreso, cantidadAprobadas, ucAcumuladas, toggleAprobacion, toggleSemestre } = useMallaCurricular(malla);
     const [hoveredMateria, setHoveredMateria] = React.useState<string | null>(null);
 
     // Detectar si es móvil para deshabilitar el zoom con la rueda del ratón en escritorio
     const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+
+    // Obtener la función para recalcular las flechas de react-xarrows manualmente
+    const updateXarrow = useXarrow();
 
     React.useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -59,6 +63,11 @@ export const MallaPage = () => {
                     disablePadding={true}
                     panning={{ velocityDisabled: true }}
                     alignmentAnimation={{ animationTime: 0, animationType: "linear" }}
+
+                    // Aseguramos que las flechas se redibujen interactivamente al mover la cámara
+                    onTransformed={updateXarrow}
+                    onPanning={updateXarrow}
+                    onZoom={updateXarrow}
                 >
                     {({ zoomIn, zoomOut, resetTransform }) => (
                         <React.Fragment>
@@ -75,10 +84,11 @@ export const MallaPage = () => {
                                 </button>
                             </div>
 
+                            {/* Overlay de Flechas, movido fuera del contenedor escalable para evitar el bug del doble escalado (css scale + boudning rect) */}
+                            <MallaConnections grafo={malla} progreso={progreso} hoveredMateria={hoveredMateria} />
+
                             <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
                                 <div className="relative flex flex-row gap-12 px-20 items-start pb-32 pt-32 min-w-max min-h-max">
-                                    {/* Flechas de Prerrequisitos dibujadas por debajo de las materias */}
-                                    <MallaConnections grafo={malla} progreso={progreso} hoveredMateria={hoveredMateria} />
 
                                     {semestresArray.map((numeroSemestre) => {
                                         // Le pedimos al Grafo solo las materias de esta columna
@@ -93,6 +103,7 @@ export const MallaPage = () => {
                                                 onSelectMateria={toggleAprobacion}
                                                 onHoverMateria={setHoveredMateria}
                                                 hoveredMateria={hoveredMateria}
+                                                onToggleSemestre={toggleSemestre}
                                             />
                                         );
                                     })}
@@ -105,3 +116,11 @@ export const MallaPage = () => {
         </div>
     );
 };
+
+// Necesario envolver el sistema de renderizado de react-xarrows dentro de su contexto global
+// para que useXarrow() pueda solicitar un repintado síncrono en todos los lugares donde existan flechas
+export const MallaPage = () => (
+    <Xwrapper>
+        <MallaContent />
+    </Xwrapper>
+);

@@ -103,12 +103,39 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         });
     }, [grafo]);
 
+    // Función para aprobar/desaprobar un semestre completo
+    const toggleSemestre = useCallback((numeroSemestre: number) => {
+        setProgreso(progresoActual => {
+            const materiasDelSemestre = grafo.getMateriasPorSemestre(numeroSemestre);
+            const nuevoProgreso = { ...progresoActual };
+
+            // Verificamos si TODAS las materias del semestre ya están aprobadas
+            const todasAprobadas = materiasDelSemestre.every(materia =>
+                nuevoProgreso[materia.codigoMateria] === 'aprobada'
+            );
+
+            // Si todas están aprobadas, las desaprobamos (pasamos a disponible). Si no, las aprobamos.
+            const nuevoEstadoObjetivo = todasAprobadas ? 'disponible' : 'aprobada';
+
+            materiasDelSemestre.forEach(materia => {
+                // Solo modificamos materias que NO estén bloqueadas 
+                // (no podemos mágicamente aprobar algo que estaba estructuralmente bloqueado)
+                if (nuevoProgreso[materia.codigoMateria] !== 'bloqueada') {
+                    nuevoProgreso[materia.codigoMateria] = nuevoEstadoObjetivo;
+                }
+            });
+
+            // Forzamos la reevaluación estricta de la malla para revertir aprobaciones inválidas o 
+            // bloquear materias que dependían de las que acabamos de desaprobar.
+            return evaluarMalla(nuevoProgreso, grafo);
+        });
+    }, [grafo]);
+
     return {
         progreso,
         cantidadAprobadas,
         ucAcumuladas,
-        toggleAprobacion
+        toggleAprobacion,
+        toggleSemestre
     }
-
-
 }

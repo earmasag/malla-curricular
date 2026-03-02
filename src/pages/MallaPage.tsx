@@ -35,7 +35,7 @@ const MallaContent = () => {
     const semestresArray = Array.from({ length: totalSemestres }, (_, i) => i + 1);
 
     return (
-        <div className="flex relative h-screen w-screen bg-gray-50 font-sans m-0 overflow-hidden">
+        <div className="flex relative h-screen w-screen bg-gray-100 font-sans m-0 overflow-hidden">
 
             {/* Cabecera / Dashboard (Flotante) */}
             <header className="absolute top-6 left-0 right-0 z-50 flex flex-col items-center pointer-events-none">

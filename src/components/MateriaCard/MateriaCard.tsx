@@ -30,7 +30,8 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
         taxonomia,
         modalidad,
         estado,
-        areaFormacion
+        areaFormacion,
+        ucRequeridas
     } = materia;
 
     // Estado lógico
@@ -63,6 +64,46 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
             className={`relative w-48 h-20 rounded-br-[20px] shadow-sm border-[3px] ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-blue-400 z-50' : 'z-10'}`}
             style={{ backgroundColor: currentHexColor, borderColor: currentHexColor }}
         >
+
+            {/* Listón de Aprobado en la esquina superior derecha */}
+            {isAprobada && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit] z-30">
+                    <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
+                        <div className="absolute top-5 -right-5 w-28 bg-emerald-500 text-white text-center transform rotate-45 py-0.5 shadow-sm">
+                            <span className="font-bold text-sm">✓</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Indicador de Unidades de Crédito Requeridas On Hover */}
+            {isHovered && ucRequeridas > 0 && (
+                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-1 flex items-center justify-end h-full max-h-[30px] z-50 pointer-events-none">
+                    <div className="relative flex items-center">
+                        {/* Texto re-posicionado arriba de la flecha con menor tamaño */}
+                        <span
+                            className="absolute bottom-1 w-full text-center font-bold text-[12px] whitespace-nowrap text-black"
+                            style={{ fontFamily: "'Oswald', sans-serif" }}
+                        >
+                            {ucRequeridas} UC
+                        </span>
+                        {/* Cuerpo de la flecha */}
+                        <div
+                            className="h-[3px] w-6"
+                            style={{ backgroundColor: currentHexColor }}
+                        />
+                        {/* Punta de la flecha usando bordes CSS transparentes */}
+                        <div
+                            className="w-0 h-0"
+                            style={{
+                                borderTop: '5px solid transparent',
+                                borderBottom: '5px solid transparent',
+                                borderLeft: `6px solid ${currentHexColor}`
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* Cuadro principal blanco o con grilla */}
             <div
@@ -125,13 +166,6 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
             >
                 {unidadesCredito}
             </div>
-
-            {/* Sello de Aprobado (Círculo verde hueco superpuesto) */}
-            {isAprobada && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30 overflow-hidden rounded-br-[18px]">
-                    <div className="size-20 rounded-full border-8 border-green-500 opacity-40"></div>
-                </div>
-            )}
 
         </div>
     );

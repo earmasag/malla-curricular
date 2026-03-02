@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import type { ProgresoMalla } from "../types/materia";
 import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 
@@ -65,6 +65,21 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
 
     const [progreso, setProgreso] = useState<ProgresoMalla>(
         () => {
+            // Intentamos recuperar el progreso guardado
+            const progresoGuardado = localStorage.getItem("malla-progreso");
+            if (progresoGuardado) {
+                try {
+                    const parsedProgreso = JSON.parse(progresoGuardado);
+                    // Verificamos superficialmente que es un objeto con datos
+                    if (parsedProgreso && typeof parsedProgreso === 'object' && Object.keys(parsedProgreso).length > 0) {
+                        return evaluarMalla(parsedProgreso, grafo);
+                    }
+                } catch (e) {
+                    console.error("Error leyendo historial de progreso", e);
+                }
+            }
+
+            // Fallback: Progreso desde cero
             const estadoInicial: ProgresoMalla = {};
             // Iniciamos todas bloqueadas
             grafo.getAllNodes().forEach((materia) => {
@@ -74,6 +89,11 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
             return evaluarMalla(estadoInicial, grafo);
         }
     );
+
+    // Efecto secundario: Cada vez que el progreso cambie, respaldar en memoria caché local del navegador
+    useEffect(() => {
+        localStorage.setItem("malla-progreso", JSON.stringify(progreso));
+    }, [progreso]);
 
     const cantidadAprobadas = useMemo(() => {
         return Object.values(progreso).filter(estado => estado === "aprobada").length;
@@ -131,11 +151,24 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         });
     }, [grafo]);
 
+    // Función que destruye todo el progreso almacenado y reinicia el grafo a Cero
+    const resetProgreso = useCallback(() => {
+        localStorage.removeItem("malla-progreso");
+
+        const estadoInicial: ProgresoMalla = {};
+        grafo.getAllNodes().forEach((materia) => {
+            estadoInicial[materia.codigoMateria] = "bloqueada";
+        });
+
+        setProgreso(evaluarMalla(estadoInicial, grafo));
+    }, [grafo]);
+
     return {
         progreso,
         cantidadAprobadas,
         ucAcumuladas,
         toggleAprobacion,
-        toggleSemestre
+        toggleSemestre,
+        resetProgreso
     }
 }

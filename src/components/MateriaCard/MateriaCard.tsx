@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { MateriaNode } from '../../types/materia';
 import areasColorData from '../../data/areas_color.json';
 
@@ -16,7 +17,7 @@ export interface MateriaCardProps {
     isHovered?: boolean;
 }
 
-export default function MateriaCard({ materia, onClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) {
+const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
     const {
         nombre,
         codigoMateria,
@@ -128,10 +129,20 @@ export default function MateriaCard({ materia, onClick, onMouseEnter, onMouseLea
             {/* Sello de Aprobado (Círculo verde hueco superpuesto) */}
             {isAprobada && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30 overflow-hidden rounded-br-[18px]">
-                    <div className="size-18 rounded-full border-8 border-green-500 opacity-40"></div>
+                    <div className="size-20 rounded-full border-8 border-green-500 opacity-40"></div>
                 </div>
             )}
 
         </div>
     );
-}
+};
+
+export default memo(MateriaCardContent, (prevProps, nextProps) => {
+    // Solo re-renderizar si cambia el estado (aprobada/bloqueada) O el estado de hover de ESTA materia.
+    // Ignoramos la recreación de funciones (onClick, etc) provenientes del padre para aprovechar al 100% el memo.
+    return (
+        prevProps.materia.estado === nextProps.materia.estado &&
+        prevProps.isHovered === nextProps.isHovered &&
+        prevProps.materia.codigoMateria === nextProps.materia.codigoMateria
+    );
+});

@@ -13,9 +13,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4",
-        "prelacion": [
-            "Ingreso"
-        ],
+        "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0
@@ -34,9 +32,7 @@
         "tipo": "C*",
         "modalidad": "PRE",
         "taxonomia": "TA-4",
-        "prelacion": [
-            "Ingreso"
-        ],
+        "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Lógica y Programación",
         "ucRequeridas": 0
@@ -55,9 +51,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-9",
-        "prelacion": [
-            "Ingreso"
-        ],
+        "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Lógica y Programación",
         "ucRequeridas": 0
@@ -76,9 +70,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-1",
-        "prelacion": [
-            "Ingreso"
-        ],
+        "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Formación Gerencial",
         "ucRequeridas": 0
@@ -97,9 +89,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-6",
-        "prelacion": [
-            "Ingreso"
-        ],
+        "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Formación Integral",
         "ucRequeridas": 0
@@ -118,9 +108,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-1",
-        "prelacion": [
-            "Ingreso"
-        ],
+        "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Formación Integral",
         "ucRequeridas": 0
@@ -140,7 +128,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Álgebra y Trigonometría"
+            "FING-02002"
         ],
         "semestre": 2,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -161,7 +149,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Álgebra y Trigonometría"
+            "FING-02002"
         ],
         "semestre": 2,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -182,7 +170,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Lógica"
+            "FING-02009"
         ],
         "semestre": 2,
         "areaFormacion": "Lógica y Programación",
@@ -203,7 +191,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Fundamentos de Programación"
+            "FING-02008"
         ],
         "semestre": 2,
         "areaFormacion": "Lógica y Programación",
@@ -224,7 +212,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Algoritmos y Programación"
+            "INFO-02001"
         ],
         "semestre": 2,
         "areaFormacion": "Lógica y Programación",
@@ -245,7 +233,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-1",
         "prelacion": [
-            "Identidad, Liderazgo y Compromiso I"
+            "UCAB-00001"
         ],
         "semestre": 2,
         "areaFormacion": "Formación Integral",
@@ -266,7 +254,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Cálculo Diferencial"
+            "FING-02003"
         ],
         "semestre": 3,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -287,7 +275,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Cálculo Diferencial"
+            "FING-02003"
         ],
         "semestre": 3,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -308,7 +296,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Algoritmos y Estructuras de Datos"
+            "INFO-02002"
         ],
         "semestre": 3,
         "areaFormacion": "Lógica y Programación",
@@ -405,7 +393,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Cálculo Integral"
+            "FING-02004"
         ],
         "semestre": 4,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -426,7 +414,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Cálculo Integral"
+            "FING-02004"
         ],
         "semestre": 4,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -447,7 +435,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Programación Orientada a Objetos"
+            "INFO-02003"
         ],
         "semestre": 4,
         "areaFormacion": "Lógica y Programación",
@@ -468,7 +456,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Sistemas de Información"
+            "INFO-02004"
         ],
         "semestre": 4,
         "areaFormacion": "Ingeniería de Software",
@@ -489,7 +477,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Ingeniería de Software"
+            "INFO-02007"
         ],
         "semestre": 4,
         "areaFormacion": "Ingeniería de Software",
@@ -510,7 +498,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Matemáticas Discretas"
+            "INFO-02000"
         ],
         "semestre": 4,
         "areaFormacion": "Telemática",
@@ -531,7 +519,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Contabilidad Financiera"
+            "FACE-00024"
         ],
         "semestre": 4,
         "areaFormacion": "Formación Gerencial",
@@ -552,7 +540,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Física General"
+            "FING-02015"
         ],
         "semestre": 5,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -573,7 +561,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Electricidad y Magnetismo"
+            "FING-02007"
         ],
         "semestre": 5,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -594,7 +582,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Programación Orientada a Objetos"
+            "INFO-02003"
         ],
         "semestre": 5,
         "areaFormacion": "Lógica y Programación",
@@ -615,8 +603,8 @@
         "modalidad": "VIT",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Ingeniería Económica",
-            "Ingeniería de Software"
+            "FING-02016",
+            "INFO-02007"
         ],
         "semestre": 5,
         "areaFormacion": "Ingeniería de Software",
@@ -656,7 +644,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Organización del Computador"
+            "INFO-02005"
         ],
         "semestre": 5,
         "areaFormacion": "Telemática",
@@ -677,7 +665,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Cálculo Integral"
+            "FING-02004"
         ],
         "semestre": 5,
         "areaFormacion": "Formación Gerencial",
@@ -698,7 +686,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Cálculo Vectorial"
+            "FING-02005"
         ],
         "semestre": 6,
         "areaFormacion": "Fundamentos de Ingeniería",
@@ -719,7 +707,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Sistemas de Bases de Datos"
+            "INFO-02012"
         ],
         "semestre": 6,
         "areaFormacion": "Ingeniería de Software",
@@ -740,8 +728,8 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Sistemas de Bases de Datos",
-            "Gestión de Proyectos de Software"
+            "INFO-02012",
+            "INFO-02013"
         ],
         "semestre": 6,
         "areaFormacion": "Ingeniería de Software",
@@ -762,7 +750,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Gestión de Proyectos de Software"
+            "INFO-02013"
         ],
         "semestre": 6,
         "areaFormacion": "Ingeniería de Software",
@@ -783,7 +771,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Electricidad y Magnetismo"
+            "FING-02007"
         ],
         "semestre": 6,
         "areaFormacion": "Telemática",
@@ -804,7 +792,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Sistemas Operativos"
+            "INFO-02010"
         ],
         "semestre": 6,
         "areaFormacion": "Telemática",
@@ -882,8 +870,8 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Ingeniería de Requisitos",
-            "Aseguramiento de la Calidad del Software"
+            "INFO-02018",
+            "INFO-02019"
         ],
         "semestre": 7,
         "areaFormacion": "Ingeniería de Software",
@@ -904,7 +892,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Redes de Comunicación de Datos"
+            "INFO-02016"
         ],
         "semestre": 7,
         "areaFormacion": "Telemática",
@@ -925,8 +913,8 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Probabilidad y Estadística",
-            "Métodos Numéricos"
+            "FING-02011",
+            "FING-02010"
         ],
         "semestre": 7,
         "areaFormacion": "Formación Gerencial",
@@ -947,7 +935,7 @@
         "modalidad": "PRE-VIT",
         "taxonomia": "TA-7",
         "prelacion": [
-            "Desarrollo de Software"
+            "INFO-02025"
         ],
         "semestre": 7,
         "areaFormacion": "Electivas",
@@ -987,7 +975,7 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "Ciberseguridad"
+            "INFO-02023"
         ],
         "semestre": 8,
         "areaFormacion": "Telemática",
@@ -1008,7 +996,7 @@
         "modalidad": "VIT",
         "taxonomia": "TA-4",
         "prelacion": [
-            "Investigación de Operaciones"
+            "INFO-02022"
         ],
         "semestre": 8,
         "areaFormacion": "Formación Gerencial",
@@ -1048,7 +1036,7 @@
         "modalidad": "VIT",
         "taxonomia": "TA-6",
         "prelacion": [
-            "Inglés I"
+            "INFO-02014"
         ],
         "semestre": 7,
         "areaFormacion": "Formación Integral",
@@ -1069,7 +1057,7 @@
         "modalidad": "VIT",
         "taxonomia": "TA-6",
         "prelacion": [
-            "Inglés II"
+            "INFO-02021"
         ],
         "semestre": 8,
         "areaFormacion": "Formación Integral",
@@ -1166,7 +1154,7 @@
         "modalidad": "PRE",
         "taxonomia": "-",
         "prelacion": [
-            "CURSO DE SERVIVIO COMUNITARIO"
+            "CUSC"
         ],
         "semestre": 6,
         "areaFormacion": "Extensión Social",
@@ -1187,7 +1175,7 @@
         "modalidad": "V",
         "taxonomia": "-",
         "prelacion": [
-            "Desarrollo de Software"
+            "INFO-02025"
         ],
         "semestre": 8,
         "areaFormacion": "Prácticas Profesionales y TSG",
@@ -1208,7 +1196,7 @@
         "modalidad": "P/V",
         "taxonomia": "TA-7",
         "prelacion": [
-            "CURSO DE TRABAJO DE GRADO"
+            "INFO-IILCT"
         ],
         "semestre": 8,
         "areaFormacion": "Prácticas Profesionales y TSG",

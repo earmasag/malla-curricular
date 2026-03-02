@@ -24,15 +24,11 @@ export class MallaCurricularBuilder {
         // 2. Segunda pasada: Establecer las conexiones (aristas)
         for (const materia of materias) {
             if (materia.prelacion && Array.isArray(materia.prelacion)) {
-                for (const requisitoNombre of materia.prelacion) {
-                    // Ignoramos "Ingreso" ya que no es una materia real
-                    if (requisitoNombre !== "Ingreso") {
-                        const codigoRequisito = nameToCode[requisitoNombre.trim()];
-                        if (codigoRequisito) {
-                            this.graph.addEdge(materia.codigoMateria, codigoRequisito);
-                        } else {
-                            console.warn(`Advertencia: No se encontró el código para el prerrequisito "${requisitoNombre}" de la materia "${materia.nombre}".`);
-                        }
+                for (const codigoRequisito of materia.prelacion) {
+                    if (this.graph.getNode(codigoRequisito)) {
+                        this.graph.addEdge(materia.codigoMateria, codigoRequisito);
+                    } else {
+                        console.warn(`Advertencia: No se encontró la materia para el prerrequisito con código "${codigoRequisito}" de la materia "${materia.nombre}".`);
                     }
                 }
             }

@@ -24,7 +24,7 @@ export default function MallaConnections({ grafo, progreso, hoveredMateria }: Ma
                     startAnchor="right"
                     endAnchor="left"
                     color={arrowProps.color}
-                    strokeWidth={2}
+                    strokeWidth={3}
                     dashness={arrowProps.dashness}
                     showHead={true}
                     headSize={4}

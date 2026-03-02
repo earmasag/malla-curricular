@@ -3,7 +3,8 @@ import { useMallaCurricular } from '../hooks/useMallaCurricular';
 import { MallaCurricularBuilder } from '../core/MallaCurricularBuilder';
 import type { MateriaJSON } from '../types/materia';
 import { SemestreColumn } from '../components/SemestreColumn/SemestreColumn';
-
+import MallaConnections from '../components/MallaConnections/MallaConnections';
+import React from 'react';
 const builder = new MallaCurricularBuilder();
 const materiaData = planEstudioJSON as unknown as MateriaJSON[];
 const malla = builder.build(materiaData);
@@ -12,6 +13,7 @@ console.log(malla.getAllNodes());
 
 export const MallaPage = () => {
     const { progreso, cantidadAprobadas, ucAcumuladas, toggleAprobacion } = useMallaCurricular(malla);
+    const [hoveredMateria, setHoveredMateria] = React.useState<string | null>(null);
 
     // 1. Array de los números de semestre [1, 2, 3...]
     const totalSemestres = malla.getTotalSemestres();
@@ -37,7 +39,10 @@ export const MallaPage = () => {
                     </header>
 
                     {/* Grilla Horizontal con Scroll que agrupa Columnas Verticales */}
-                    <div className="flex flex-row overflow-x-auto gap-8 px-4 items-start max-w-[95vw] mx-auto pb-4">
+                    <div className="relative flex flex-row overflow-x-auto gap-8 px-4 items-start max-w-[95vw] mx-auto pb-4 pt-10">
+
+                        {/* Flechas de Prerrequisitos dibujadas por debajo de las materias */}
+                        <MallaConnections grafo={malla} progreso={progreso} hoveredMateria={hoveredMateria} />
 
                         {semestresArray.map((numeroSemestre) => {
                             // Le pedimos al Grafo solo las materias de esta columna
@@ -50,6 +55,8 @@ export const MallaPage = () => {
                                     materiasDelSemestre={materiasDelSemestre}
                                     progreso={progreso}
                                     onSelectMateria={toggleAprobacion}
+                                    onHoverMateria={setHoveredMateria}
+                                    hoveredMateria={hoveredMateria}
                                 />
                             );
                         })}

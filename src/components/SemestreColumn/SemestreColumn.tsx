@@ -6,13 +6,17 @@ interface SemestreColumnProps {
     materiasDelSemestre: MateriaNode[];
     progreso: ProgresoMalla;
     onSelectMateria: (codigoMateria: string) => void;
+    onHoverMateria: (codigoMateria: string | null) => void;
+    hoveredMateria: string | null;
 }
 
 export const SemestreColumn = ({
     numeroSemestre,
     materiasDelSemestre,
     progreso,
-    onSelectMateria
+    onSelectMateria,
+    onHoverMateria,
+    hoveredMateria
 }: SemestreColumnProps) => {
     return (
         <div className="flex flex-col gap-3 min-w-[200px]">
@@ -32,6 +36,9 @@ export const SemestreColumn = ({
                         key={materiaInmutable.codigoMateria}
                         materia={materiaPaPintar}
                         onClick={() => onSelectMateria(materiaInmutable.codigoMateria)}
+                        onMouseEnter={() => onHoverMateria(materiaInmutable.codigoMateria)}
+                        onMouseLeave={() => onHoverMateria(null)}
+                        isHovered={hoveredMateria === materiaInmutable.codigoMateria}
                     />
                 );
             })}

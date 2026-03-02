@@ -11,9 +11,12 @@ const areasColorMap: Record<string, string> = areasColorData.reduce((acc, curr) 
 export interface MateriaCardProps {
     materia: MateriaNode;
     onClick?: () => void;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
+    isHovered?: boolean;
 }
 
-export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
+export default function MateriaCard({ materia, onClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) {
     const {
         nombre,
         codigoMateria,
@@ -52,8 +55,11 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
 
     return (
         <div
+            id={codigoMateria}
             onClick={onClick}
-            className={`relative w-48 h-20 rounded-br-[20px] shadow-sm border-[3px] ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''}`}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            className={`relative w-48 h-20 rounded-br-[20px] shadow-sm border-[3px] ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-blue-400 z-50' : 'z-10'}`}
             style={{ backgroundColor: currentHexColor, borderColor: currentHexColor }}
         >
 
@@ -70,7 +76,7 @@ export default function MateriaCard({ materia, onClick }: MateriaCardProps) {
                 </p>
                 <p
                     className={`absolute bottom-5 left-2 right-0 text-left text-gray-700 font-bold text-[11px] uppercase`}
-                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "-0.5px" }}
+                    style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "0.5px" }}
                 >
                     {codigoMateria}
                 </p>

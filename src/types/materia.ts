@@ -26,4 +26,5 @@ export interface MateriaNode extends MateriaBase {
 
 export interface MateriaJSON extends MateriaBase {
     prelacion: string[];
+    correquisito?: string[];
 }

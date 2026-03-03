@@ -32,14 +32,23 @@ export class MallaCurricularBuilder {
                     }
                 }
             }
+            if (materia.correquisito && Array.isArray(materia.correquisito)) {
+                for (const codigoCorrequisito of materia.correquisito) {
+                    if (this.graph.getNode(codigoCorrequisito)) {
+                        this.graph.addCorrequisito(materia.codigoMateria, codigoCorrequisito);
+                    } else {
+                        console.warn(`Advertencia: No se encontró la materia para el correquisito con código "${codigoCorrequisito}" de la materia "${materia.nombre}".`);
+                    }
+                }
+            }
         }
 
         return this.graph;
     }
 
     private createNode(materia: MateriaJSON): MateriaNode {
-        // Extraemos 'prelacion' para no incluirla en el MateriaNode final
-        const { prelacion, ...materiaBase } = materia;
+        // Extraemos 'prelacion' y 'correquisito' para no incluirlas en el MateriaNode final
+        const { prelacion, correquisito, ...materiaBase } = materia;
         return {
             ...materiaBase,
             estado: "disponible"

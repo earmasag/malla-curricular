@@ -103,7 +103,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                                     const nodo = grafo.getNode(codigo);
                                     if (nodo) {
                                         ucBloque += nodo.unidadesCredito || 0;
-                                        horasBloque += nodo.horasTotales || 0;
+                                        horasBloque += nodo.horasTotales - nodo.horasAutonomas || 0;
                                     }
                                 });
 

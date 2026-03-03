@@ -27,11 +27,13 @@ export const evaluarMalla = (progresoBase: ProgresoMalla, grafo: MallaCurricular
             const estadoAnterior = nuevoProgreso[cod] || "bloqueada";
 
             const reqs = grafo.getMateriasRequeridas(cod);
+            const correqs = grafo.getCorrequisitos(cod);
             const cumpleReqs = reqs.every(req => nuevoProgreso[req] === "aprobada");
+            const cumpleCorreqs = correqs.length === 0 || correqs.every(req => nuevoProgreso[req] === "aprobada" || nuevoProgreso[req] === "disponible");
             const cumpleUC = ucActual >= materia.ucRequeridas;
 
-            // Una materia está lista para cursarse si cumple pre-requisitos explícitos Y créditos (UC)
-            const puedeCursarse = cumpleReqs && cumpleUC;
+            // Una materia está lista para cursarse si cumple pre-requisitos explícitos, correquisitos Y créditos (UC)
+            const puedeCursarse = cumpleReqs && cumpleCorreqs && cumpleUC;
 
             if (estadoAnterior === "aprobada") {
                 // Si la teníamos aprobada pero perdió los requisitos (ej. perdimos UC o desaprobamos una prelativa)

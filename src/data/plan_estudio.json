@@ -211,12 +211,13 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-9",
-        "prelacion": [
-            "INFO-02001"
-        ],
+        "prelacion": [],
         "semestre": 2,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
+        "ucRequeridas": 0,
+        "correquisito": [
+            "INFO-02001"
+        ]
     },
     {
         "departamento": "UCAB",
@@ -476,12 +477,13 @@
         "tipo": "C*",
         "modalidad": "PRE",
         "taxonomia": "TA-4",
-        "prelacion": [
-            "INFO-02007"
-        ],
+        "prelacion": [],
         "semestre": 4,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 0
+        "ucRequeridas": 0,
+        "correquisito": [
+            "INFO-02007"
+        ]
     },
     {
         "departamento": "INFO",
@@ -560,12 +562,13 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-9",
-        "prelacion": [
-            "FING-02007"
-        ],
+        "prelacion": [],
         "semestre": 5,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
+        "ucRequeridas": 0,
+        "correquisito": [
+            "FING-02007"
+        ]
     },
     {
         "departamento": "INFO",

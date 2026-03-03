@@ -106,8 +106,8 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     }, [grafo]);
 
     // Función que calcula y retorna los bloques óptimos de estudio (Topological Sort / Algoritmo de Kahn)
-    const generarRutaOptima = useCallback((maxUcPorSemestre?: number, maxMateriasPorSemestre?: number) => {
-        return grafo.calcularRutaOptima(progreso, maxUcPorSemestre, maxMateriasPorSemestre);
+    const generarRutaOptima = useCallback((maxUcPorSemestre?: number, maxMateriasPorSemestre?: number, maxHorasPorSemestre?: number) => {
+        return grafo.calcularRutaOptima(progreso, maxUcPorSemestre, maxMateriasPorSemestre, maxHorasPorSemestre);
     }, [grafo, progreso]);
 
     return {

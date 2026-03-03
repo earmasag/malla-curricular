@@ -6,17 +6,19 @@ import { useRutaOptima } from '../../hooks/useRutaOptima';
 interface RutaModalProps {
     isOpen: boolean;
     onClose: () => void;
-    generarRutaOptima: (maxUcPorSemestre?: number, maxMateriasPorSemestre?: number) => string[][];
+    generarRutaOptima: (maxUcPorSemestre?: number, maxMateriasPorSemestre?: number, maxHorasPorSemestre?: number) => string[][];
     grafo: MallaCurricularGraph;
 }
 
 export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRutaOptima, grafo }) => {
-    
+
     const {
         maxUcInput,
         setMaxUcInput,
         maxMateriasInput,
         setMaxMateriasInput,
+        maxHorasInput,
+        setMaxHorasInput,
         ruta
     } = useRutaOptima(isOpen, generarRutaOptima);
 
@@ -32,7 +34,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                         <span>🚀</span> Ruta Óptima
                     </h2>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-2 rounded-lg border border-gray-200 shadow-sm w-full sm:w-auto">
+                    <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-2 rounded-lg border border-gray-200 shadow-sm w-full sm:w-auto overflow-x-auto">
                         <div className="flex items-center gap-2 w-full sm:w-auto">
                             <label className="text-sm font-semibold text-gray-600 whitespace-nowrap">Máx. UC:</label>
                             <input
@@ -56,11 +58,23 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                                 className="w-16 sm:w-20 border border-gray-200 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-blue-400 outline-none"
                             />
                         </div>
+                        <div className="hidden sm:block w-px h-6 bg-gray-200"></div>
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                            <label className="text-sm font-semibold text-gray-600 whitespace-nowrap">Máx. Horas:</label>
+                            <input
+                                type="number"
+                                min="1"
+                                placeholder="∞"
+                                value={maxHorasInput}
+                                onChange={(e) => setMaxHorasInput(e.target.value)}
+                                className="w-16 sm:w-20 border border-gray-200 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-blue-400 outline-none"
+                            />
+                        </div>
                     </div>
 
                     <button
                         onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-full transition-colors self-end sm:self-auto"
+                        className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-full transition-colors self-end sm:self-auto shrink-0"
                         title="Cerrar"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
@@ -82,11 +96,16 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                             <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-blue-200 hidden sm:block"></div>
 
                             {ruta.map((bloque, index) => {
-                                // Calculamos las UC recomendadas para este bloque
-                                const ucBloque = bloque.reduce((sum, codigo) => {
+                                // Calculamos las UC y Horas recomendadas para este bloque
+                                let ucBloque = 0;
+                                let horasBloque = 0;
+                                bloque.forEach((codigo) => {
                                     const nodo = grafo.getNode(codigo);
-                                    return sum + (nodo?.unidadesCredito || 0);
-                                }, 0);
+                                    if (nodo) {
+                                        ucBloque += nodo.unidadesCredito || 0;
+                                        horasBloque += nodo.horasTotales || 0;
+                                    }
+                                });
 
                                 return (
                                     <div key={index} className="relative flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
@@ -103,7 +122,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                                                     Bloque de Estudio {index + 1}
                                                 </h3>
                                                 <span className="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-100 whitespace-nowrap">
-                                                    {bloque.length} Mat. • {ucBloque} UC
+                                                    {bloque.length} Mat. • {horasBloque} Hrs • {ucBloque} UC
                                                 </span>
                                             </div>
 

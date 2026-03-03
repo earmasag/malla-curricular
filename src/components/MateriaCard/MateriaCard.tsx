@@ -136,7 +136,7 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
 
             {/* Fila de horas */}
             <div
-                className={`absolute bottom-0 left-5 flex z-10 border-2 border-b-0 mask-[linear-gradient(to_right,transparent_0%,black_15%,black_85%,transparent_100%)]`}
+                className={`absolute bottom-0 left-5 flex z-10 border-t-2 border-b-0 mask-[linear-gradient(to_right,transparent_0%,black_5%,black_95%,transparent_100%)]`}
                 style={{ borderColor: currentHexColor, fontFamily: "'Oswald', sans-serif" }}
             >
                 <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>

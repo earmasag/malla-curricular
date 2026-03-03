@@ -51,7 +51,7 @@ export class MallaCurricularGraph {
      * Algoritmo de recorrido topológico (Basado en Kahn) que simula cursar todas las materias
      * "disponibles" de golpe en bloques sucesivos (semestres) hasta completar la malla.
      */
-    calcularRutaOptima(progresoActual: ProgresoMalla, maxUcPorSemestre: number = Infinity, maxMateriasPorSemestre: number = Infinity): string[][] {
+    calcularRutaOptima(progresoActual: ProgresoMalla, maxUcPorSemestre: number = Infinity, maxMateriasPorSemestre: number = Infinity, maxHorasPorSemestre: number = Infinity): string[][] {
         let simulacion = { ...progresoActual };
         const bloquesOptimos: string[][] = [];
 
@@ -81,14 +81,17 @@ export class MallaCurricularGraph {
             // 2. Extraer los códigos para el bloque final respetando los límites
             const bloquePendiente: string[] = [];
             let ucAcumuladasBloque = 0;
+            let horasAcumuladasBloque = 0;
 
             for (const materia of disponiblesEnEsteBloque) {
                 if (
                     bloquePendiente.length < maxMateriasPorSemestre &&
-                    (ucAcumuladasBloque + materia.unidadesCredito) <= maxUcPorSemestre
+                    (ucAcumuladasBloque + materia.unidadesCredito) <= maxUcPorSemestre &&
+                    (horasAcumuladasBloque + materia.horasTotales) <= maxHorasPorSemestre
                 ) {
                     bloquePendiente.push(materia.codigoMateria);
                     ucAcumuladasBloque += materia.unidadesCredito;
+                    horasAcumuladasBloque += materia.horasTotales - materia.horasAutonomas;
                 }
             }
 

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import React, { memo, useRef } from 'react';
 import type { MateriaNode } from '../../types/materia';
 import areasColorData from '../../data/areas_color.json';
 
@@ -12,12 +12,13 @@ const areasColorMap: Record<string, string> = areasColorData.reduce((acc, curr) 
 export interface MateriaCardProps {
     materia: MateriaNode;
     onClick?: () => void;
+    onRightClick?: () => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
     isHovered?: boolean;
 }
 
-const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
+const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
     const {
         nombre,
         codigoMateria,
@@ -37,12 +38,50 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
     // Estado lógico
     const isBloqueada = estado === "bloqueada";
     const isAprobada = estado === "aprobada";
+    const isCursando = estado === "cursando";
 
     // Obtenemos el color desde nuestro Diccionario usando la llave `areaFormacion`
     const colorArea = areasColorMap[areaFormacion] || "#bfdbfe";
 
     // Colores del borde y acento basados puramente en su estado
     const currentHexColor = colorArea;
+
+    // --- Lógica para Simular el Clic Derecho en Móviles (Long Press) ---
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const isLongPress = useRef(false);
+
+    const handleTouchStart = () => {
+        isLongPress.current = false;
+        if (timerRef.current) clearTimeout(timerRef.current);
+
+        timerRef.current = setTimeout(() => {
+            isLongPress.current = true;
+            if (onRightClick) {
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(50);
+                }
+                onRightClick();
+            }
+            timerRef.current = null;
+        }, 500);
+    };
+
+    const handleTouchEnd = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+        if (isLongPress.current) {
+            e.preventDefault();
+            e.stopPropagation();
+            isLongPress.current = false; // Reset vital para permitir el siguiente clic
+            return;
+        }
+        if (onClick) onClick();
+    };
 
     // Si está bloqueada, le aplicamos una grilla con CSS lineal
     const gridStyle = isBloqueada ? {
@@ -58,18 +97,33 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
     return (
         <div
             id={codigoMateria}
-            onClick={onClick}
+            onClick={handleClick}
+            onContextMenu={(e) => {
+                // En Desktop: interceptamos el verdadero click derecho
+                e.preventDefault();
+                if (onRightClick) onRightClick();
+            }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchEnd}
             onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-            className={`relative w-48 h-20 rounded-br-[20px] shadow-sm border-[3px] ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-blue-400 z-50' : 'z-10'}`}
-            style={{ backgroundColor: currentHexColor, borderColor: currentHexColor }}
+            onMouseLeave={() => {
+                handleTouchEnd();
+                if (onMouseLeave) onMouseLeave();
+            }}
+            className={`relative w-48 h-20 rounded-br-[20px] shadow-sm border-[3px] select-none ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-blue-400 z-50' : 'z-10'}`}
+            style={{
+                backgroundColor: currentHexColor,
+                borderColor: currentHexColor,
+                WebkitTouchCallout: 'none' // Deshabilitar el popup contextual nativo de iOS al mantener presionado
+            }}
         >
 
-            {/* Listón de Aprobado en la esquina superior derecha */}
-            {isAprobada && (
+            {/* Listón de Aprobado o Cursando en la esquina superior derecha */}
+            {(isAprobada || isCursando) && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit] z-30">
                     <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
-                        <div className="absolute top-5 -right-5 w-28 bg-emerald-500 text-white text-center transform rotate-45 py-0.5 shadow-sm">
+                        <div className={`absolute top-5 -right-5 w-28 text-white text-center transform rotate-45 py-0.5 shadow-sm ${isAprobada ? 'bg-emerald-500' : 'bg-blue-500'}`}>
                             <span className="font-bold text-sm">✓</span>
                         </div>
                     </div>

@@ -23,6 +23,7 @@ const MallaContent = () => {
         cantidadAprobadas,
         ucAcumuladas,
         toggleAprobacion,
+        toggleCursando,
         toggleSemestre,
         resetProgreso,
         generarRutaOptima,
@@ -115,6 +116,7 @@ const MallaContent = () => {
                                                 materiasDelSemestre={materiasDelSemestre}
                                                 progreso={progreso}
                                                 onSelectMateria={toggleAprobacion}
+                                                onToggleCursandoMateria={toggleCursando}
                                                 onHoverMateria={setHoveredMateria}
                                                 hoveredMateria={hoveredMateria}
                                                 onToggleSemestre={toggleSemestre}

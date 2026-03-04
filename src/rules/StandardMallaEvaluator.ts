@@ -21,7 +21,10 @@ export class StandardMallaEvaluator implements IMallaEvaluator {
                 const reqs = grafo.getMateriasRequeridas(cod);
                 const correqs = grafo.getCorrequisitos(cod);
                 const cumpleReqs = reqs.every(req => nuevoProgreso[req] === "aprobada");
-                const cumpleCorreqs = correqs.length === 0 || correqs.every(req => nuevoProgreso[req] === "aprobada" || nuevoProgreso[req] === "disponible");
+                const cumpleCorreqs = correqs.length === 0 || correqs.every(req =>
+                    nuevoProgreso[req] === "aprobada" ||
+                    nuevoProgreso[req] === "disponible" ||
+                    nuevoProgreso[req] === "cursando");
                 const cumpleUC = ucActual >= materia.ucRequeridas;
 
                 // Una materia está lista para cursarse si cumple pre-requisitos explícitos, correquisitos Y créditos (UC)
@@ -33,8 +36,8 @@ export class StandardMallaEvaluator implements IMallaEvaluator {
                         nuevoProgreso[cod] = "bloqueada";
                         cambiado = true;
                     }
-                } else if (estadoAnterior === "disponible") {
-                    // Si estaba disponible pero ya no cumple los requisitos
+                } else if (estadoAnterior === "disponible" || estadoAnterior === "cursando") {
+                    // Si estaba disponible o cursando pero ya no cumple los requisitos regresará a bloqueada
                     if (!puedeCursarse) {
                         nuevoProgreso[cod] = "bloqueada";
                         cambiado = true;

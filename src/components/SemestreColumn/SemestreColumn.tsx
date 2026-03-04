@@ -6,6 +6,7 @@ interface SemestreColumnProps {
     materiasDelSemestre: MateriaNode[];
     progreso: ProgresoMalla;
     onSelectMateria: (codigoMateria: string) => void;
+    onToggleCursandoMateria: (codigoMateria: string) => void;
     onHoverMateria: (codigoMateria: string | null) => void;
     hoveredMateria: string | null;
     onToggleSemestre: (numeroSemestre: number) => void;
@@ -16,6 +17,7 @@ export const SemestreColumn = ({
     materiasDelSemestre,
     progreso,
     onSelectMateria,
+    onToggleCursandoMateria,
     onHoverMateria,
     hoveredMateria,
     onToggleSemestre
@@ -59,6 +61,7 @@ export const SemestreColumn = ({
                         key={materiaInmutable.codigoMateria}
                         materia={materiaPaPintar}
                         onClick={() => onSelectMateria(materiaInmutable.codigoMateria)}
+                        onRightClick={() => onToggleCursandoMateria(materiaInmutable.codigoMateria)}
                         onMouseEnter={() => onHoverMateria(materiaInmutable.codigoMateria)}
                         onMouseLeave={() => onHoverMateria(null)}
                         isHovered={hoveredMateria === materiaInmutable.codigoMateria}

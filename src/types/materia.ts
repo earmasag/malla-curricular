@@ -1,4 +1,4 @@
-export type EstadoMateria = "bloqueada" | "disponible" | "aprobada";
+export type EstadoMateria = "bloqueada" | "disponible" | "cursando" | "aprobada";
 
 export interface MateriaBase {
     codigoMateria: string;

@@ -57,9 +57,30 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
                 return progresoActual; // No se puede interactuar con bloqueadas
             }
 
-            if (estadoActualDeLaMateria === "disponible") {
+            if (estadoActualDeLaMateria === "disponible" || estadoActualDeLaMateria === "cursando") {
                 nuevoProgreso[codigoMateria] = "aprobada";
             } else if (estadoActualDeLaMateria === "aprobada") {
+                nuevoProgreso[codigoMateria] = "disponible";
+            }
+
+            // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
+            return evaluator.evaluate(nuevoProgreso, grafo);
+        });
+    }, [grafo, evaluator]);
+
+    // Función exclusiva para click derecho: transiciona entre disponible y cursando
+    const toggleCursando = useCallback((codigoMateria: string) => {
+        setProgreso(progresoActual => {
+            const nuevoProgreso = { ...progresoActual };
+            const estadoActualDeLaMateria = nuevoProgreso[codigoMateria];
+
+            if (estadoActualDeLaMateria === "bloqueada" || estadoActualDeLaMateria === "aprobada") {
+                return progresoActual; // No se puede interactuar con bloqueadas, y aprobadas se ignoran en click derecho
+            }
+
+            if (estadoActualDeLaMateria === "disponible") {
+                nuevoProgreso[codigoMateria] = "cursando";
+            } else if (estadoActualDeLaMateria === "cursando") {
                 nuevoProgreso[codigoMateria] = "disponible";
             }
 
@@ -121,6 +142,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         cantidadAprobadas,
         ucAcumuladas,
         toggleAprobacion,
+        toggleCursando,
         toggleSemestre,
         resetProgreso,
         generarRutaOptima

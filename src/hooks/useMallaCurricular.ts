@@ -1,9 +1,14 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import type { ProgresoMalla } from "../types/materia";
 import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
-import { calcularUCAcumuladas, evaluarMalla } from "../core/evaluarMalla";
+import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
+import { PathfindingService } from "../services/PathfindingService";
+import { GreedyScheduler } from "../strategies/GreedyScheduler";
+import { calcularUCAcumuladas } from "../utils/mallaUtils";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
+    // Instanciamos el evaluador estándar de la malla (Service Layer / Strategy)
+    const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
 
     const [progreso, setProgreso] = useState<ProgresoMalla>(
         () => {
@@ -14,7 +19,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
                     const parsedProgreso = JSON.parse(progresoGuardado);
                     // Verificamos superficialmente que es un objeto con datos
                     if (parsedProgreso && typeof parsedProgreso === 'object' && Object.keys(parsedProgreso).length > 0) {
-                        return evaluarMalla(parsedProgreso, grafo);
+                        return evaluator.evaluate(parsedProgreso, grafo);
                     }
                 } catch (e) {
                     console.error("Error leyendo historial de progreso", e);
@@ -28,7 +33,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
                 estadoInicial[materia.codigoMateria] = "bloqueada";
             });
             // La función evaluará y liberará automáticamente las que no tengan requisitos (ej. Semestre 1)
-            return evaluarMalla(estadoInicial, grafo);
+            return evaluator.evaluate(estadoInicial, grafo);
         }
     );
 
@@ -61,9 +66,9 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
             }
 
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
-            return evaluarMalla(nuevoProgreso, grafo);
+            return evaluator.evaluate(nuevoProgreso, grafo);
         });
-    }, [grafo]);
+    }, [grafo, evaluator]);
 
     // Función para aprobar/desaprobar un semestre completo
     const toggleSemestre = useCallback((numeroSemestre: number) => {
@@ -89,9 +94,9 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
 
             // Forzamos la reevaluación estricta de la malla para revertir aprobaciones inválidas o 
             // bloquear materias que dependían de las que acabamos de desaprobar.
-            return evaluarMalla(nuevoProgreso, grafo);
+            return evaluator.evaluate(nuevoProgreso, grafo);
         });
-    }, [grafo]);
+    }, [grafo, evaluator]);
 
     // Función que destruye todo el progreso almacenado y reinicia el grafo a Cero
     const resetProgreso = useCallback(() => {
@@ -102,13 +107,16 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
             estadoInicial[materia.codigoMateria] = "bloqueada";
         });
 
-        setProgreso(evaluarMalla(estadoInicial, grafo));
-    }, [grafo]);
+        setProgreso(evaluator.evaluate(estadoInicial, grafo));
+    }, [grafo, evaluator]);
 
     // Función que calcula y retorna los bloques óptimos de estudio (Topological Sort / Algoritmo de Kahn)
     const generarRutaOptima = useCallback((maxUcPorSemestre?: number, maxMateriasPorSemestre?: number, maxHorasPorSemestre?: number) => {
-        return grafo.calcularRutaOptima(progreso, maxUcPorSemestre, maxMateriasPorSemestre, maxHorasPorSemestre);
-    }, [grafo, progreso]);
+        const strategy = new GreedyScheduler();
+        const pathfinder = new PathfindingService(grafo, evaluator, strategy);
+
+        return pathfinder.calcularRutaOptima(progreso, maxUcPorSemestre, maxMateriasPorSemestre, maxHorasPorSemestre);
+    }, [grafo, progreso, evaluator]);
 
     return {
         progreso,

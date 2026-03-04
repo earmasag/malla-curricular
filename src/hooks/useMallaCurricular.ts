@@ -5,25 +5,23 @@ import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
 import { PathfindingService } from "../services/PathfindingService";
 import { GreedyScheduler } from "../strategies/GreedyScheduler";
 import { calcularUCAcumuladas } from "../utils/mallaUtils";
+import { MateriaRepository } from "../data/MateriaRepository";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     // Instanciamos el evaluador estándar de la malla (Service Layer / Strategy)
     const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
 
+    // Instanciamos el Repositorio para independizarnos del localStorage crudo
+    const repository = useMemo(() => new MateriaRepository(), []);
+
     const [progreso, setProgreso] = useState<ProgresoMalla>(
         () => {
-            // Intentamos recuperar el progreso guardado
-            const progresoGuardado = localStorage.getItem("malla-progreso");
-            if (progresoGuardado) {
-                try {
-                    const parsedProgreso = JSON.parse(progresoGuardado);
-                    // Verificamos superficialmente que es un objeto con datos
-                    if (parsedProgreso && typeof parsedProgreso === 'object' && Object.keys(parsedProgreso).length > 0) {
-                        return evaluator.evaluate(parsedProgreso, grafo);
-                    }
-                } catch (e) {
-                    console.error("Error leyendo historial de progreso", e);
-                }
+            // Intentamos recuperar el progreso guardado a través del Repository
+            const progresoGuardado = repository.getStudentProgress();
+
+            // Si el objeto no está vacío, cargamos los datos y los pasamos por el evaluador
+            if (Object.keys(progresoGuardado).length > 0) {
+                return evaluator.evaluate(progresoGuardado, grafo);
             }
 
             // Fallback: Progreso desde cero
@@ -37,10 +35,10 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         }
     );
 
-    // Efecto secundario: Cada vez que el progreso cambie, respaldar en memoria caché local del navegador
+    // Efecto secundario: Cada vez que el progreso cambie, delegarlo al Repositorio
     useEffect(() => {
-        localStorage.setItem("malla-progreso", JSON.stringify(progreso));
-    }, [progreso]);
+        repository.saveStudentProgress(progreso);
+    }, [progreso, repository]);
 
     const cantidadAprobadas = useMemo(() => {
         return Object.values(progreso).filter(estado => estado === "aprobada").length;
@@ -100,7 +98,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
 
     // Función que destruye todo el progreso almacenado y reinicia el grafo a Cero
     const resetProgreso = useCallback(() => {
-        localStorage.removeItem("malla-progreso");
+        repository.clearProgress();
 
         const estadoInicial: ProgresoMalla = {};
         grafo.getAllNodes().forEach((materia) => {

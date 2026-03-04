@@ -297,7 +297,8 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "INFO-02002"
+            "INFO-02002",
+            "INFO-02001"
         ],
         "semestre": 3,
         "areaFormacion": "Lógica y Programación",

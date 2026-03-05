@@ -28,3 +28,10 @@ export interface MateriaJSON extends MateriaBase {
     prelacion: string[];
     correquisito?: string[];
 }
+
+export interface SavedRoute {
+    id: string; // Unique identifier (e.g., timestamp)
+    nombre: string; // User defined name or auto-generated
+    semesters: string[][]; // The array of selected subjects per semester
+    createdAt: number; // Unix timestamp
+}

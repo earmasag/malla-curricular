@@ -9,9 +9,11 @@ interface RutaModalProps {
     onClose: () => void;
     generarRutaOptima: (maxUcPorSemestre?: number, maxMateriasPorSemestre?: number, maxHorasPorSemestre?: number) => string[][];
     grafo: MallaCurricularGraph;
+    customRoute?: string[][] | null;
+    optimaRuta?: string[][] | null;
 }
 
-export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRutaOptima, grafo }) => {
+export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRutaOptima, grafo, customRoute, optimaRuta: initialOptimaRuta }) => {
 
     const {
         maxUcInput,
@@ -20,10 +22,13 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
         setMaxMateriasInput,
         maxHorasInput,
         setMaxHorasInput,
-        ruta
+        ruta: localOptimaRuta
     } = useRutaOptima(isOpen, generarRutaOptima);
 
     if (!isOpen) return null;
+
+    // Usar la ruta personalizada si se proporciona, si no, usar la óptima generada (o la inicial prop)
+    const rutaParaMostrar = customRoute || localOptimaRuta || initialOptimaRuta || [];
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -33,13 +38,15 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-4 bg-gray-50 border-b border-gray-100">
                     <div className="flex items-center gap-4">
                         <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
-                            <span>🚀</span> Ruta Óptima
+                            <span>{customRoute ? '🛠️' : '🚀'}</span> {customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
                         </h2>
-                        <FiltrosRutaOptima
-                            maxUcInput={maxUcInput} setMaxUcInput={setMaxUcInput}
-                            maxMateriasInput={maxMateriasInput} setMaxMateriasInput={setMaxMateriasInput}
-                            maxHorasInput={maxHorasInput} setMaxHorasInput={setMaxHorasInput}
-                        />
+                        {!customRoute && (
+                            <FiltrosRutaOptima
+                                maxUcInput={maxUcInput} setMaxUcInput={setMaxUcInput}
+                                maxMateriasInput={maxMateriasInput} setMaxMateriasInput={setMaxMateriasInput}
+                                maxHorasInput={maxHorasInput} setMaxHorasInput={setMaxHorasInput}
+                            />
+                        )}
                     </div>
 
                     <button
@@ -55,7 +62,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
 
                 {/* Body (Scrollable) */}
                 <div className="flex-1 overflow-y-auto p-6 bg-gray-50/50">
-                    {ruta.length === 0 ? (
+                    {rutaParaMostrar.length === 0 ? (
                         <div className="text-center py-12 text-gray-500">
                             <p className="text-lg font-medium">¡Felicidades!</p>
                             <p>Has completado o tienes disponibles los requisitos para finalizar toda la malla académica.</p>
@@ -65,7 +72,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                             {/* Línea conectora de la línea de tiempo */}
                             <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-blue-200 hidden sm:block"></div>
 
-                            {ruta.map((bloque, index) => (
+                            {rutaParaMostrar.map((bloque: string[], index: number) => (
                                 <BloqueEstudioCard
                                     key={index}
                                     bloque={bloque}

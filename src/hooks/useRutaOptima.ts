@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { DEFAULT_MAX_UC, DEFAULT_MAX_MATERIAS, DEFAULT_MAX_HORAS } from '../components/RutaModal/FiltrosRutaOptima';
 
 export const useRutaOptima = (
     isOpen: boolean,
@@ -11,9 +12,9 @@ export const useRutaOptima = (
 
     useEffect(() => {
         if (isOpen) {
-            const maxUc = maxUcInput ? parseInt(maxUcInput, 10) : undefined;
-            const maxMat = maxMateriasInput ? parseInt(maxMateriasInput, 10) : undefined;
-            const maxHoras = maxHorasInput ? parseInt(maxHorasInput, 10) : undefined;
+            const maxUc = maxUcInput !== '' ? parseInt(maxUcInput, 10) : DEFAULT_MAX_UC;
+            const maxMat = maxMateriasInput !== '' ? parseInt(maxMateriasInput, 10) : DEFAULT_MAX_MATERIAS;
+            const maxHoras = maxHorasInput !== '' ? parseInt(maxHorasInput, 10) : DEFAULT_MAX_HORAS;
 
             // Calculamos asíncronamente o en el acto
             const nuevaRuta = generarRutaOptima(

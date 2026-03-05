@@ -1,4 +1,8 @@
 import React from 'react';
+import {
+    Map as MapPath, Library, MessageSquareHeart, Trash2,
+    Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag
+} from 'lucide-react';
 
 export interface MallaHeaderProps {
     cantidadAprobadas: number;
@@ -62,13 +66,13 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                 {!isCustomRouteMode ? (
                     <>
                         <div className="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5">
-                            <span>📚</span>
+                            <BookOpen className="w-4 h-4 text-blue-500" />
                             {isExpanded && <span className="whitespace-nowrap">Aprobadas:</span>}
                             <span className="text-blue-600 font-bold">{cantidadAprobadas}</span>
                         </div>
 
                         <div className="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5">
-                            <span>⭐</span>
+                            <Lightbulb className="w-4 h-4 text-amber-500" />
                             {isExpanded && <span className="whitespace-nowrap">UC:</span>}
                             <span className="text-blue-600 font-bold">{ucAcumuladas}</span>
                         </div>
@@ -83,7 +87,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     className="bg-blue-50 text-blue-600 hover:bg-blue-500 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-blue-200 flex items-center gap-1.5 transition-colors"
                                     title="Calcular la ruta más rápida para graduarte"
                                 >
-                                    <span>🚀</span>
+                                    <MapPath className="w-4 h-4" />
                                     <span className="whitespace-nowrap">Ruta Óptima</span>
                                 </button>
 
@@ -96,7 +100,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                         className="bg-purple-50 text-purple-600 hover:bg-purple-500 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-purple-200 flex items-center gap-1.5 transition-colors"
                                         title={hasDraftRoute ? "Continuar editando tu borrador" : "Crear tu propia ruta manualmente"}
                                     >
-                                        <span>🛠️</span>
+                                        <Wrench className="w-4 h-4" />
                                         <span className="whitespace-nowrap">{hasDraftRoute ? "Volver al borrador" : "Crear Ruta"}</span>
                                     </button>
                                 )}
@@ -107,7 +111,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                         className="bg-white text-indigo-600 hover:bg-indigo-50 px-3 py-1.5 rounded-full shadow-sm border border-indigo-200 flex items-center gap-1.5 transition-colors"
                                         title="Ver mis rutas guardadas"
                                     >
-                                        <span>📚</span>
+                                        <Library className="w-4 h-4" />
                                         <span className="whitespace-nowrap hidden sm:inline">Mis Rutas</span>
                                     </button>
                                 )}
@@ -118,7 +122,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                         className="bg-white text-gray-700 hover:bg-gray-100 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5 transition-colors"
                                         title="Enviar sugerencias o reportar errores"
                                     >
-                                        <span>💡</span>
+                                        <MessageSquareHeart className="w-4 h-4" />
                                         <span className="whitespace-nowrap hidden sm:inline">Sugerencias</span>
                                     </button>
                                 )}
@@ -128,7 +132,8 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     className="bg-red-50 text-red-600 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-red-200 flex items-center gap-1.5 transition-colors"
                                     title="Borrar todo el historial"
                                 >
-                                    <span className="whitespace-nowrap">🗑️ Borrar</span>
+                                    <Trash2 className="w-4 h-4" />
+                                    <span className="whitespace-nowrap">Borrar Todo</span>
                                 </button>
                             </>
                         )}
@@ -137,7 +142,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                     // --- Custom Route Mode Dashboard ---
                     <>
                         <div className="bg-purple-100 text-purple-800 px-3 py-1.5 rounded-full shadow-sm border border-purple-300 flex items-center gap-1.5 font-bold animate-pulse">
-                            <span>🛠️</span>
+                            <Wrench className="w-4 h-4" />
                             <span className="whitespace-nowrap">Modo Constructor</span>
                         </div>
 
@@ -152,7 +157,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                         </div>
 
                         <div className="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5">
-                            <span>📚</span>
+                            <Wrench className="w-4 h-4 text-blue-500" />
                             <span className="whitespace-nowrap hidden md:inline">Materias selec.:</span>
                             <span className="text-blue-600 font-bold">{customCurrentSemesterCount}</span>
                         </div>
@@ -171,7 +176,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                         }`}
                                     title={customCurrentSemesterCount > 0 ? "Avanzar al siguiente semestre" : "Selecciona al menos una materia"}
                                 >
-                                    <span>➡️</span>
+                                    <ArrowRight className="w-4 h-4" />
                                     <span className="whitespace-nowrap">Avanzar Semestre</span>
                                 </button>
 
@@ -189,7 +194,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     className="bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed px-3 py-1.5 rounded-full shadow-sm border border-indigo-200 flex items-center gap-1.5 transition-colors"
                                     title="Terminar y guardar ruta"
                                 >
-                                    <span>🏁</span>
+                                    <Flag className="w-4 h-4" />
                                     <span className="whitespace-nowrap">Guardar y Terminar</span>
                                 </button>
 
@@ -201,7 +206,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     className="bg-red-50 text-red-600 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-red-200 flex items-center gap-1.5 transition-colors"
                                     title="Cancelar y salir del modo constructor"
                                 >
-                                    <span>❌</span>
+                                    <X className="w-4 h-4" />
                                     <span className="whitespace-nowrap">Cerrar</span>
                                 </button>
 
@@ -214,7 +219,8 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                         className="bg-red-100 text-red-700 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-red-300 flex items-center gap-1.5 transition-colors"
                                         title="Descartar borrador"
                                     >
-                                        <span className="whitespace-nowrap">🗑️ Descartar</span>
+                                        <Trash2 className="w-4 h-4" />
+                                        <span className="whitespace-nowrap">Descartar</span>
                                     </button>
                                 )}
                             </>

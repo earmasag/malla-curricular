@@ -1,4 +1,5 @@
 import React from 'react';
+import { Map as MapPath, Wrench, X } from 'lucide-react';
 import type { MallaCurricularGraph } from '../../core/MallaCurricularGraph';
 import { useRutaOptima } from '../../hooks/useRutaOptima';
 import { BloqueEstudioCard } from './BloqueEstudioCard';
@@ -38,7 +39,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-4 bg-gray-50 border-b border-gray-100">
                     <div className="flex items-center gap-4">
                         <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
-                            <span>{customRoute ? '🛠️' : '🚀'}</span> {customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
+                            {customRoute ? <Wrench className="w-6 h-6 text-purple-500" /> : <MapPath className="w-6 h-6 text-blue-500" />} {customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
                         </h2>
                         {!customRoute && (
                             <FiltrosRutaOptima
@@ -54,9 +55,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                         className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-full transition-colors self-end sm:self-auto shrink-0"
                         title="Cerrar"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <X className="w-6 h-6" />
                     </button>
                 </div>
 

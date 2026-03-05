@@ -41,5 +41,5 @@ Asegúrate de tener Node.js instalado en tu sistema.
 
 Este es un proyecto open-source y parte de un portafolio personal. Toda retroalimentación es altamente valorada. 
 Si encuentras bugs algorítmicos (especialmente en la lógica condicional del DAG y la estructura de Kahn), o quieres sugerir modificaciones sobre la interfaz:
-
 * Deja un [Issue estructurado en el repositorio](https://github.com/earmasag/malla-curricular/issues).
+* Déjame tus comentarios en el [Formulario de Sugerencias](https://forms.gle/wyb4PjqYG9xQgviT8).

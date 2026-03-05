@@ -32,6 +32,17 @@ export class PathfindingService {
         let simulacion = { ...progresoActual };
         const bloquesOptimos: string[][] = [];
 
+        // Pre-procesamiento: Las materias "cursando" no deben incluirse en rutas futuras,
+        // deben considerarse como ya "aprobadas" para efectos de cálculo y desbloqueo.
+        this.graph.getAllNodes().forEach(materia => {
+            if (simulacion[materia.codigoMateria] === "cursando") {
+                simulacion[materia.codigoMateria] = "aprobada";
+            }
+        });
+
+        // Reevaluamos antes de arrancar para que las "cursando" desbloqueen sus consecuentes
+        simulacion = this.evaluator.evaluate(simulacion, this.graph);
+
         // Por seguridad contra grafos cíclicos teóricos (deadlock), limitamos las iteraciones
         const maxIteraciones = this.graph.getAllNodes().length;
         let iteracion = 0;

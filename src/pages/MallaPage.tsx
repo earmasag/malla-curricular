@@ -13,6 +13,7 @@ import { MallaHeader } from "../components/MallaHeader/MallaHeader";
 import { ZoomControls } from "../components/ZoomControls/ZoomControls";
 import { RutaModal } from "../components/RutaModal/RutaModal";
 import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
+import { FeedbackModal } from "../components/FeedbackModal/FeedbackModal";
 import { MateriaRepository } from "../data/MateriaRepository";
 
 const builder = new MallaCurricularBuilder();
@@ -53,6 +54,7 @@ const MallaContent = () => {
     const [optimaRuta, setOptimaRuta] = useState<string[][] | null>(null);
     const [customRouteResult, setCustomRouteResult] = useState<string[][] | null>(null);
     const [isMisRutasModalOpen, setIsMisRutasModalOpen] = useState(false);
+    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [savedRoutesList, setSavedRoutesList] = useState<SavedRoute[]>([]);
 
     // Repository for loading routes list
@@ -129,6 +131,7 @@ const MallaContent = () => {
                 currentSemesterUCs={currentSemesterUCs}
                 totalCustomUCs={totalCustomUCs}
                 onOpenMisRutas={handleOpenMisRutas}
+                onOpenFeedback={() => setIsFeedbackModalOpen(true)}
             />
 
             <MisRutasModal
@@ -137,6 +140,11 @@ const MallaContent = () => {
                 savedRoutes={savedRoutesList}
                 onViewRoute={handleViewSavedRoute}
                 onDeleteRoute={handleDeleteSavedRoute}
+            />
+
+            <FeedbackModal
+                isOpen={isFeedbackModalOpen}
+                onClose={() => setIsFeedbackModalOpen(false)}
             />
 
             <RutaModal

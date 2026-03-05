@@ -17,6 +17,7 @@ export interface MallaHeaderProps {
     currentSemesterUCs?: number;
     totalCustomUCs?: number;
     onOpenMisRutas?: () => void;
+    onOpenFeedback?: () => void;
 }
 
 export const MallaHeader: React.FC<MallaHeaderProps> = ({
@@ -35,7 +36,8 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
     hasDraftRoute = false,
     currentSemesterUCs = 0,
     totalCustomUCs = 0,
-    onOpenMisRutas
+    onOpenMisRutas,
+    onOpenFeedback
 }) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -107,6 +109,17 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     >
                                         <span>📚</span>
                                         <span className="whitespace-nowrap hidden sm:inline">Mis Rutas</span>
+                                    </button>
+                                )}
+
+                                {onOpenFeedback && (
+                                    <button
+                                        onClick={onOpenFeedback}
+                                        className="bg-white text-gray-700 hover:bg-gray-100 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5 transition-colors"
+                                        title="Enviar sugerencias o reportar errores"
+                                    >
+                                        <span>💡</span>
+                                        <span className="whitespace-nowrap hidden sm:inline">Sugerencias</span>
                                     </button>
                                 )}
 

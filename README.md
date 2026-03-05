@@ -1,73 +1,45 @@
-# React + TypeScript + Vite
+# Malla Curricular Interactiva 🎓
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una herramienta de planificación académica visual e interactiva construida para facilitar el seguimiento y la proyección de la carrera universitaria. Diseñada para estudiantes, esta aplicación permite llevar un control preciso de las materias aprobadas, explorar rutas de estudio perzonalizadas y generar caminos óptimos hacia la graduación basados en restricciones reales.
 
-Currently, two official plugins are available:
+## ✨ Características Principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Visor de Malla Dinámico:** Visualiza el pensum de tu carrera en formato de nodos interactivos distribuidos por semestre.
+*   **Gestión de Progreso:** Marca las materias con estados dinámicos (Aprobada, Cursando, Disponible o Bloqueada).
+*   **Seguimiento de Creditos (UCs):** El sistema rastrea de forma inteligente tus Unidades de Crédito acumuladas tomando en cuenta el grafo de requisitos.
+*   **Visualización de Prelaciones:** Entiende qué materias componen los cuellos de botella mediante el dibujado dinámico de líneas conectando prerrequisitos usando `react-xarrows`.
+*   **Constructor de Rutas Personalizadas:** Un modo "Sandbox" para planificar libremente próximos semestres, añadir materias temporalmente para ver cuántas UCs suman, y guardar tu propia ruta estimada a futuro en `LocalStorage`.
+*   **Generador de Ruta Óptima Asistido (Kahn's Algorithm):** Utilizando teoría de grafos, la aplicación puede calcular y dibujar de forma automática el mejor camino hacia tu graduación, optimizado según restricciones personalizables (Límites de UC y Límite de Materias por semestre).
 
-## React Compiler
+## 🛠️ Stack Tecnológico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+La aplicación está construida utilizando el moderno ecosistema de React (Frontend):
 
-## Expanding the ESLint configuration
+*   **Core:** React 18, TypeScript, Vite
+*   **Estilos y UI:** Tailwind CSS (Vanilla + Utilitarios Modernos)
+*   **Visualización de Nodos y Canvas:** 
+    *   `react-zoom-pan-pinch` para la navegación interactiva (Paneo y Escalado estilo Google Maps).
+    *   `react-xarrows` para enrutar flechas ortogonales uniendo los prerrequisitos y correquisitos entre las cartas de las materias.
+*   **Almacenamiento Local:** Interfaz abstracta sobre `window.localStorage` para persistencia del progreso estudiantil y de múltiples simulaciones temporales (rutas personalizadas). 
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Corriendo el proyecto localmente
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Asegúrate de tener Node.js instalado en tu sistema.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1.  Clona el repositorio.
+2.  Instala las dependencias:
+    ```bash
+    npm install
+    ```
+3.  Arranca el servidor local de desarrollo:
+    ```bash
+    npm run dev
+    ```
+4.  La aplicación estará disponible típicamente en `http://localhost:5173`. Para compilarla hacia producción (estáticos puros) usa `npm run build`.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ✉️ Feedback y Contribuciones
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Este es un proyecto open-source y parte de un portafolio personal. Toda retroalimentación es altamente valorada. 
+Si encuentras bugs algorítmicos (especialmente en la lógica condicional del DAG y la estructura de Kahn), o quieres sugerir modificaciones sobre la interfaz:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+* Deja un [Issue estructurado en el repositorio](https://github.com/earmasag/malla-curricular/issues).

@@ -13,7 +13,7 @@ const matriculaService = new MatriculaService();
 export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose, materiasCursando }) => {
     // Estado del perfil del estudiante para cálculo interactivo
     const [perfil, setPerfil] = useState<StudentProfile>({
-        esSedeGuayana: false,
+        esSedeGuayana: true,
         carrera: "sinDescuento",
         esAlumnoNuevo: false,
         aplicaRetraso: false,

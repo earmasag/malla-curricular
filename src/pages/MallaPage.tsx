@@ -14,7 +14,9 @@ import { ZoomControls } from "../components/ZoomControls/ZoomControls";
 import { RutaModal } from "../components/RutaModal/RutaModal";
 import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
 import { FeedbackModal } from "../components/FeedbackModal/FeedbackModal";
+import { MatriculaModal } from "../components/MatriculaModal/MatriculaModal";
 import { MateriaRepository } from "../repository/MateriaRepository";
+import type { MateriaMatricula } from "../services/MatriculaService";
 
 const builder = new MallaCurricularBuilder();
 const materiaData = planEstudioJSON as unknown as MateriaJSON[];
@@ -55,6 +57,7 @@ const MallaContent = () => {
     const [customRouteResult, setCustomRouteResult] = useState<string[][] | null>(null);
     const [isMisRutasModalOpen, setIsMisRutasModalOpen] = useState(false);
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+    const [isMatriculaModalOpen, setIsMatriculaModalOpen] = useState(false);
     const [savedRoutesList, setSavedRoutesList] = useState<SavedRoute[]>([]);
 
     // Repository for loading routes list
@@ -111,6 +114,23 @@ const MallaContent = () => {
     // Determinar qué progreso usar
     const activeProgreso = isCustomRouteMode ? customProgreso : progreso;
 
+    // Obtener las materias que actualmente están "cursando"
+    const materiasCursando = useMemo(() => {
+        return Object.entries(activeProgreso)
+            .filter(([_, estado]) => estado === 'cursando')
+            .map(([codigo]) => {
+                const m = malla.getNode(codigo);
+                if (!m) return null;
+                return {
+                    ...m,
+                    estado: "cursando" as const,
+                    esTSU: false,
+                    esElectivaEspecialHumanidades: false,
+                } as MateriaMatricula;
+            })
+            .filter(Boolean) as MateriaMatricula[];
+    }, [activeProgreso]);
+
     return (
         <div className="flex relative h-screen w-screen bg-gray-100 font-sans m-0 overflow-hidden">
             {/* Cabecera / Dashboard (Flotante) */}
@@ -132,6 +152,13 @@ const MallaContent = () => {
                 totalCustomUCs={totalCustomUCs}
                 onOpenMisRutas={handleOpenMisRutas}
                 onOpenFeedback={() => setIsFeedbackModalOpen(true)}
+                onCalculoMatricula={() => setIsMatriculaModalOpen(true)}
+            />
+
+            <MatriculaModal
+                isOpen={isMatriculaModalOpen}
+                onClose={() => setIsMatriculaModalOpen(false)}
+                materiasCursando={materiasCursando}
             />
 
             <MisRutasModal

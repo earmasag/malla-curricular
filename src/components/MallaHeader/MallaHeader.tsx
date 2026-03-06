@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
-    Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag
+    Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator
 } from 'lucide-react';
 
 export interface MallaHeaderProps {
@@ -22,6 +22,7 @@ export interface MallaHeaderProps {
     totalCustomUCs?: number;
     onOpenMisRutas?: () => void;
     onOpenFeedback?: () => void;
+    onCalculoMatricula?: () => void;
 }
 
 export const MallaHeader: React.FC<MallaHeaderProps> = ({
@@ -41,7 +42,8 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
     currentSemesterUCs = 0,
     totalCustomUCs = 0,
     onOpenMisRutas,
-    onOpenFeedback
+    onOpenFeedback,
+    onCalculoMatricula
 }) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -102,6 +104,20 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     >
                                         <Wrench className="w-4 h-4" />
                                         <span className="whitespace-nowrap">{hasDraftRoute ? "Volver al borrador" : "Crear Ruta"}</span>
+                                    </button>
+                                )}
+
+                                {onCalculoMatricula && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onCalculoMatricula();
+                                        }}
+                                        className="bg-green-50 text-green-700 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-green-200 flex items-center gap-1.5 transition-colors"
+                                        title="Calcular la matrícula de las materias marcadas como cursando (azul)"
+                                    >
+                                        <Calculator className="w-4 h-4" />
+                                        <span className="whitespace-nowrap hidden sm:inline">Matrícula</span>
                                     </button>
                                 )}
 
@@ -209,6 +225,20 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     <X className="w-4 h-4" />
                                     <span className="whitespace-nowrap">Cerrar</span>
                                 </button>
+
+                                {onCalculoMatricula && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onCalculoMatricula();
+                                        }}
+                                        className="bg-green-50 text-green-700 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-green-200 flex items-center gap-1.5 transition-colors"
+                                        title="Calcular la matrícula de las materias que llevas en este semestre"
+                                    >
+                                        <Calculator className="w-4 h-4" />
+                                        <span className="whitespace-nowrap hidden sm:inline">Matrícula</span>
+                                    </button>
+                                )}
 
                                 {deleteDraftRoute && (
                                     <button

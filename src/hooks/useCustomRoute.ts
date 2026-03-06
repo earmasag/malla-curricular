@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import type { ProgresoMalla } from "../types/materia";
 import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
-import { MateriaRepository } from "../data/MateriaRepository";
+import { MateriaRepository } from "../repository/MateriaRepository";
 
 export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: ProgresoMalla) => {
     // Instanciamos Evaluator y Repository independientemente para el hook

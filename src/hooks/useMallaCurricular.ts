@@ -5,7 +5,7 @@ import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
 import { PathfindingService } from "../services/PathfindingService";
 import { GreedyScheduler } from "../strategies/GreedyScheduler";
 import { calcularUCAcumuladas } from "../utils/mallaUtils";
-import { MateriaRepository } from "../data/MateriaRepository";
+import { MateriaRepository } from "../repository/MateriaRepository";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     // Instanciamos el evaluador estándar de la malla (Service Layer / Strategy)

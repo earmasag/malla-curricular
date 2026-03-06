@@ -14,7 +14,7 @@ import { ZoomControls } from "../components/ZoomControls/ZoomControls";
 import { RutaModal } from "../components/RutaModal/RutaModal";
 import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
 import { FeedbackModal } from "../components/FeedbackModal/FeedbackModal";
-import { MateriaRepository } from "../data/MateriaRepository";
+import { MateriaRepository } from "../repository/MateriaRepository";
 
 const builder = new MallaCurricularBuilder();
 const materiaData = planEstudioJSON as unknown as MateriaJSON[];

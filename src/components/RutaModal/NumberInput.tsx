@@ -50,7 +50,7 @@ export const NumberInput: React.FC<NumberInputProps> = ({
     };
 
     const inputControl = (
-        <div className="relative flex items-center w-24">
+        <div className="relative flex items-center w-18">
             <input
                 id={id}
                 type="text"
@@ -89,7 +89,7 @@ export const NumberInput: React.FC<NumberInputProps> = ({
     if (label) {
         return (
             <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-gray-600 cursor-pointer" htmlFor={id}>
+                <label className="text-sm font-medium text-gray-600 cursor-pointer mr-1" htmlFor={id}>
                     {label}
                 </label>
                 {inputControl}

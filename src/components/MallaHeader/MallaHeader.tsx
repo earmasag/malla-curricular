@@ -7,6 +7,8 @@ import {
 export interface MallaHeaderProps {
     cantidadAprobadas: number;
     ucAcumuladas: number;
+    totalMaterias: number;
+    ucCursando: number;
     onResetProgreso: () => void;
     onShowRutaOptima: () => void;
     isCustomRouteMode?: boolean;
@@ -28,6 +30,8 @@ export interface MallaHeaderProps {
 export const MallaHeader: React.FC<MallaHeaderProps> = ({
     cantidadAprobadas,
     ucAcumuladas,
+    totalMaterias,
+    ucCursando,
     onResetProgreso,
     onShowRutaOptima,
     isCustomRouteMode = false,
@@ -70,14 +74,22 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                         <div className="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5">
                             <BookOpen className="w-4 h-4 text-blue-500" />
                             {isExpanded && <span className="whitespace-nowrap">Aprobadas:</span>}
-                            <span className="text-blue-600 font-bold">{cantidadAprobadas}</span>
+                            <span className="text-blue-600 font-bold">{cantidadAprobadas} / {totalMaterias}</span>
                         </div>
 
                         <div className="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5">
                             <Lightbulb className="w-4 h-4 text-amber-500" />
-                            {isExpanded && <span className="whitespace-nowrap">UC:</span>}
+                            {isExpanded && <span className="whitespace-nowrap">UC Aprobadas:</span>}
                             <span className="text-blue-600 font-bold">{ucAcumuladas}</span>
                         </div>
+
+                        {ucCursando > 0 && (
+                            <div className="bg-blue-50 px-3 py-1.5 rounded-full shadow-sm border border-blue-200 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                {isExpanded && <span className="text-blue-800 whitespace-nowrap">UC Cursando:</span>}
+                                <span className="text-blue-700 font-bold">{ucCursando}</span>
+                            </div>
+                        )}
 
                         {isExpanded && (
                             <>

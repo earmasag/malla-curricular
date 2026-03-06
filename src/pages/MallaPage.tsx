@@ -98,12 +98,17 @@ const MallaContent = () => {
         ? []
         : materiasCursandoOriginal;
 
+    const ucCursando = materiasCursando.reduce((sum, m) => sum + m.unidadesCredito, 0);
+    const totalMaterias = malla.getAllNodes().length;
+
     return (
         <div className="flex relative h-screen w-screen bg-gray-100 font-sans m-0 overflow-hidden">
             {/* Cabecera / Dashboard (Flotante) */}
             <MallaHeader
                 cantidadAprobadas={cantidadAprobadas}
                 ucAcumuladas={ucAcumuladas}
+                totalMaterias={totalMaterias}
+                ucCursando={ucCursando}
                 onResetProgreso={resetProgreso}
                 onShowRutaOptima={handleShowRutaOptima}
                 isCustomRouteMode={isCustomRouteMode}

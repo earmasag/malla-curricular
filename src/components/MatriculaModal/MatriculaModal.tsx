@@ -78,8 +78,8 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
 
                                     <div className="flex flex-col gap-2 pt-1">
                                         <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 font-medium">
-                                            <input type="checkbox" checked={perfil.esSedeGuayana} onChange={(e) => setPerfil({ ...perfil, esSedeGuayana: e.target.checked })} className="rounded text-green-500 focus:ring-green-500 w-4 h-4" />
-                                            Sede Guayana
+                                            <input type="checkbox" checked={!perfil.esSedeGuayana} onChange={(e) => setPerfil({ ...perfil, esSedeGuayana: !e.target.checked })} className="rounded text-green-500 focus:ring-green-500 w-4 h-4" />
+                                            Sede Caracas
                                         </label>
                                         <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 font-medium">
                                             <input type="checkbox" checked={perfil.esAlumnoNuevo} onChange={(e) => setPerfil({ ...perfil, esAlumnoNuevo: e.target.checked })} className="rounded text-green-500 focus:ring-green-500 w-4 h-4" />

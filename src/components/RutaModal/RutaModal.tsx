@@ -3,7 +3,7 @@ import { Map as MapPath, Wrench, X } from 'lucide-react';
 import type { MallaCurricularGraph } from '../../core/MallaCurricularGraph';
 import { useRutaOptima } from '../../hooks/useRutaOptima';
 import { BloqueEstudioCard } from './BloqueEstudioCard';
-import { FiltrosRutaOptima } from './FiltrosRutaOptima';
+import { FiltrosRutaOptimaButton, FiltrosRutaOptimaPanel } from './FiltrosRutaOptima';
 
 interface RutaModalProps {
     isOpen: boolean;
@@ -26,6 +26,8 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
         ruta: localOptimaRuta
     } = useRutaOptima(isOpen, generarRutaOptima);
 
+    const [isFiltrosOpen, setIsFiltrosOpen] = React.useState(false);
+
     if (!isOpen) return null;
 
     // Usar la ruta personalizada si se proporciona, si no, usar la óptima generada (o la inicial prop)
@@ -42,10 +44,9 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                             {customRoute ? <Wrench className="w-6 h-6 text-purple-500" /> : <MapPath className="w-6 h-6 text-blue-500" />} {customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
                         </h2>
                         {!customRoute && (
-                            <FiltrosRutaOptima
-                                maxUcInput={maxUcInput} setMaxUcInput={setMaxUcInput}
-                                maxMateriasInput={maxMateriasInput} setMaxMateriasInput={setMaxMateriasInput}
-                                maxHorasInput={maxHorasInput} setMaxHorasInput={setMaxHorasInput}
+                            <FiltrosRutaOptimaButton
+                                isOpen={isFiltrosOpen}
+                                setIsOpen={setIsFiltrosOpen}
                             />
                         )}
                     </div>
@@ -58,6 +59,16 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                         <X className="w-6 h-6" />
                     </button>
                 </div>
+
+                {/* Filtros Accordion Panel */}
+                {!customRoute && (
+                    <FiltrosRutaOptimaPanel
+                        isOpen={isFiltrosOpen}
+                        maxUcInput={maxUcInput} setMaxUcInput={setMaxUcInput}
+                        maxMateriasInput={maxMateriasInput} setMaxMateriasInput={setMaxMateriasInput}
+                        maxHorasInput={maxHorasInput} setMaxHorasInput={setMaxHorasInput}
+                    />
+                )}
 
                 {/* Body (Scrollable) */}
                 <div className="flex-1 overflow-y-auto p-6 bg-gray-50/50">

@@ -2,10 +2,10 @@ import planEstudioJSON from "../data/plan_estudio.json";
 import { useMallaCurricular } from "../hooks/useMallaCurricular";
 import { useCustomRoute } from "../hooks/useCustomRoute";
 import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
-import type { MateriaJSON, SavedRoute } from "../types/materia";
+import type { MateriaJSON } from "../types/materia";
 import { SemestreColumn } from "../components/SemestreColumn/SemestreColumn";
 import MallaConnections from "../components/MallaConnections/MallaConnections";
-import React, { useState, useMemo } from "react";
+import React from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Xwrapper, useXarrow } from "react-xarrows";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -15,8 +15,7 @@ import { RutaModal } from "../components/RutaModal/RutaModal";
 import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
 import { FeedbackModal } from "../components/FeedbackModal/FeedbackModal";
 import { MatriculaModal } from "../components/MatriculaModal/MatriculaModal";
-import { MateriaRepository } from "../repository/MateriaRepository";
-import type { MateriaMatricula } from "../services/MatriculaService";
+import { useMallaController } from "../hooks/useMallaController";
 
 const builder = new MallaCurricularBuilder();
 const materiaData = planEstudioJSON as unknown as MateriaJSON[];
@@ -32,6 +31,7 @@ const MallaContent = () => {
         toggleSemestre,
         resetProgreso,
         generarRutaOptima,
+        materiasCursando: materiasCursandoOriginal
     } = useMallaCurricular(malla);
 
     const {
@@ -49,19 +49,31 @@ const MallaContent = () => {
         saveAndFinishRoute
     } = useCustomRoute(malla, progreso);
 
-
-    const [hoveredMateria, setHoveredMateria] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [optimaRuta, setOptimaRuta] = useState<string[][] | null>(null);
-    const [customRouteResult, setCustomRouteResult] = useState<string[][] | null>(null);
-    const [isMisRutasModalOpen, setIsMisRutasModalOpen] = useState(false);
-    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-    const [isMatriculaModalOpen, setIsMatriculaModalOpen] = useState(false);
-    const [savedRoutesList, setSavedRoutesList] = useState<SavedRoute[]>([]);
-
-    // Repository for loading routes list
-    const repository = useMemo(() => new MateriaRepository(), []);
+    const {
+        hoveredMateria,
+        setHoveredMateria,
+        isModalOpen,
+        setIsModalOpen,
+        optimaRuta,
+        customRouteResult,
+        isMisRutasModalOpen,
+        setIsMisRutasModalOpen,
+        isFeedbackModalOpen,
+        setIsFeedbackModalOpen,
+        isMatriculaModalOpen,
+        setIsMatriculaModalOpen,
+        savedRoutesList,
+        handleShowRutaOptima,
+        handleFinishCustomRoute,
+        handleOpenMisRutas,
+        handleDeleteSavedRoute,
+        handleViewSavedRoute
+    } = useMallaController(
+        generarRutaOptima,
+        saveAndFinishRoute,
+        cancelCustomRoute,
+        customSemesters
+    );
 
     // Detectar si es móvil para deshabilitar el zoom con la rueda del ratón en escritorio
     const isMobile = useIsMobile();
@@ -76,60 +88,15 @@ const MallaContent = () => {
         (_, i) => i + 1
     );
 
-    const handleShowRutaOptima = () => {
-        const ruta = generarRutaOptima(24, 6, undefined);
-        setOptimaRuta(ruta);
-        setCustomRouteResult(null); // Ensure we are in "Ruta Optima" mode
-        setIsModalOpen(true);
-    };
 
-    const handleFinishCustomRoute = (name: string) => {
-        // Filtrar semestres vacíos en caso de que el último no tenga nada
-        const validSemesters = customSemesters.filter((sem: string[]) => sem.length > 0);
-        if (validSemesters.length > 0) {
-            const uniqueId = `route-${Date.now()}`;
-            saveAndFinishRoute(uniqueId, name);
-            setCustomRouteResult(validSemesters);
-            setIsModalOpen(true);
-        }
-        cancelCustomRoute();
-    };
-
-    const handleOpenMisRutas = () => {
-        setSavedRoutesList(repository.getSavedRoutes());
-        setIsMisRutasModalOpen(true);
-    };
-
-    const handleDeleteSavedRoute = (routeId: string) => {
-        repository.deleteRoute(routeId);
-        setSavedRoutesList(repository.getSavedRoutes());
-    };
-
-    const handleViewSavedRoute = (routeSemesters: string[][]) => {
-        setIsMisRutasModalOpen(false);
-        setCustomRouteResult(routeSemesters);
-        setIsModalOpen(true);
-    };
 
     // Determinar qué progreso usar
     const activeProgreso = isCustomRouteMode ? customProgreso : progreso;
 
-    // Obtener las materias que actualmente están "cursando"
-    const materiasCursando = useMemo(() => {
-        return Object.entries(activeProgreso)
-            .filter(([_, estado]) => estado === 'cursando')
-            .map(([codigo]) => {
-                const m = malla.getNode(codigo);
-                if (!m) return null;
-                return {
-                    ...m,
-                    estado: "cursando" as const,
-                    esTSU: false,
-                    esElectivaEspecialHumanidades: false,
-                } as MateriaMatricula;
-            })
-            .filter(Boolean) as MateriaMatricula[];
-    }, [activeProgreso]);
+    const materiasCursando = isCustomRouteMode
+        // En modo personalizado simulamos que no cursa nada
+        ? []
+        : materiasCursandoOriginal;
 
     return (
         <div className="flex relative h-screen w-screen bg-gray-100 font-sans m-0 overflow-hidden">

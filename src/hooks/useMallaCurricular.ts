@@ -6,6 +6,7 @@ import { PathfindingService } from "../services/PathfindingService";
 import { GreedyScheduler } from "../strategies/GreedyScheduler";
 import { calcularUCAcumuladas } from "../utils/mallaUtils";
 import { MateriaRepository } from "../repository/MateriaRepository";
+import type { MateriaMatricula } from "../services/MatriculaService";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     // Instanciamos el evaluador estándar de la malla (Service Layer / Strategy)
@@ -47,6 +48,23 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     const ucAcumuladas = useMemo(() => {
         return calcularUCAcumuladas(progreso, grafo);
     }, [progreso, grafo])
+
+    // Obtener las materias que actualmente están "cursando"
+    const materiasCursando = useMemo(() => {
+        return Object.entries(progreso)
+            .filter(([, estado]) => estado === 'cursando')
+            .map(([codigo]) => {
+                const m = grafo.getNode(codigo);
+                if (!m) return null;
+                return {
+                    ...m,
+                    estado: "cursando" as const,
+                    esTSU: false,
+                    esElectivaEspecialHumanidades: false,
+                } as MateriaMatricula;
+            })
+            .filter(Boolean) as MateriaMatricula[];
+    }, [progreso, grafo]);
 
     const toggleAprobacion = useCallback((codigoMateria: string) => {
         setProgreso(progresoActual => {
@@ -135,12 +153,13 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         const pathfinder = new PathfindingService(grafo, evaluator, strategy);
 
         return pathfinder.calcularRutaOptima(progreso, maxUcPorSemestre, maxMateriasPorSemestre, maxHorasPorSemestre);
-    }, [grafo, progreso, evaluator]);
+    }, [grafo, progreso, evaluator]); // Evaluator no cambia porque está envuelto en un useMemo vacío
 
     return {
         progreso,
         cantidadAprobadas,
         ucAcumuladas,
+        materiasCursando,
         toggleAprobacion,
         toggleCursando,
         toggleSemestre,

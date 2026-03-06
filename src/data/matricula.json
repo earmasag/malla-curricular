@@ -1,0 +1,48 @@
+{
+    "costo_uc_base": 20,
+    "costo_uc_tsu": 12,
+    "meses_por_semestre": 5,
+    "recargos_taxonomia": {
+        "TA-1": 0.00,
+        "TA-2": 0.00,
+        "TA-3": 0.00,
+        "TA-4": 0.00,
+        "TA-5": 0.00,
+        "TA-6": 0.00,
+        "TA-7": 0.10,
+        "TA-8": 0.10,
+        "TA-9": 0.15,
+        "electivas_especiales_humanidades": 0.15
+    },
+    "derecho_inscripcion_uc": {
+        "alumno_nuevo_inscripcion": 10,
+        "alumno_nuevo_confirmacion": 2.5,
+        "alumno_regular_inscripcion": 6,
+        "alumno_regular_confirmacion": 2.5
+    },
+    "descuentos": {
+        "sede_guayana": 0.10
+    },
+    "descuentos_carrera": {
+        "educacion": {
+            "porcentaje": 0.30,
+            "sobreBaseBruta": false
+        },
+        "letras": {
+            "porcentaje": 0.30,
+            "sobreBaseBruta": false
+        },
+        "filosofia": {
+            "porcentaje": 0.60,
+            "sobreBaseBruta": true
+        },
+        "sinDescuento": {
+            "porcentaje": 0.00,
+            "sobreBaseBruta": false
+        }
+    },
+    "recargos_adicionales": {
+        "retraso_pago": 0.10,
+        "cursos_intensivos": 0.20
+    }
+}

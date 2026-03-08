@@ -33,8 +33,8 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
     const totalUc = materiasCursando.reduce((sum, m) => sum + m.unidadesCredito, 0);
 
     return (
-        <div className="fixed inset-0 z-60 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm sm:p-4 animate-fade-in text-sm sm:text-base">
-            <div className="bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92dvh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-slide-up mt-8 sm:mt-0 relative">
+        <div className="fixed inset-0 z-60 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-4 animate-fade-in text-sm sm:text-base">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90dvh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-slide-up mb-2 sm:mb-0 mt-8 sm:mt-0 relative">
 
                 {/* Indicador visual móvil */}
                 <div className="w-full flex justify-center pt-2 pb-2 sm:hidden absolute top-0 left-0 z-10 pointer-events-none">

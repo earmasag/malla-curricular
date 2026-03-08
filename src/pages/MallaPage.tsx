@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import planEstudioJSON from "../data/plan_estudio.json";
 import areasColorData from "../data/areas_color.json";
 import { useMallaCurricular } from "../hooks/useMallaCurricular";
@@ -70,7 +70,11 @@ const MallaContent = () => {
         handleFinishCustomRoute,
         handleOpenMisRutas,
         handleDeleteSavedRoute,
-        handleViewSavedRoute
+        handleViewSavedRoute,
+        isLeyendaOpen,
+        setIsLeyendaOpen,
+        leyendaRef,
+        botonLeyendaRef
     } = useMallaController(
         generarRutaOptima,
         saveAndFinishRoute,
@@ -80,9 +84,6 @@ const MallaContent = () => {
 
     // Detectar si es móvil para deshabilitar el zoom con la rueda del ratón en escritorio
     const isMobile = useIsMobile();
-
-    // Estado para la leyenda
-    const [isLeyendaOpen, setIsLeyendaOpen] = useState(false);
 
     // Obtener la función para recalcular las flechas de react-xarrows manualmente
     const updateXarrow = useXarrow();
@@ -111,6 +112,7 @@ const MallaContent = () => {
         <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden">
             {/* Botón Flotante Leyenda (Top Right) */}
             <button
+                ref={botonLeyendaRef}
                 onClick={() => setIsLeyendaOpen(!isLeyendaOpen)}
                 className="absolute top-4 right-4 md:top-6 md:right-6 z-50 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
                 title="Ver Leyenda y Abreviaturas"
@@ -120,7 +122,7 @@ const MallaContent = () => {
 
             {/* Popover / Modal de Leyenda */}
             {isLeyendaOpen && (
-                <div className="absolute top-20 right-2 md:right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100dvh-100px)] max-w-[calc(100dvw-16px)] md:max-w-none overflow-y-auto overflow-x-hidden rounded-xl shadow-2xl">
+                <div ref={leyendaRef} className="absolute top-20 right-2 md:right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100dvh-100px)] max-w-[calc(100dvw-16px)] md:max-w-none overflow-y-auto overflow-x-hidden rounded-xl shadow-2xl">
                     <LeyendaMalla
                         tituloCarrera="Ingeniería Informática"
                         totalSemestres={totalSemestres}

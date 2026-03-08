@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { MateriaRepository } from "../repository/MateriaRepository";
 import type { SavedRoute } from "../types/materia";
 
@@ -18,7 +18,34 @@ export const useMallaController = (
     const [isMisRutasModalOpen, setIsMisRutasModalOpen] = useState(false);
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [isMatriculaModalOpen, setIsMatriculaModalOpen] = useState(false);
+    const [isLeyendaOpen, setIsLeyendaOpen] = useState(false);
     const [savedRoutesList, setSavedRoutesList] = useState<SavedRoute[]>([]);
+
+    const leyendaRef = useRef<HTMLDivElement>(null);
+    const botonLeyendaRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                leyendaRef.current &&
+                !leyendaRef.current.contains(event.target as Node) &&
+                botonLeyendaRef.current &&
+                !botonLeyendaRef.current.contains(event.target as Node)
+            ) {
+                setIsLeyendaOpen(false);
+            }
+        };
+
+        if (isLeyendaOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isLeyendaOpen]);
 
     // Repository for loading routes list
     const repository = useMemo(() => new MateriaRepository(), []);
@@ -71,6 +98,10 @@ export const useMallaController = (
         setIsFeedbackModalOpen,
         isMatriculaModalOpen,
         setIsMatriculaModalOpen,
+        isLeyendaOpen,
+        setIsLeyendaOpen,
+        leyendaRef,
+        botonLeyendaRef,
         savedRoutesList,
         handleShowRutaOptima,
         handleFinishCustomRoute,

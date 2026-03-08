@@ -4,9 +4,11 @@ import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
 import { MateriaRepository } from "../repository/MateriaRepository";
 import { useNotification } from "./useNotification";
+import { useToast } from "./useToast";
 
 export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: ProgresoMalla) => {
     const { confirm } = useNotification();
+    const { showToast } = useToast();
 
     // Instanciamos Evaluator y Repository independientemente para el hook
     const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
@@ -111,6 +113,22 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
     }, [customSemesters, isCustomRouteMode, repository]);
 
     const toggleCustomMateria = useCallback((codigoMateria: string) => {
+
+        // Validación preventiva y disparo de TOAST en modo Constructor
+        const estadoActual = customProgreso[codigoMateria];
+        if (estadoActual === "bloqueada") {
+            const faltantes = grafo.obtenerPrerrequisitosFaltantes(codigoMateria, customProgreso);
+            const nombres = faltantes.map(f => f.nombre).join(", ");
+            const materia = grafo.getNode(codigoMateria);
+
+            showToast(
+                `No puedes añadir ${materia?.nombre || codigoMateria} al borrador`,
+                `Te falta aprobar: ${nombres}`,
+                'warning'
+            );
+            return; // Cortocircuitamos
+        }
+
         setCustomProgreso(progresoActual => {
             const nuevoProgreso = { ...progresoActual };
             const estadoActualDeLaMateria = nuevoProgreso[codigoMateria];
@@ -137,7 +155,7 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
             }
             return newSemesters;
         });
-    }, []);
+    }, [customProgreso, customSemesters, grafo, showToast]);
 
     const advanceCustomSemester = useCallback(() => {
         if (customSemesters.length > 0 && customSemesters[customSemesters.length - 1].length === 0) {

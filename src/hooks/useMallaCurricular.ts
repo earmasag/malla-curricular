@@ -7,8 +7,10 @@ import { GreedyScheduler } from "../strategies/GreedyScheduler";
 import { calcularUCAcumuladas } from "../utils/mallaUtils";
 import { MateriaRepository } from "../repository/MateriaRepository";
 import type { MateriaMatricula } from "../services/MatriculaService";
+import { useToast } from "./useToast";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
+    const { showToast } = useToast();
     // Instanciamos el evaluador estándar de la malla (Service Layer / Strategy)
     const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
 
@@ -67,13 +69,24 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     }, [progreso, grafo]);
 
     const toggleAprobacion = useCallback((codigoMateria: string) => {
+        // Validación preventiva y disparo de TOAST
+        const estadoActual = progreso[codigoMateria];
+        if (estadoActual === "bloqueada") {
+            const faltantes = grafo.obtenerPrerrequisitosFaltantes(codigoMateria, progreso);
+            const nombres = faltantes.map(f => f.nombre).join(", ");
+            const materia = grafo.getNode(codigoMateria);
+
+            showToast(
+                `Aún no puedes cursar ${materia?.nombre || codigoMateria}`,
+                `Te falta aprobar: ${nombres}`,
+                'warning'
+            );
+            return; // Cortocircuitamos
+        }
+
         setProgreso(progresoActual => {
             const nuevoProgreso = { ...progresoActual };
             const estadoActualDeLaMateria = nuevoProgreso[codigoMateria];
-
-            if (estadoActualDeLaMateria === "bloqueada") {
-                return progresoActual; // No se puede interactuar con bloqueadas
-            }
 
             if (estadoActualDeLaMateria === "disponible" || estadoActualDeLaMateria === "cursando") {
                 nuevoProgreso[codigoMateria] = "aprobada";
@@ -84,17 +97,32 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
             return evaluator.evaluate(nuevoProgreso, grafo);
         });
-    }, [grafo, evaluator]);
+    }, [grafo, evaluator, progreso, showToast]);
 
     // Función exclusiva para click derecho: transiciona entre disponible y cursando
     const toggleCursando = useCallback((codigoMateria: string) => {
+        // Validación preventiva y disparo de TOAST para click derecho
+        const estadoActual = progreso[codigoMateria];
+        if (estadoActual === "bloqueada") {
+            const faltantes = grafo.obtenerPrerrequisitosFaltantes(codigoMateria, progreso);
+            const nombres = faltantes.map(f => f.nombre).join(", ");
+            const materia = grafo.getNode(codigoMateria);
+
+            showToast(
+                `Aún no puedes llevar ${materia?.nombre || codigoMateria}`,
+                `Te falta aprobar: ${nombres}`,
+                'warning'
+            );
+            return; // Cortocircuitamos
+        }
+
+        if (estadoActual === "aprobada") {
+            return; // Aprobadas se ignoran en click derecho sin notificar (comportamiento silencioso)
+        }
+
         setProgreso(progresoActual => {
             const nuevoProgreso = { ...progresoActual };
             const estadoActualDeLaMateria = nuevoProgreso[codigoMateria];
-
-            if (estadoActualDeLaMateria === "bloqueada" || estadoActualDeLaMateria === "aprobada") {
-                return progresoActual; // No se puede interactuar con bloqueadas, y aprobadas se ignoran en click derecho
-            }
 
             if (estadoActualDeLaMateria === "disponible") {
                 nuevoProgreso[codigoMateria] = "cursando";
@@ -105,7 +133,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
             return evaluator.evaluate(nuevoProgreso, grafo);
         });
-    }, [grafo, evaluator]);
+    }, [grafo, evaluator, progreso, showToast]);
 
     // Función para aprobar/desaprobar un semestre completo
     const toggleSemestre = useCallback((numeroSemestre: number) => {

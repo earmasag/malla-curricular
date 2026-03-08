@@ -4,13 +4,19 @@ import { MallaPage } from './pages/MallaPage';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { CustomNotification } from './components/CustomNotification/CustomNotification';
 
+import { ToastProvider } from './contexts/ToastContext';
+import { ToastContainer } from './components/Toast/ToastContainer';
+
 function App() {
 
   return (
-    <NotificationProvider>
-      <MallaPage />
-      <CustomNotification />
-    </NotificationProvider>
+    <ToastProvider>
+      <NotificationProvider>
+        <MallaPage />
+        <CustomNotification />
+        <ToastContainer />
+      </NotificationProvider>
+    </ToastProvider>
   )
 }
 

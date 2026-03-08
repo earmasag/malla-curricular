@@ -1127,7 +1127,7 @@
     {
         "departamento": "CUSC",
         "codigoMateria": "CUSC",
-        "nombre": "CURSO DE SERVIVIO COMUNITARIO",
+        "nombre": "CURSO DE SERVICIO COMUNITARIO",
         "horasTeoricas": 0,
         "horasPracticas": 0,
         "horasLaboratorio": 0,
@@ -1146,7 +1146,7 @@
     {
         "departamento": "IISC",
         "codigoMateria": "IISC",
-        "nombre": "SERVIVIO COMUNITARIO",
+        "nombre": "SERVICIO COMUNITARIO",
         "horasTeoricas": 0,
         "horasPracticas": 0,
         "horasLaboratorio": 0,

@@ -10,10 +10,14 @@ export interface StudentProfile {
 }
 
 export interface MatriculaBreakdown {
+    mensualidad: number;
     costoMaterias: number;
-    montoDescuentos: number;
-    montoRecargos: number;
+    recargosTaxonomia: number;
+    descuentoSede: number;
+    descuentoCarrera: number;
+    recargoIntensivo: number;
     derechoInscripcion: number;
+    derechoConfirmacion: number;
     totalFinal: number;
     pagosMensuales: number[];
 }
@@ -25,82 +29,92 @@ export interface MateriaMatricula extends MateriaNode {
 }
 
 export class MatriculaService {
-    
+
     public calcularDesglose(materias: MateriaMatricula[], perfil: StudentProfile): MatriculaBreakdown {
-        let costoMaterias = 0;
-        let subtotalBaseTotal = 0;
+        const cantSemestres = 5;
+        let costoMateriasMensual = 0;
+        let recargosTaxonomiaMensual = 0;
+        let descuentoSedeMensual = 0;
+        let descuentoCarrera = 0;
+        let recargoIntensivo = 0;
+        let derechoInscripcion = 0;
+        let derechoConfirmacion = 0;
+        let totalFinal = 0;
+        let pagosMensuales: number[] = [];
+        let mensualidad = 0;
 
-        for (const materia of materias) {
-            const costoBase = this.calcularCostoBaseMateria(materia);
+        costoMateriasMensual = this.calcularMensualidad(materias);
+        recargosTaxonomiaMensual = this.calcularTaxMensual(materias);
 
-            let costoFinal = this.calcularCostoTaxonomiaMateria(materia, costoBase);
-            if (perfil.esIntensivo) {
-                costoFinal = this.aplicarRecargoIntensivo(costoFinal);
-            }
-
-            subtotalBaseTotal += costoBase;
-            costoMaterias += costoFinal;
+        if (perfil.esSedeGuayana) {
+            descuentoSedeMensual = this.calcularDescuentoSede(costoMateriasMensual + recargosTaxonomiaMensual);
         }
 
-        const montoDescuentos = this.calcularDescuentos(costoMaterias, perfil, subtotalBaseTotal);
-        const desgloseInscripcion = this.calcularInscripcion(perfil.esAlumnoNuevo);
-        const derechoInscripcion = desgloseInscripcion.total;
+        derechoInscripcion = this.calcularInscripcion(perfil.esAlumnoNuevo).inscripcion;
+        derechoConfirmacion = this.calcularInscripcion(perfil.esAlumnoNuevo).confirmacion;
 
-        // Subtotal antes del recargo global por retraso
-        const subtotalAntesRecargos = costoMaterias - montoDescuentos + derechoInscripcion;
+        mensualidad = costoMateriasMensual + recargosTaxonomiaMensual - descuentoSedeMensual;
+        pagosMensuales = this.calcularPagosMensuales(mensualidad, perfil);
+        totalFinal = mensualidad * cantSemestres + derechoInscripcion + derechoConfirmacion;
 
-        let montoRecargos = 0;
-        // Retraso de pago
-        if (perfil.aplicaRetraso) {
-            montoRecargos += subtotalAntesRecargos * matriculaData.recargos_adicionales.retraso_pago;
-        }
+        const costoMaterias = costoMateriasMensual * cantSemestres;
+        const recargosTaxonomia = recargosTaxonomiaMensual * cantSemestres;
+        const descuentoSede = descuentoSedeMensual * cantSemestres;
 
-        const totalFinal = subtotalAntesRecargos + montoRecargos;
-
-        // El costo neto de las materias con recargos/descuentos aplicados
-        const costoNetoMaterias = totalFinal - derechoInscripcion;
-        const pagosMensuales = this.calcularPagosMensuales(costoNetoMaterias, desgloseInscripcion.inscripcion, desgloseInscripcion.confirmacion);
 
         return {
+            mensualidad,
             costoMaterias,
-            montoDescuentos,
-            montoRecargos,
+            recargosTaxonomia,
+            descuentoSede,
+            descuentoCarrera,
+            recargoIntensivo,
             derechoInscripcion,
+            derechoConfirmacion,
             totalFinal,
             pagosMensuales
         };
     }
 
-    public calcularPagosMensuales(costoNetoMaterias: number, pagoInscripcion: number, pagoConfirmacion: number): number[] {
-        // Las materias se dividen equitativamente entre los 5 meses del semestre
-        const cuotaMateria = costoNetoMaterias / matriculaData.meses_por_semestre;
-
-        // Cuota 1: Inscripción + Primera fracción de materias
-        const pago1 = pagoInscripcion + cuotaMateria;
-
-        // Cuota 2 y 3: Solo la fracción correspondiente a las materias
-        const pagoRestante = cuotaMateria;
-
-        // Cuota 4: Parte de la confirmación + fracción de materias
-        const pago4 = pagoConfirmacion + cuotaMateria;
-
-        // Cuota 5: Fracción correspondiente a las materias
-        const pago5 = cuotaMateria;
-
-        return [
-            pago1,
-            pagoRestante,
-            pagoRestante,
-            pago4,
-            pago5
-        ];
+    private calcularMensualidad(materias: MateriaMatricula[]): number {
+        const costoUC = matriculaData.costo_uc_base;
+        const mensualidad = costoUC * materias.reduce((sum, m) => sum + m.unidadesCredito, 0);
+        return mensualidad;
     }
 
-    private calcularCostoBaseMateria(materia: MateriaMatricula): number {
-        const costoPorUc = materia.esTSU ? matriculaData.costo_uc_tsu : matriculaData.costo_uc_base;
+    private calcularTaxMensual(materias: MateriaMatricula[]): number {
+        const costoUC = matriculaData.costo_uc_base;
+        const materiasTax = materias;
+        let recargoTax = 0;
 
-        // Fórmula Base: Costo UC * 5 meses * Cantidad de UCs de la materia
-        return costoPorUc * matriculaData.meses_por_semestre * materia.unidadesCredito;
+        materiasTax.forEach((materia) => {
+            recargoTax += this.calcularCostoTaxonomiaMateria(materia, costoUC);
+        })
+
+        return recargoTax;
+
+    }
+
+    private calcularPagosMensuales(mensualidad: number, perfil: StudentProfile): number[] {
+
+        const derecho_inscripcion = this.calcularInscripcion(perfil.esAlumnoNuevo).inscripcion;
+        const derecho_confirmacion = this.calcularInscripcion(perfil.esAlumnoNuevo).confirmacion;
+
+        if (perfil.aplicaRetraso === true) {
+            let monto = mensualidad;
+            let montoInscripción = mensualidad + derecho_inscripcion + this.calcularAtraso(mensualidad + derecho_inscripcion);
+            let montoConfirmacion = mensualidad + derecho_confirmacion + this.calcularAtraso(mensualidad + derecho_confirmacion);
+            monto += this.calcularAtraso(monto)
+            return [
+                montoInscripción,
+                monto,
+                monto,
+                montoConfirmacion,
+                monto
+            ]
+        }
+
+        return [mensualidad + derecho_inscripcion, mensualidad, mensualidad, mensualidad + derecho_confirmacion, mensualidad];
     }
 
     private calcularCostoTaxonomiaMateria(materia: MateriaMatricula, costoBase: number): number {
@@ -116,33 +130,15 @@ export class MatriculaService {
             }
         }
 
-        return costoBase * (1 + porcentajeTaxonomia);
+        return costoBase * porcentajeTaxonomia * materia.unidadesCredito;
     }
 
-    private aplicarRecargoIntensivo(costoMateria: number): number {
-        // Cursos Intensivos: +20% sobre el costo
-        return costoMateria * (1 + matriculaData.recargos_adicionales.cursos_intensivos);
+    private calcularDescuentoSede(costoMaterias: number): number {
+        return costoMaterias * matriculaData.descuentos.sede_guayana;
     }
 
-    private calcularDescuentos(subtotalMaterias: number, perfil: StudentProfile, subtotalBaseMaterias: number): number {
-        let montoDescuentoTotal = 0;
-        let baseGravable = subtotalMaterias; // Se aplica sobre el subtotal con taxonomías incluidas
-
-        // 1. Descuento Sede Guayana (-10%)
-        if (perfil.esSedeGuayana) {
-            const descuentoSede = baseGravable * matriculaData.descuentos.sede_guayana;
-            montoDescuentoTotal += descuentoSede;
-            baseGravable -= descuentoSede; // Importante para la cascada en el siguiente paso
-        }
-
-        // 2. Descuento por Carrera leyendo del JSON dict
-        const infoDescuento = matriculaData.descuentos_carrera[perfil.carrera];
-        if (infoDescuento && infoDescuento.porcentaje > 0) {
-            const montoCalculo = infoDescuento.sobreBaseBruta ? subtotalBaseMaterias : baseGravable;
-            montoDescuentoTotal += montoCalculo * infoDescuento.porcentaje;
-        }
-
-        return montoDescuentoTotal;
+    private calcularAtraso(mensualidad: number): number {
+        return mensualidad * matriculaData.recargos_adicionales.retraso_pago;
     }
 
     private calcularInscripcion(esAlumnoNuevo: boolean): { inscripcion: number, confirmacion: number, total: number } {

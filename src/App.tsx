@@ -1,10 +1,16 @@
 import './App.css'
 import { MallaPage } from './pages/MallaPage';
 
+import { NotificationProvider } from './contexts/NotificationContext';
+import { CustomNotification } from './components/CustomNotification/CustomNotification';
+
 function App() {
 
   return (
-    <MallaPage />
+    <NotificationProvider>
+      <MallaPage />
+      <CustomNotification />
+    </NotificationProvider>
   )
 }
 

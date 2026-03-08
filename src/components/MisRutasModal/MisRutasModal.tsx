@@ -1,6 +1,7 @@
 import React from 'react';
 import type { SavedRoute } from '../../types/materia';
 import { Library, FolderOpen, Calendar, Clock, Eye, X, Trash2 } from 'lucide-react';
+import { useNotification } from '../../hooks/useNotification';
 
 interface MisRutasModalProps {
     isOpen: boolean;
@@ -17,6 +18,8 @@ export const MisRutasModal: React.FC<MisRutasModalProps> = ({
     onViewRoute,
     onDeleteRoute
 }) => {
+    const { confirm } = useNotification();
+
     if (!isOpen) return null;
 
     return (
@@ -55,9 +58,13 @@ export const MisRutasModal: React.FC<MisRutasModalProps> = ({
                                     <div className="flex justify-between items-start mb-3">
                                         <h3 className="font-bold text-lg text-gray-800 line-clamp-2 pr-8">{route.nombre}</h3>
                                         <button
-                                            onClick={(e) => {
+                                            onClick={async (e) => {
                                                 e.stopPropagation();
-                                                if (window.confirm(`¿Seguro que deseas eliminar la ruta "${route.nombre}"?`)) {
+                                                const isConfirmed = await confirm(`¿Seguro que deseas eliminar la ruta "${route.nombre}"?`, {
+                                                    isDestructive: true,
+                                                    confirmText: "Eliminar"
+                                                });
+                                                if (isConfirmed) {
                                                     onDeleteRoute(route.id);
                                                 }
                                             }}

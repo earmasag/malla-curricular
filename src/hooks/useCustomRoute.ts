@@ -3,8 +3,11 @@ import type { ProgresoMalla } from "../types/materia";
 import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
 import { MateriaRepository } from "../repository/MateriaRepository";
+import { useNotification } from "./useNotification";
 
 export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: ProgresoMalla) => {
+    const { confirm } = useNotification();
+
     // Instanciamos Evaluator y Repository independientemente para el hook
     const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
     const repository = useMemo(() => new MateriaRepository(), []);
@@ -57,8 +60,13 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
         setCustomSemesters([[]]);
     }, [progresoBase, hasDraftRoute, loadDraftCustomRoute]);
 
-    const deleteDraftRoute = useCallback(() => {
-        if (window.confirm("¿Seguro que deseas descartar tu borrador actual?")) {
+    const deleteDraftRoute = useCallback(async () => {
+        const isConfirmed = await confirm("¿Seguro que deseas descartar tu borrador actual?", {
+            isDestructive: true,
+            confirmText: "Descartar"
+        });
+
+        if (isConfirmed) {
             repository.clearDraftRoute();
             setHasDraftRoute(false);
             if (isCustomRouteMode) {
@@ -66,7 +74,7 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
                 setCustomProgreso({ ...progresoBase });
             }
         }
-    }, [repository, isCustomRouteMode, progresoBase]);
+    }, [repository, isCustomRouteMode, progresoBase, confirm]);
 
     // Calcular UCs cada vez que cambia customSemesters
     useEffect(() => {

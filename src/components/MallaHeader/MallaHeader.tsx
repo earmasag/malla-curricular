@@ -3,6 +3,7 @@ import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator
 } from 'lucide-react';
+import { useNotification } from '../../hooks/useNotification';
 
 export interface MallaHeaderProps {
     cantidadAprobadas: number;
@@ -49,11 +50,16 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
     onOpenFeedback,
     onCalculoMatricula
 }) => {
+    const { confirm } = useNotification();
     const [isExpanded, setIsExpanded] = React.useState(false);
 
-    const handleResetProgreso = (e: React.MouseEvent) => {
+    const handleResetProgreso = async (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (window.confirm("¿Estás seguro que deseas borrar todo tu progreso? Esta acción no se puede deshacer.")) {
+        const isConfirmed = await confirm("¿Estás seguro que deseas borrar todo tu progreso? Esta acción no se puede deshacer.", {
+            isDestructive: true,
+            confirmText: "Borrar Todo"
+        });
+        if (isConfirmed) {
             onResetProgreso();
         }
     };

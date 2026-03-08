@@ -1,29 +1,31 @@
 import MateriaCard from '../MateriaCard/MateriaCard';
-import type { MateriaNode, ProgresoMalla } from '../../types/materia';
+import type { MateriaNode } from '../../types/materia';
+import { useMallaData, useMallaUI } from '../../contexts/MallaContexts';
 
 interface SemestreColumnProps {
     numeroSemestre: number;
     materiasDelSemestre: MateriaNode[];
-    progreso: ProgresoMalla;
-    onSelectMateria: (codigoMateria: string) => void;
-    onToggleCursandoMateria: (codigoMateria: string) => void;
-    onHoverMateria: (codigoMateria: string | null) => void;
-    hoveredMateria: string | null;
-    onToggleSemestre: (numeroSemestre: number) => void;
-    hideActions?: boolean;
 }
 
 export const SemestreColumn = ({
     numeroSemestre,
     materiasDelSemestre,
-    progreso,
-    onSelectMateria,
-    onToggleCursandoMateria,
-    onHoverMateria,
-    hoveredMateria,
-    onToggleSemestre,
-    hideActions = false
 }: SemestreColumnProps) => {
+
+    // 1. Contextos para mitigar el Prop Bloat
+    const { estadoMalla, estadoCustom, accionesMalla, accionesCustom } = useMallaData();
+    const { ui } = useMallaUI();
+
+    // 2. Data Mapeada
+    const { isCustomRouteMode, customProgreso } = estadoCustom;
+    const progreso = isCustomRouteMode ? customProgreso : estadoMalla.progreso;
+    const hideActions = isCustomRouteMode;
+    const hoveredMateria = ui.hoveredMateria;
+
+    const onSelectMateria = isCustomRouteMode ? accionesCustom.toggleCustomMateria : accionesMalla.toggleAprobacion;
+    const onToggleCursandoMateria = isCustomRouteMode ? () => { } : accionesMalla.toggleCursando;
+    const onToggleSemestre = isCustomRouteMode ? () => { } : accionesMalla.toggleSemestre;
+    const onHoverMateria = ui.setHoveredMateria;
 
     // Verificamos si TODAS las materias están aprobadas visualmente, 
     // ignorando las que ni siquiera se pueden aprobar estructuralmente (bloqueadas absolutas).

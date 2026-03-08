@@ -4,53 +4,34 @@ import {
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator
 } from 'lucide-react';
 import { useNotification } from '../../hooks/useNotification';
+import { useMallaData, useMallaUI } from '../../contexts/MallaContexts';
 
 export interface MallaHeaderProps {
-    cantidadAprobadas: number;
-    ucAcumuladas: number;
     totalMaterias: number;
-    ucCursando: number;
-    onResetProgreso: () => void;
-    onShowRutaOptima: () => void;
-    isCustomRouteMode?: boolean;
-    startCustomRoute?: () => void;
-    advanceCustomSemester?: () => void;
-    cancelCustomRoute?: () => void;
-    finishCustomRoute?: (name: string) => void;
-    deleteDraftRoute?: () => void;
-    customSemestersCount?: number;
-    customCurrentSemesterCount?: number;
-    hasDraftRoute?: boolean;
-    currentSemesterUCs?: number;
-    totalCustomUCs?: number;
-    onOpenMisRutas?: () => void;
-    onOpenFeedback?: () => void;
-    onCalculoMatricula?: () => void;
 }
 
 export const MallaHeader: React.FC<MallaHeaderProps> = ({
-    cantidadAprobadas,
-    ucAcumuladas,
     totalMaterias,
-    ucCursando,
-    onResetProgreso,
-    onShowRutaOptima,
-    isCustomRouteMode = false,
-    startCustomRoute,
-    advanceCustomSemester,
-    cancelCustomRoute,
-    finishCustomRoute,
-    deleteDraftRoute,
-    customSemestersCount = 0,
-    customCurrentSemesterCount = 0,
-    hasDraftRoute = false,
-    currentSemesterUCs = 0,
-    totalCustomUCs = 0,
-    onOpenMisRutas,
-    onOpenFeedback,
-    onCalculoMatricula
 }) => {
+    // 1. Extraemos lógica del Contexto para mitigar Prop Bloat
+    const { estadoMalla, accionesMalla, estadoCustom, accionesCustom } = useMallaData();
+    const { modales, handlers } = useMallaUI();
     const { confirm } = useNotification();
+
+    // 2. Desestructuramos para conveniencia de renderizado
+    const { cantidadAprobadas, ucAcumuladas, materiasCursando } = estadoMalla;
+    const {
+        isCustomRouteMode,
+        currentSemesterUCs,
+        totalCustomUCs,
+        customSemesters,
+        hasDraftRoute
+    } = estadoCustom;
+
+    const ucCursando = materiasCursando.reduce((sum: number, m: any) => sum + m.unidadesCredito, 0);
+    const customSemestersCount = customSemesters.length;
+    const customCurrentSemesterCount = customSemestersCount > 0 ? customSemesters[customSemestersCount - 1].length : 0;
+
     const [isExpanded, setIsExpanded] = React.useState(false);
 
     const handleResetProgreso = async (e: React.MouseEvent) => {
@@ -60,7 +41,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
             confirmText: "Borrar Todo"
         });
         if (isConfirmed) {
-            onResetProgreso();
+            accionesMalla.resetProgreso();
         }
     };
 
@@ -102,7 +83,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        onShowRutaOptima();
+                                        handlers.handleShowRutaOptima();
                                     }}
                                     className="bg-blue-50 text-blue-600 hover:bg-blue-500 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-blue-200 flex items-center gap-1.5 transition-colors"
                                     title="Calcular la ruta más rápida para graduarte"
@@ -111,11 +92,11 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     <span className="whitespace-nowrap">Ruta Óptima</span>
                                 </button>
 
-                                {startCustomRoute && (
+                                {accionesCustom.startCustomRoute && (
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            startCustomRoute();
+                                            accionesCustom.startCustomRoute();
                                         }}
                                         className="bg-purple-50 text-purple-600 hover:bg-purple-500 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-purple-200 flex items-center gap-1.5 transition-colors"
                                         title={hasDraftRoute ? "Continuar editando tu borrador" : "Crear tu propia ruta manualmente"}
@@ -125,11 +106,11 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     </button>
                                 )}
 
-                                {onCalculoMatricula && (
+                                {modales.isMatriculaModalOpen !== undefined && (
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            onCalculoMatricula();
+                                            modales.setIsMatriculaModalOpen(true);
                                         }}
                                         className="bg-green-50 text-green-700 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-green-200 flex items-center gap-1.5 transition-colors"
                                         title="Calcular la matrícula de las materias marcadas como cursando (azul)"
@@ -139,9 +120,9 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     </button>
                                 )}
 
-                                {onOpenMisRutas && (
+                                {handlers.handleOpenMisRutas && (
                                     <button
-                                        onClick={onOpenMisRutas}
+                                        onClick={handlers.handleOpenMisRutas}
                                         className="bg-white text-indigo-600 hover:bg-indigo-50 px-3 py-1.5 rounded-full shadow-sm border border-indigo-200 flex items-center gap-1.5 transition-colors"
                                         title="Ver mis rutas guardadas"
                                     >
@@ -150,9 +131,9 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     </button>
                                 )}
 
-                                {onOpenFeedback && (
+                                {modales.setIsFeedbackModalOpen && (
                                     <button
-                                        onClick={onOpenFeedback}
+                                        onClick={() => modales.setIsFeedbackModalOpen(true)}
                                         className="bg-white text-gray-700 hover:bg-gray-100 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-1.5 transition-colors"
                                         title="Enviar sugerencias o reportar errores"
                                     >
@@ -201,7 +182,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        if (advanceCustomSemester) advanceCustomSemester();
+                                        accionesCustom.advanceCustomSemester();
                                     }}
                                     disabled={customCurrentSemesterCount === 0}
                                     className={`px-3 py-1.5 rounded-full shadow-sm border flex items-center gap-1.5 transition-colors ${customCurrentSemesterCount > 0
@@ -217,11 +198,9 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        if (finishCustomRoute) {
-                                            const name = window.prompt("¿Qué nombre le pondrás a esta ruta?");
-                                            if (name) {
-                                                finishCustomRoute(name);
-                                            }
+                                        const name = window.prompt("¿Qué nombre le pondrás a esta ruta?");
+                                        if (name) {
+                                            handlers.handleFinishCustomRoute(name);
                                         }
                                     }}
                                     disabled={customSemestersCount === 0 || (customSemestersCount === 1 && customCurrentSemesterCount === 0)}
@@ -235,7 +214,7 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        if (cancelCustomRoute) cancelCustomRoute();
+                                        accionesCustom.cancelCustomRoute();
                                     }}
                                     className="bg-red-50 text-red-600 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-red-200 flex items-center gap-1.5 transition-colors"
                                     title="Cancelar y salir del modo constructor"
@@ -244,11 +223,11 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     <span className="whitespace-nowrap">Cerrar</span>
                                 </button>
 
-                                {onCalculoMatricula && (
+                                {modales.isMatriculaModalOpen !== undefined && (
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            onCalculoMatricula();
+                                            modales.setIsMatriculaModalOpen(true);
                                         }}
                                         className="bg-green-50 text-green-700 hover:bg-green-600 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-green-200 flex items-center gap-1.5 transition-colors"
                                         title="Calcular la matrícula de las materias que llevas en este semestre"
@@ -258,19 +237,17 @@ export const MallaHeader: React.FC<MallaHeaderProps> = ({
                                     </button>
                                 )}
 
-                                {deleteDraftRoute && (
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            deleteDraftRoute();
-                                        }}
-                                        className="bg-red-100 text-red-700 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-red-300 flex items-center gap-1.5 transition-colors"
-                                        title="Descartar borrador"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                        <span className="whitespace-nowrap">Descartar</span>
-                                    </button>
-                                )}
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        accionesCustom.deleteDraftRoute();
+                                    }}
+                                    className="bg-red-100 text-red-700 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-full shadow-sm border border-red-300 flex items-center gap-1.5 transition-colors"
+                                    title="Descartar borrador"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                    <span className="whitespace-nowrap">Descartar</span>
+                                </button>
                             </>
                         )}
                     </>

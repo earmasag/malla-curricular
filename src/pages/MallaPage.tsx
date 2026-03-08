@@ -1,15 +1,19 @@
-import React from "react";
-import planEstudioJSON from "../data/plan_estudio.json";
-import areasColorData from "../data/areas_color.json";
-import { useMallaCurricular } from "../hooks/useMallaCurricular";
-import { useCustomRoute } from "../hooks/useCustomRoute";
-import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
-import type { MateriaJSON } from "../types/materia";
+import React, { useMemo } from "react";
 import { SemestreColumn } from "../components/SemestreColumn/SemestreColumn";
 import MallaConnections from "../components/MallaConnections/MallaConnections";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Xwrapper, useXarrow } from "react-xarrows";
+
+// Core y Datos
+import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
+import planEstudioJSON from "../data/plan_estudio.json";
+import areasColorData from '../data/areas_color.json';
+
+// Hook auxiliar
 import { useIsMobile } from "../hooks/useIsMobile";
+
+// Provider
+import { MallaProvider, useMallaData, useMallaUI } from "../contexts/MallaContexts";
 import { MallaHeader } from "../components/MallaHeader/MallaHeader";
 import { ZoomControls } from "../components/ZoomControls/ZoomControls";
 import { RutaModal } from "../components/RutaModal/RutaModal";
@@ -17,40 +21,33 @@ import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
 import { FeedbackModal } from "../components/FeedbackModal/FeedbackModal";
 import { MatriculaModal } from "../components/MatriculaModal/MatriculaModal";
 import { LeyendaMalla } from "../components/LeyendaMalla/LeyendaMalla";
-import { useMallaController } from "../hooks/useMallaController";
 import { Info, X } from "lucide-react";
 
 const builder = new MallaCurricularBuilder();
-const materiaData = planEstudioJSON as unknown as MateriaJSON[];
+const materiaData = planEstudioJSON as any; // Allow the builder to cast internally
 const malla = builder.build(materiaData);
 
-const MallaContent = () => {
-    const { estado: estadoMalla, acciones: accionesMalla } = useMallaCurricular(malla);
-    const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(malla, estadoMalla.progreso);
+const MallaLayout = () => {
+    // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
+    const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
+    const { ui, modales, datos, handlers } = useMallaUI();
 
-    const { ui, modales, datos, handlers } = useMallaController(
-        accionesMalla.generarRutaOptima,
-        accionesCustom.saveAndFinishRoute,
-        accionesCustom.cancelCustomRoute,
-        estadoCustom.customSemesters
-    );
+    const mallaContext = useMemo(() => builder.build(materiaData), []);
 
-    // Detectar si es móvil para deshabilitar el zoom con la rueda del ratón en escritorio
+    // 2. Estado local para renders del componente (Zoom, Mobile, Flechas)
     const isMobile = useIsMobile();
 
-    // Obtener la función para recalcular las flechas de react-xarrows manualmente
+    // 3. Helpers locales
     const updateXarrow = useXarrow();
 
     // 1. Array de los números de semestre [1, 2, 3...]
-    const totalSemestres = malla.getTotalSemestres();
+    const totalSemestres = mallaContext.getTotalSemestres();
     const semestresArray = Array.from(
         { length: totalSemestres },
         (_, i) => i + 1
     );
 
-
-
-    // Determinar qué progreso usar
+    // Determinar qué progreso usar visualmente en las cajas
     const activeProgreso = estadoCustom.isCustomRouteMode ? estadoCustom.customProgreso : estadoMalla.progreso;
 
     const materiasCursando = estadoCustom.isCustomRouteMode
@@ -58,8 +55,7 @@ const MallaContent = () => {
         ? []
         : estadoMalla.materiasCursando;
 
-    const ucCursando = materiasCursando.reduce((sum, m) => sum + m.unidadesCredito, 0);
-    const totalMaterias = malla.getAllNodes().length;
+    const totalMaterias = mallaContext.getAllNodes().length;
 
     return (
         <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden">
@@ -79,35 +75,14 @@ const MallaContent = () => {
                     <LeyendaMalla
                         tituloCarrera="Ingeniería Informática"
                         totalSemestres={totalSemestres}
-                        totalUc={malla.getAllNodes().reduce((acc, curr) => acc + curr.unidadesCredito, 0)}
+                        totalUc={mallaContext.getAllNodes().reduce((acc: number, curr: any) => acc + curr.unidadesCredito, 0)}
                         areasFormacion={areasColorData}
                     />
                 </div>
             )}
 
-            {/* Cabecera / Dashboard (Flotante) */}
-            <MallaHeader
-                cantidadAprobadas={estadoMalla.cantidadAprobadas}
-                ucAcumuladas={estadoMalla.ucAcumuladas}
-                totalMaterias={totalMaterias}
-                ucCursando={ucCursando}
-                onResetProgreso={accionesMalla.resetProgreso}
-                onShowRutaOptima={handlers.handleShowRutaOptima}
-                isCustomRouteMode={estadoCustom.isCustomRouteMode}
-                startCustomRoute={accionesCustom.startCustomRoute}
-                advanceCustomSemester={accionesCustom.advanceCustomSemester}
-                cancelCustomRoute={accionesCustom.cancelCustomRoute}
-                finishCustomRoute={handlers.handleFinishCustomRoute}
-                deleteDraftRoute={accionesCustom.deleteDraftRoute}
-                customSemestersCount={estadoCustom.customSemesters.length}
-                customCurrentSemesterCount={estadoCustom.customSemesters.length > 0 ? estadoCustom.customSemesters[estadoCustom.customSemesters.length - 1].length : 0}
-                hasDraftRoute={estadoCustom.hasDraftRoute}
-                currentSemesterUCs={estadoCustom.currentSemesterUCs}
-                totalCustomUCs={estadoCustom.totalCustomUCs}
-                onOpenMisRutas={handlers.handleOpenMisRutas}
-                onOpenFeedback={() => modales.setIsFeedbackModalOpen(true)}
-                onCalculoMatricula={() => modales.setIsMatriculaModalOpen(true)}
-            />
+            {/* Cabecera / Dashboard (Totalmente Desacoplado del Prop Bloat) */}
+            <MallaHeader totalMaterias={totalMaterias} />
 
             <MatriculaModal
                 isOpen={modales.isMatriculaModalOpen}
@@ -132,7 +107,7 @@ const MallaContent = () => {
                 isOpen={modales.isModalOpen}
                 onClose={() => modales.setIsModalOpen(false)}
                 generarRutaOptima={accionesMalla.generarRutaOptima}
-                grafo={malla}
+                grafo={mallaContext}
                 optimaRuta={datos.optimaRuta}
                 customRoute={datos.customRouteResult}
             />
@@ -162,7 +137,7 @@ const MallaContent = () => {
 
                             {/* Overlay de Flechas, movido fuera del contenedor escalable para evitar el bug del doble escalado (css scale + boudning rect) */}
                             <MallaConnections
-                                grafo={malla}
+                                grafo={mallaContext}
                                 progreso={activeProgreso}
                                 hoveredMateria={ui.hoveredMateria}
                             />
@@ -174,9 +149,9 @@ const MallaContent = () => {
                                     <div className="relative flex flex-row gap-12 px-20 items-start pt-20 pb-32 min-w-max min-h-max">
                                         {semestresArray.map((numeroSemestre) => {
                                             // Le pedimos al Grafo solo las materias de esta columna
-                                            const materiasDelSemestre = malla
+                                            const materiasDelSemestre = mallaContext
                                                 .getMateriasPorSemestre(numeroSemestre)
-                                                .sort((a, b) =>
+                                                .sort((a: any, b: any) =>
                                                     b.areaFormacion.localeCompare(a.areaFormacion)
                                                 );
 
@@ -185,13 +160,6 @@ const MallaContent = () => {
                                                     key={`semestre-${numeroSemestre}`}
                                                     numeroSemestre={numeroSemestre}
                                                     materiasDelSemestre={materiasDelSemestre}
-                                                    progreso={activeProgreso}
-                                                    onSelectMateria={estadoCustom.isCustomRouteMode ? accionesCustom.toggleCustomMateria : accionesMalla.toggleAprobacion}
-                                                    onToggleCursandoMateria={estadoCustom.isCustomRouteMode ? () => { } : accionesMalla.toggleCursando}
-                                                    onHoverMateria={ui.setHoveredMateria}
-                                                    hoveredMateria={ui.hoveredMateria}
-                                                    onToggleSemestre={estadoCustom.isCustomRouteMode ? () => { } : accionesMalla.toggleSemestre}
-                                                    hideActions={estadoCustom.isCustomRouteMode}
                                                 />
                                             );
                                         })}
@@ -206,10 +174,10 @@ const MallaContent = () => {
     );
 };
 
-// Necesario envolver el sistema de renderizado de react-xarrows dentro de su contexto global
-// para que useXarrow() pueda solicitar un repintado síncrono en todos los lugares donde existan flechas
 export const MallaPage = () => (
     <Xwrapper>
-        <MallaContent />
+        <MallaProvider grafo={malla}>
+            <MallaLayout />
+        </MallaProvider>
     </Xwrapper>
 );

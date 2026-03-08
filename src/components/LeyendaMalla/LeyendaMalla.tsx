@@ -16,7 +16,7 @@ export const LeyendaMalla: React.FC<LeyendaMallaProps> = ({
     areasFormacion
 }) => {
     return (
-        <div className="bg-[#e4e6e8] rounded-xl flex flex-col gap-3 shadow-md border border-gray-300 select-none w-full md:w-max max-w-full max-h-[70dvh] overflow-y-auto" style={{ fontFamily: 'sans-serif' }}>
+        <div className="bg-[#e4e6e8] rounded-xl flex flex-col gap-3 shadow-md border border-gray-300 select-none w-full md:w-max max-w-full pb-2 max-h-[70dvh] overflow-y-auto" style={{ fontFamily: 'sans-serif' }}>
             {/* Header */}
             <div className="font-black text-lg tracking-wide text-gray-900 border-b border-gray-300 pb-1 flex w-full">
                 <div className="bg-white px-3 py-1 rounded-t-lg -mb-[5px] border-t border-l border-r border-gray-300 shadow-sm relative z-10 uppercase">

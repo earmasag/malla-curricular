@@ -27,12 +27,16 @@ export const useRutaOptima = (
     }, [isOpen, maxUcInput, maxMateriasInput, maxHorasInput, generarRutaOptima]);
 
     return {
-        maxUcInput,
-        setMaxUcInput,
-        maxMateriasInput,
-        setMaxMateriasInput,
-        maxHorasInput,
-        setMaxHorasInput,
-        ruta
+        estado: {
+            maxUcInput,
+            maxMateriasInput,
+            maxHorasInput,
+            ruta
+        },
+        acciones: {
+            setMaxUcInput,
+            setMaxMateriasInput,
+            setMaxHorasInput
+        }
     };
 };

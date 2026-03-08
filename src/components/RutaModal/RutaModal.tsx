@@ -16,22 +16,14 @@ interface RutaModalProps {
 
 export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRutaOptima, grafo, customRoute, optimaRuta: initialOptimaRuta }) => {
 
-    const {
-        maxUcInput,
-        setMaxUcInput,
-        maxMateriasInput,
-        setMaxMateriasInput,
-        maxHorasInput,
-        setMaxHorasInput,
-        ruta: localOptimaRuta
-    } = useRutaOptima(isOpen, generarRutaOptima);
+    const { estado, acciones } = useRutaOptima(isOpen, generarRutaOptima);
 
     const [isFiltrosOpen, setIsFiltrosOpen] = React.useState(false);
 
     if (!isOpen) return null;
 
     // Usar la ruta personalizada si se proporciona, si no, usar la óptima generada (o la inicial prop)
-    const rutaParaMostrar = customRoute || localOptimaRuta || initialOptimaRuta || [];
+    const rutaParaMostrar = customRoute || estado.ruta || initialOptimaRuta || [];
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -64,9 +56,9 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                 {!customRoute && (
                     <FiltrosRutaOptimaPanel
                         isOpen={isFiltrosOpen}
-                        maxUcInput={maxUcInput} setMaxUcInput={setMaxUcInput}
-                        maxMateriasInput={maxMateriasInput} setMaxMateriasInput={setMaxMateriasInput}
-                        maxHorasInput={maxHorasInput} setMaxHorasInput={setMaxHorasInput}
+                        maxUcInput={estado.maxUcInput} setMaxUcInput={acciones.setMaxUcInput}
+                        maxMateriasInput={estado.maxMateriasInput} setMaxMateriasInput={acciones.setMaxMateriasInput}
+                        maxHorasInput={estado.maxHorasInput} setMaxHorasInput={acciones.setMaxHorasInput}
                     />
                 )}
 

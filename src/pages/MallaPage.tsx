@@ -1,11 +1,12 @@
+import React, { useState } from "react";
 import planEstudioJSON from "../data/plan_estudio.json";
+import areasColorData from "../data/areas_color.json";
 import { useMallaCurricular } from "../hooks/useMallaCurricular";
 import { useCustomRoute } from "../hooks/useCustomRoute";
 import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
 import type { MateriaJSON } from "../types/materia";
 import { SemestreColumn } from "../components/SemestreColumn/SemestreColumn";
 import MallaConnections from "../components/MallaConnections/MallaConnections";
-import React from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Xwrapper, useXarrow } from "react-xarrows";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -15,7 +16,9 @@ import { RutaModal } from "../components/RutaModal/RutaModal";
 import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
 import { FeedbackModal } from "../components/FeedbackModal/FeedbackModal";
 import { MatriculaModal } from "../components/MatriculaModal/MatriculaModal";
+import { LeyendaMalla } from "../components/LeyendaMalla/LeyendaMalla";
 import { useMallaController } from "../hooks/useMallaController";
+import { Info, X } from "lucide-react";
 
 const builder = new MallaCurricularBuilder();
 const materiaData = planEstudioJSON as unknown as MateriaJSON[];
@@ -78,6 +81,9 @@ const MallaContent = () => {
     // Detectar si es móvil para deshabilitar el zoom con la rueda del ratón en escritorio
     const isMobile = useIsMobile();
 
+    // Estado para la leyenda
+    const [isLeyendaOpen, setIsLeyendaOpen] = useState(false);
+
     // Obtener la función para recalcular las flechas de react-xarrows manualmente
     const updateXarrow = useXarrow();
 
@@ -103,6 +109,27 @@ const MallaContent = () => {
 
     return (
         <div className="flex relative h-screen w-screen bg-gray-100 font-sans m-0 overflow-hidden">
+            {/* Botón Flotante Leyenda (Top Right) */}
+            <button
+                onClick={() => setIsLeyendaOpen(!isLeyendaOpen)}
+                className="absolute top-6 right-6 z-50 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                title="Ver Leyenda y Abreviaturas"
+            >
+                {isLeyendaOpen ? <X className="w-6 h-6" /> : <Info className="w-6 h-6" />}
+            </button>
+
+            {/* Popover / Modal de Leyenda */}
+            {isLeyendaOpen && (
+                <div className="absolute top-20 right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100vh-100px)] overflow-y-auto rounded-xl shadow-2xl">
+                    <LeyendaMalla
+                        tituloCarrera="Ingeniería Informática"
+                        totalSemestres={totalSemestres}
+                        totalUc={malla.getAllNodes().reduce((acc, curr) => acc + curr.unidadesCredito, 0)}
+                        areasFormacion={areasColorData}
+                    />
+                </div>
+            )}
+
             {/* Cabecera / Dashboard (Flotante) */}
             <MallaHeader
                 cantidadAprobadas={cantidadAprobadas}
@@ -188,30 +215,32 @@ const MallaContent = () => {
                             <TransformComponent
                                 wrapperStyle={{ width: "100%", height: "100%" }}
                             >
-                                <div className="relative flex flex-row gap-12 px-20 items-start pb-32 pt-32 min-w-max min-h-max">
-                                    {semestresArray.map((numeroSemestre) => {
-                                        // Le pedimos al Grafo solo las materias de esta columna
-                                        const materiasDelSemestre = malla
-                                            .getMateriasPorSemestre(numeroSemestre)
-                                            .sort((a, b) =>
-                                                b.areaFormacion.localeCompare(a.areaFormacion)
-                                            );
+                                <div className="flex flex-col min-w-max min-h-max items-start">
+                                    <div className="relative flex flex-row gap-12 px-20 items-start pt-20 pb-32 min-w-max min-h-max">
+                                        {semestresArray.map((numeroSemestre) => {
+                                            // Le pedimos al Grafo solo las materias de esta columna
+                                            const materiasDelSemestre = malla
+                                                .getMateriasPorSemestre(numeroSemestre)
+                                                .sort((a, b) =>
+                                                    b.areaFormacion.localeCompare(a.areaFormacion)
+                                                );
 
-                                        return (
-                                            <SemestreColumn
-                                                key={`semestre-${numeroSemestre}`}
-                                                numeroSemestre={numeroSemestre}
-                                                materiasDelSemestre={materiasDelSemestre}
-                                                progreso={activeProgreso}
-                                                onSelectMateria={isCustomRouteMode ? toggleCustomMateria : toggleAprobacion}
-                                                onToggleCursandoMateria={isCustomRouteMode ? () => { } : toggleCursando}
-                                                onHoverMateria={setHoveredMateria}
-                                                hoveredMateria={hoveredMateria}
-                                                onToggleSemestre={isCustomRouteMode ? () => { } : toggleSemestre}
-                                                hideActions={isCustomRouteMode}
-                                            />
-                                        );
-                                    })}
+                                            return (
+                                                <SemestreColumn
+                                                    key={`semestre-${numeroSemestre}`}
+                                                    numeroSemestre={numeroSemestre}
+                                                    materiasDelSemestre={materiasDelSemestre}
+                                                    progreso={activeProgreso}
+                                                    onSelectMateria={isCustomRouteMode ? toggleCustomMateria : toggleAprobacion}
+                                                    onToggleCursandoMateria={isCustomRouteMode ? () => { } : toggleCursando}
+                                                    onHoverMateria={setHoveredMateria}
+                                                    hoveredMateria={hoveredMateria}
+                                                    onToggleSemestre={isCustomRouteMode ? () => { } : toggleSemestre}
+                                                    hideActions={isCustomRouteMode}
+                                                />
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </TransformComponent>
                         </React.Fragment>

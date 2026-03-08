@@ -111,7 +111,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
                 handleTouchEnd();
                 if (onMouseLeave) onMouseLeave();
             }}
-            className={`relative w-48 h-20 rounded-br-[20px] shadow-sm border-[3px] select-none ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-blue-400 z-50' : 'z-10'}`}
+            className={`relative w-48 h-20 rounded-br-[20px] my-1 shadow-sm border-[3px] select-none ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-blue-400 z-50' : 'z-10'}`}
             style={{
                 backgroundColor: currentHexColor,
                 borderColor: currentHexColor,

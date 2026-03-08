@@ -108,11 +108,11 @@ const MallaContent = () => {
     const totalMaterias = malla.getAllNodes().length;
 
     return (
-        <div className="flex relative h-screen w-screen bg-gray-100 font-sans m-0 overflow-hidden">
+        <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden">
             {/* Botón Flotante Leyenda (Top Right) */}
             <button
                 onClick={() => setIsLeyendaOpen(!isLeyendaOpen)}
-                className="absolute top-6 right-6 z-50 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
                 title="Ver Leyenda y Abreviaturas"
             >
                 {isLeyendaOpen ? <X className="w-6 h-6" /> : <Info className="w-6 h-6" />}
@@ -120,7 +120,7 @@ const MallaContent = () => {
 
             {/* Popover / Modal de Leyenda */}
             {isLeyendaOpen && (
-                <div className="absolute top-20 right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100vh-100px)] overflow-y-auto rounded-xl shadow-2xl">
+                <div className="absolute top-20 right-2 md:right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100dvh-100px)] max-w-[calc(100dvw-16px)] md:max-w-none overflow-y-auto overflow-x-hidden rounded-xl shadow-2xl">
                     <LeyendaMalla
                         tituloCarrera="Ingeniería Informática"
                         totalSemestres={totalSemestres}

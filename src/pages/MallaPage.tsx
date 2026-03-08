@@ -25,61 +25,14 @@ const materiaData = planEstudioJSON as unknown as MateriaJSON[];
 const malla = builder.build(materiaData);
 
 const MallaContent = () => {
-    const {
-        progreso,
-        cantidadAprobadas,
-        ucAcumuladas,
-        toggleAprobacion,
-        toggleCursando,
-        toggleSemestre,
-        resetProgreso,
-        generarRutaOptima,
-        materiasCursando: materiasCursandoOriginal
-    } = useMallaCurricular(malla);
+    const { estado: estadoMalla, acciones: accionesMalla } = useMallaCurricular(malla);
+    const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(malla, estadoMalla.progreso);
 
-    const {
-        isCustomRouteMode,
-        customProgreso,
-        customSemesters,
-        hasDraftRoute,
-        currentSemesterUCs,
-        totalCustomUCs,
-        startCustomRoute,
-        deleteDraftRoute,
-        toggleCustomMateria,
-        advanceCustomSemester,
-        cancelCustomRoute,
-        saveAndFinishRoute
-    } = useCustomRoute(malla, progreso);
-
-    const {
-        hoveredMateria,
-        setHoveredMateria,
-        isModalOpen,
-        setIsModalOpen,
-        optimaRuta,
-        customRouteResult,
-        isMisRutasModalOpen,
-        setIsMisRutasModalOpen,
-        isFeedbackModalOpen,
-        setIsFeedbackModalOpen,
-        isMatriculaModalOpen,
-        setIsMatriculaModalOpen,
-        savedRoutesList,
-        handleShowRutaOptima,
-        handleFinishCustomRoute,
-        handleOpenMisRutas,
-        handleDeleteSavedRoute,
-        handleViewSavedRoute,
-        isLeyendaOpen,
-        setIsLeyendaOpen,
-        leyendaRef,
-        botonLeyendaRef
-    } = useMallaController(
-        generarRutaOptima,
-        saveAndFinishRoute,
-        cancelCustomRoute,
-        customSemesters
+    const { ui, modales, datos, handlers } = useMallaController(
+        accionesMalla.generarRutaOptima,
+        accionesCustom.saveAndFinishRoute,
+        accionesCustom.cancelCustomRoute,
+        estadoCustom.customSemesters
     );
 
     // Detectar si es móvil para deshabilitar el zoom con la rueda del ratón en escritorio
@@ -98,12 +51,12 @@ const MallaContent = () => {
 
 
     // Determinar qué progreso usar
-    const activeProgreso = isCustomRouteMode ? customProgreso : progreso;
+    const activeProgreso = estadoCustom.isCustomRouteMode ? estadoCustom.customProgreso : estadoMalla.progreso;
 
-    const materiasCursando = isCustomRouteMode
+    const materiasCursando = estadoCustom.isCustomRouteMode
         // En modo personalizado simulamos que no cursa nada
         ? []
-        : materiasCursandoOriginal;
+        : estadoMalla.materiasCursando;
 
     const ucCursando = materiasCursando.reduce((sum, m) => sum + m.unidadesCredito, 0);
     const totalMaterias = malla.getAllNodes().length;
@@ -112,17 +65,17 @@ const MallaContent = () => {
         <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden">
             {/* Botón Flotante Leyenda (Top Right) */}
             <button
-                ref={botonLeyendaRef}
-                onClick={() => setIsLeyendaOpen(!isLeyendaOpen)}
+                ref={ui.botonLeyendaRef}
+                onClick={() => ui.setIsLeyendaOpen(!ui.isLeyendaOpen)}
                 className="absolute top-4 right-4 md:top-6 md:right-6 z-50 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
                 title="Ver Leyenda y Abreviaturas"
             >
-                {isLeyendaOpen ? <X className="w-6 h-6" /> : <Info className="w-6 h-6" />}
+                {ui.isLeyendaOpen ? <X className="w-6 h-6" /> : <Info className="w-6 h-6" />}
             </button>
 
             {/* Popover / Modal de Leyenda */}
-            {isLeyendaOpen && (
-                <div ref={leyendaRef} className="absolute top-20 right-2 md:right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100dvh-100px)] max-w-[calc(100dvw-16px)] md:max-w-none overflow-y-auto overflow-x-hidden rounded-xl shadow-2xl">
+            {ui.isLeyendaOpen && (
+                <div ref={ui.leyendaRef} className="absolute top-20 right-2 md:right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100dvh-100px)] max-w-[calc(100dvw-16px)] md:max-w-none overflow-y-auto overflow-x-hidden rounded-xl shadow-2xl">
                     <LeyendaMalla
                         tituloCarrera="Ingeniería Informática"
                         totalSemestres={totalSemestres}
@@ -134,54 +87,54 @@ const MallaContent = () => {
 
             {/* Cabecera / Dashboard (Flotante) */}
             <MallaHeader
-                cantidadAprobadas={cantidadAprobadas}
-                ucAcumuladas={ucAcumuladas}
+                cantidadAprobadas={estadoMalla.cantidadAprobadas}
+                ucAcumuladas={estadoMalla.ucAcumuladas}
                 totalMaterias={totalMaterias}
                 ucCursando={ucCursando}
-                onResetProgreso={resetProgreso}
-                onShowRutaOptima={handleShowRutaOptima}
-                isCustomRouteMode={isCustomRouteMode}
-                startCustomRoute={startCustomRoute}
-                advanceCustomSemester={advanceCustomSemester}
-                cancelCustomRoute={cancelCustomRoute}
-                finishCustomRoute={handleFinishCustomRoute}
-                deleteDraftRoute={deleteDraftRoute}
-                customSemestersCount={customSemesters.length}
-                customCurrentSemesterCount={customSemesters.length > 0 ? customSemesters[customSemesters.length - 1].length : 0}
-                hasDraftRoute={hasDraftRoute}
-                currentSemesterUCs={currentSemesterUCs}
-                totalCustomUCs={totalCustomUCs}
-                onOpenMisRutas={handleOpenMisRutas}
-                onOpenFeedback={() => setIsFeedbackModalOpen(true)}
-                onCalculoMatricula={() => setIsMatriculaModalOpen(true)}
+                onResetProgreso={accionesMalla.resetProgreso}
+                onShowRutaOptima={handlers.handleShowRutaOptima}
+                isCustomRouteMode={estadoCustom.isCustomRouteMode}
+                startCustomRoute={accionesCustom.startCustomRoute}
+                advanceCustomSemester={accionesCustom.advanceCustomSemester}
+                cancelCustomRoute={accionesCustom.cancelCustomRoute}
+                finishCustomRoute={handlers.handleFinishCustomRoute}
+                deleteDraftRoute={accionesCustom.deleteDraftRoute}
+                customSemestersCount={estadoCustom.customSemesters.length}
+                customCurrentSemesterCount={estadoCustom.customSemesters.length > 0 ? estadoCustom.customSemesters[estadoCustom.customSemesters.length - 1].length : 0}
+                hasDraftRoute={estadoCustom.hasDraftRoute}
+                currentSemesterUCs={estadoCustom.currentSemesterUCs}
+                totalCustomUCs={estadoCustom.totalCustomUCs}
+                onOpenMisRutas={handlers.handleOpenMisRutas}
+                onOpenFeedback={() => modales.setIsFeedbackModalOpen(true)}
+                onCalculoMatricula={() => modales.setIsMatriculaModalOpen(true)}
             />
 
             <MatriculaModal
-                isOpen={isMatriculaModalOpen}
-                onClose={() => setIsMatriculaModalOpen(false)}
+                isOpen={modales.isMatriculaModalOpen}
+                onClose={() => modales.setIsMatriculaModalOpen(false)}
                 materiasCursando={materiasCursando}
             />
 
             <MisRutasModal
-                isOpen={isMisRutasModalOpen}
-                onClose={() => setIsMisRutasModalOpen(false)}
-                savedRoutes={savedRoutesList}
-                onViewRoute={handleViewSavedRoute}
-                onDeleteRoute={handleDeleteSavedRoute}
+                isOpen={modales.isMisRutasModalOpen}
+                onClose={() => modales.setIsMisRutasModalOpen(false)}
+                savedRoutes={datos.savedRoutesList}
+                onViewRoute={handlers.handleViewSavedRoute}
+                onDeleteRoute={handlers.handleDeleteSavedRoute}
             />
 
             <FeedbackModal
-                isOpen={isFeedbackModalOpen}
-                onClose={() => setIsFeedbackModalOpen(false)}
+                isOpen={modales.isFeedbackModalOpen}
+                onClose={() => modales.setIsFeedbackModalOpen(false)}
             />
 
             <RutaModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                generarRutaOptima={generarRutaOptima}
+                isOpen={modales.isModalOpen}
+                onClose={() => modales.setIsModalOpen(false)}
+                generarRutaOptima={accionesMalla.generarRutaOptima}
                 grafo={malla}
-                optimaRuta={optimaRuta}
-                customRoute={customRouteResult}
+                optimaRuta={datos.optimaRuta}
+                customRoute={datos.customRouteResult}
             />
 
             {/* Main Content Area (Grilla Horizontal Libre de Zoom y Paneo) */}
@@ -211,7 +164,7 @@ const MallaContent = () => {
                             <MallaConnections
                                 grafo={malla}
                                 progreso={activeProgreso}
-                                hoveredMateria={hoveredMateria}
+                                hoveredMateria={ui.hoveredMateria}
                             />
 
                             <TransformComponent
@@ -233,12 +186,12 @@ const MallaContent = () => {
                                                     numeroSemestre={numeroSemestre}
                                                     materiasDelSemestre={materiasDelSemestre}
                                                     progreso={activeProgreso}
-                                                    onSelectMateria={isCustomRouteMode ? toggleCustomMateria : toggleAprobacion}
-                                                    onToggleCursandoMateria={isCustomRouteMode ? () => { } : toggleCursando}
-                                                    onHoverMateria={setHoveredMateria}
-                                                    hoveredMateria={hoveredMateria}
-                                                    onToggleSemestre={isCustomRouteMode ? () => { } : toggleSemestre}
-                                                    hideActions={isCustomRouteMode}
+                                                    onSelectMateria={estadoCustom.isCustomRouteMode ? accionesCustom.toggleCustomMateria : accionesMalla.toggleAprobacion}
+                                                    onToggleCursandoMateria={estadoCustom.isCustomRouteMode ? () => { } : accionesMalla.toggleCursando}
+                                                    onHoverMateria={ui.setHoveredMateria}
+                                                    hoveredMateria={ui.hoveredMateria}
+                                                    onToggleSemestre={estadoCustom.isCustomRouteMode ? () => { } : accionesMalla.toggleSemestre}
+                                                    hideActions={estadoCustom.isCustomRouteMode}
                                                 />
                                             );
                                         })}

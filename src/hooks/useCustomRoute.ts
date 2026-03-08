@@ -173,17 +173,21 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
     }, [customSemesters, repository]);
 
     return {
-        isCustomRouteMode,
-        customProgreso,
-        customSemesters,
-        hasDraftRoute,
-        currentSemesterUCs,
-        totalCustomUCs,
-        startCustomRoute,
-        deleteDraftRoute,
-        toggleCustomMateria,
-        advanceCustomSemester,
-        cancelCustomRoute,
-        saveAndFinishRoute
+        estado: {
+            isCustomRouteMode,
+            customProgreso,
+            customSemesters,
+            hasDraftRoute,
+            currentSemesterUCs,
+            totalCustomUCs
+        },
+        acciones: {
+            startCustomRoute,
+            deleteDraftRoute,
+            toggleCustomMateria,
+            advanceCustomSemester,
+            cancelCustomRoute,
+            saveAndFinishRoute
+        }
     };
 };

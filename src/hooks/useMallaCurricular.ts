@@ -156,14 +156,18 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     }, [grafo, progreso, evaluator]); // Evaluator no cambia porque está envuelto en un useMemo vacío
 
     return {
-        progreso,
-        cantidadAprobadas,
-        ucAcumuladas,
-        materiasCursando,
-        toggleAprobacion,
-        toggleCursando,
-        toggleSemestre,
-        resetProgreso,
-        generarRutaOptima
-    }
+        estado: {
+            progreso,
+            cantidadAprobadas,
+            ucAcumuladas,
+            materiasCursando
+        },
+        acciones: {
+            toggleAprobacion,
+            toggleCursando,
+            toggleSemestre,
+            resetProgreso,
+            generarRutaOptima
+        }
+    };
 }

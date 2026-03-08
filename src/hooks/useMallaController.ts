@@ -86,27 +86,35 @@ export const useMallaController = (
     };
 
     return {
-        hoveredMateria,
-        setHoveredMateria,
-        isModalOpen,
-        setIsModalOpen,
-        optimaRuta,
-        customRouteResult,
-        isMisRutasModalOpen,
-        setIsMisRutasModalOpen,
-        isFeedbackModalOpen,
-        setIsFeedbackModalOpen,
-        isMatriculaModalOpen,
-        setIsMatriculaModalOpen,
-        isLeyendaOpen,
-        setIsLeyendaOpen,
-        leyendaRef,
-        botonLeyendaRef,
-        savedRoutesList,
-        handleShowRutaOptima,
-        handleFinishCustomRoute,
-        handleOpenMisRutas,
-        handleDeleteSavedRoute,
-        handleViewSavedRoute
+        ui: {
+            hoveredMateria,
+            setHoveredMateria,
+            isLeyendaOpen,
+            setIsLeyendaOpen,
+            leyendaRef,
+            botonLeyendaRef
+        },
+        modales: {
+            isModalOpen,
+            setIsModalOpen,
+            isMisRutasModalOpen,
+            setIsMisRutasModalOpen,
+            isFeedbackModalOpen,
+            setIsFeedbackModalOpen,
+            isMatriculaModalOpen,
+            setIsMatriculaModalOpen
+        },
+        datos: {
+            optimaRuta,
+            customRouteResult,
+            savedRoutesList
+        },
+        handlers: {
+            handleShowRutaOptima,
+            handleFinishCustomRoute,
+            handleOpenMisRutas,
+            handleDeleteSavedRoute,
+            handleViewSavedRoute
+        }
     };
 };

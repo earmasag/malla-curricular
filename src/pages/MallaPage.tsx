@@ -14,7 +14,7 @@ import { useIsMobile } from "../hooks/useIsMobile";
 
 // Provider
 import { MallaProvider, useMallaData, useMallaUI } from "../contexts/MallaContexts";
-import { MallaHeader } from "../components/MallaHeader/MallaHeader";
+import { NavigationSidebar } from "../components/NavigationSidebar/NavigationSidebar";
 import { ZoomControls } from "../components/ZoomControls/ZoomControls";
 import { RutaModal } from "../components/RutaModal/RutaModal";
 import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
@@ -81,8 +81,8 @@ const MallaLayout = () => {
                 </div>
             )}
 
-            {/* Cabecera / Dashboard (Totalmente Desacoplado del Prop Bloat) */}
-            <MallaHeader totalMaterias={totalMaterias} />
+            {/* Navigation Sidebar Flotante */}
+            <NavigationSidebar totalMaterias={totalMaterias} />
 
             <MatriculaModal
                 isOpen={modales.isMatriculaModalOpen}
@@ -133,7 +133,7 @@ const MallaLayout = () => {
                     {({ zoomIn, zoomOut, resetTransform }) => (
                         <React.Fragment>
                             {/* Botones de Control de Zoom (Flotantes Inferior Derecha) */}
-                            <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} />
+                            {!isMobile && <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} />}
 
                             {/* Overlay de Flechas, movido fuera del contenedor escalable para evitar el bug del doble escalado (css scale + boudning rect) */}
                             <MallaConnections

@@ -16,7 +16,7 @@ export const FiltrosRutaOptimaButton: React.FC<FiltrosRutaOptimaProps> = ({
     return (
         <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full transition-all border focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-sm z-10 ${isOpen
+            className={`flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full transition-all border focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-sm z-10 ${isOpen
                 ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-inner'
                 : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
                 }`}

@@ -197,6 +197,17 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 variant="solid"
                             />
 
+                            {customRouteState.customSemestersCount > 1 && (
+                                <SidebarButton
+                                    isExpanded={ui.isExpanded}
+                                    icon={<ArrowRight className="rotate-180" />}
+                                    label="Retroceder Semestre"
+                                    onClick={(e) => { e.stopPropagation(); actions.accionesCustom.undoCustomSemester(); }}
+                                    color="gray"
+                                    variant="solid"
+                                />
+                            )}
+
                             <SidebarButton
                                 isExpanded={ui.isExpanded}
                                 icon={<Flag />}

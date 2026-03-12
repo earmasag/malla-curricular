@@ -28,6 +28,17 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
         setHasDraftRoute(hasValidRoute);
     }, [repository]);
 
+    // Transforma las materias "cursando" de la base a "aprobada" para el modo diseño
+    const getTransformedBaseProgress = useCallback(() => {
+        const transformed = { ...progresoBase };
+        Object.keys(transformed).forEach(codigo => {
+            if (transformed[codigo] === "cursando") {
+                transformed[codigo] = "aprobada";
+            }
+        });
+        return transformed;
+    }, [progresoBase]);
+
     const loadDraftCustomRoute = useCallback(() => {
         const savedRoute = repository.getDraftRoute();
         if (!savedRoute || savedRoute.length === 0) return false;
@@ -36,7 +47,7 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
         setCustomSemesters(savedRoute);
 
         // Reconstruimos el customProgreso basado en el progreso actual + las materias de la ruta
-        const nuevoProgreso = { ...progresoBase };
+        const nuevoProgreso = getTransformedBaseProgress();
 
         savedRoute.forEach((semester: string[], index: number) => {
             const isLast = index === savedRoute.length - 1;
@@ -48,7 +59,7 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
         setCustomProgreso(evaluator.evaluate(nuevoProgreso, grafo));
         return true;
 
-    }, [progresoBase, evaluator, grafo, repository]);
+    }, [getTransformedBaseProgress, evaluator, grafo, repository]);
 
     const startCustomRoute = useCallback(() => {
         // Intentar cargar el borrador primero si existe
@@ -58,9 +69,10 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
         }
 
         setIsCustomRouteMode(true);
-        setCustomProgreso({ ...progresoBase });
+        const transformedProgress = getTransformedBaseProgress();
+        setCustomProgreso(evaluator.evaluate(transformedProgress, grafo));
         setCustomSemesters([[]]);
-    }, [progresoBase, hasDraftRoute, loadDraftCustomRoute]);
+    }, [getTransformedBaseProgress, hasDraftRoute, loadDraftCustomRoute, evaluator, grafo]);
 
     const deleteDraftRoute = useCallback(async () => {
         const isConfirmed = await confirm("¿Seguro que deseas descartar tu borrador actual?", {
@@ -73,10 +85,11 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
             setHasDraftRoute(false);
             if (isCustomRouteMode) {
                 setCustomSemesters([[]]);
-                setCustomProgreso({ ...progresoBase });
+                const transformedProgress = getTransformedBaseProgress();
+                setCustomProgreso(evaluator.evaluate(transformedProgress, grafo));
             }
         }
-    }, [repository, isCustomRouteMode, progresoBase, confirm]);
+    }, [repository, isCustomRouteMode, getTransformedBaseProgress, evaluator, grafo, confirm]);
 
     // Calcular UCs cada vez que cambia customSemesters
     useEffect(() => {
@@ -176,6 +189,39 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
         setCustomSemesters(semesters => [...semesters, []]);
     }, [customSemesters, evaluator, grafo]);
 
+    const undoCustomSemester = useCallback(async () => {
+        if (customSemesters.length <= 1) return;
+
+        const isCurrentEmpty = customSemesters[customSemesters.length - 1].length === 0;
+
+        if (!isCurrentEmpty) {
+            const isConfirmed = await confirm("¿Seguro que deseas retroceder? Perderás las materias seleccionadas en este semestre.", {
+                isDestructive: true,
+                confirmText: "Retroceder"
+            });
+            if (!isConfirmed) return;
+        }
+
+        setCustomSemesters(semesters => {
+            const newSemesters = [...semesters];
+            newSemesters.pop();
+
+            // Reconstruct customProgreso
+            setCustomProgreso(() => {
+                const nuevoProgreso = getTransformedBaseProgress();
+                newSemesters.forEach((semester: string[], index: number) => {
+                    const isLast = index === newSemesters.length - 1;
+                    semester.forEach((code: string) => {
+                        nuevoProgreso[code] = isLast ? "cursando" : "aprobada";
+                    });
+                });
+                return evaluator.evaluate(nuevoProgreso, grafo);
+            });
+
+            return newSemesters;
+        });
+    }, [customSemesters, confirm, getTransformedBaseProgress, evaluator, grafo]);
+
     const cancelCustomRoute = useCallback(() => {
         setIsCustomRouteMode(false);
         setCustomSemesters([]);
@@ -212,6 +258,7 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
             deleteDraftRoute,
             toggleCustomMateria,
             advanceCustomSemester,
+            undoCustomSemester,
             cancelCustomRoute,
             saveAndFinishRoute
         }

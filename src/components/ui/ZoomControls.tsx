@@ -11,7 +11,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({ zoomIn, zoomOut, res
         <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col gap-3 pointer-events-auto">
             <button
                 onClick={() => zoomIn()}
-                className="flex items-center justify-center w-12 h-12 bg-white/90 backdrop-blur text-gray-700 hover:text-blue-600 hover:bg-white rounded-full shadow-lg border border-gray-200 transition-all hover:scale-110"
+                className="flex cursor-pointer items-center justify-center w-12 h-12 bg-white/90 backdrop-blur text-gray-700 hover:text-blue-600 hover:bg-white rounded-full shadow-lg border border-gray-200 transition-all hover:scale-110"
                 title="Acercar"
             >
                 <svg
@@ -27,7 +27,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({ zoomIn, zoomOut, res
             </button>
             <button
                 onClick={() => zoomOut()}
-                className="flex items-center justify-center w-12 h-12 bg-white/90 backdrop-blur text-gray-700 hover:text-blue-600 hover:bg-white rounded-full shadow-lg border border-gray-200 transition-all hover:scale-110"
+                className="flex cursor-pointer items-center justify-center w-12 h-12 bg-white/90 backdrop-blur text-gray-700 hover:text-blue-600 hover:bg-white rounded-full shadow-lg border border-gray-200 transition-all hover:scale-110"
                 title="Alejar"
             >
                 <svg
@@ -43,7 +43,7 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({ zoomIn, zoomOut, res
             </button>
             <button
                 onClick={() => resetTransform()}
-                className="flex items-center justify-center w-12 h-12 bg-white/90 backdrop-blur text-gray-700 hover:text-blue-600 hover:bg-white rounded-full shadow-lg border border-gray-200 transition-all hover:scale-110"
+                className="flex cursor-pointer items-center justify-center w-12 h-12 bg-white/90 backdrop-blur text-gray-700 hover:text-blue-600 hover:bg-white rounded-full shadow-lg border border-gray-200 transition-all hover:scale-110"
                 title="Restablecer vista"
             >
                 <svg

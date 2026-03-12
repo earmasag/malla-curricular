@@ -42,7 +42,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                 )}
                 <button
                     onClick={() => ui.setIsExpanded(!ui.isExpanded)}
-                    className={`rounded-xl hover:bg-gray-100 text-gray-700 transition-colors flex items-center justify-center ${!ui.isExpanded && ui.isMobile ? 'w-11 h-11' : 'p-2.5'}`}
+                    className={`rounded-xl cursor-pointer hover:bg-gray-100 text-gray-700 transition-colors flex items-center justify-center ${!ui.isExpanded && ui.isMobile ? 'w-11 h-11' : 'p-2.5'}`}
                 >
                     {ui.isExpanded ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </button>

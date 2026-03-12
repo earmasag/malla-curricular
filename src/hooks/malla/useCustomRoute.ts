@@ -3,6 +3,7 @@ import type { ProgresoMalla } from "../../types/materia";
 import { MallaCurricularGraph } from "../../core/MallaCurricularGraph";
 import { StandardMallaEvaluator } from "../../rules/StandardMallaEvaluator";
 import { MateriaRepository } from "../../repository/MateriaRepository";
+import { obtenerPrerrequisitosFaltantes, obtenerCorrequisitosFaltantes } from "../../utils/mallaUtils";
 import { useNotification } from "../ui/useNotification";
 import { useToast } from "../ui/useToast";
 
@@ -130,16 +131,65 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
         // Validación preventiva y disparo de TOAST en modo Constructor
         const estadoActual = customProgreso[codigoMateria];
         if (estadoActual === "bloqueada") {
-            const faltantes = grafo.obtenerPrerrequisitosFaltantes(codigoMateria, customProgreso);
-            const nombres = faltantes.map(f => f.nombre).join(", ");
             const materia = grafo.getNode(codigoMateria);
+            if (!materia) return;
 
-            showToast(
-                `No puedes añadir ${materia?.nombre || codigoMateria} al borrador`,
-                `Te falta aprobar: ${nombres}`,
-                'warning'
-            );
-            return; // Cortocircuitamos
+            // 1. Check UC Limit
+            if (currentSemesterUCs < materia.ucRequeridas) {
+                showToast(
+                    `No puedes añadir ${materia.nombre} al borrador`,
+                    `Necesitas ${materia.ucRequeridas} UC, y tienes ${currentSemesterUCs} UC en este semestre.`,
+                    'warning'
+                );
+                return;
+            }
+
+            // 2. Check Prerrequisitos
+            const faltantesPre = obtenerPrerrequisitosFaltantes(codigoMateria, customProgreso, grafo);
+            if (faltantesPre.length > 0) {
+                const nombres = faltantesPre.map(f => f.nombre).join(", ");
+                showToast(
+                    `No puedes añadir ${materia.nombre} al borrador`,
+                    `Te falta aprobar: ${nombres}`,
+                    'warning'
+                );
+                return;
+            }
+
+            // 3. Check Correquisitos
+            const faltantesCo = obtenerCorrequisitosFaltantes(codigoMateria, customProgreso, grafo);
+            if (faltantesCo.length > 0) {
+                const nombres = faltantesCo.map(f => f.nombre).join(", ");
+                showToast(
+                    `No puedes añadir ${materia.nombre} al borrador`,
+                    `Debes cursar o tener aprobado: ${nombres}`,
+                    'warning'
+                );
+                return;
+            }
+
+            return; // Cortocircuitamos si está bloqueada por alguna otra razón desconocida (raro)
+        }
+
+        // NUEVO CHECK para correquisitos estrictos al seleccionar en el Constructor
+        if (estadoActual === "disponible") {
+            const correqCodigos = grafo.getCorrequisitos(codigoMateria);
+            const faltantesParaAvanzar = correqCodigos.filter(correq => {
+                const estado = customProgreso[correq];
+                // En el constructor, para agarrar una materia, su correquisito ya debe estar cursando o aprobado
+                return estado !== 'aprobada' && estado !== 'cursando';
+            });
+            
+            if (faltantesParaAvanzar.length > 0) {
+                 const nombres = faltantesParaAvanzar.map(c => grafo.getNode(c)?.nombre || c).join(', ');
+                 const materiaNode = grafo.getNode(codigoMateria);
+                 showToast(
+                     `No puedes añadir ${materiaNode?.nombre || codigoMateria} al borrador`,
+                     `Debes seleccionar también su correquisito: ${nombres}`,
+                     'warning'
+                 );
+                 return;
+            }
         }
 
         setCustomProgreso(progresoActual => {

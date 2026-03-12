@@ -1,4 +1,4 @@
-import type { MateriaNode, ProgresoMalla } from "../types/materia";
+import type { MateriaNode } from "../types/materia";
 
 export class MallaCurricularGraph {
     private nodes: Map<string, MateriaNode> = new Map();
@@ -58,30 +58,6 @@ export class MallaCurricularGraph {
 
     getAllNodes(): MateriaNode[] {
         return Array.from(this.nodes.values());
-    }
-
-    /**
-     * Calcula qué materias específicas faltan por aprobar para desbloquear un nodo.
-     * @param codigoMateria Código de la materia a evaluar
-     * @param progresoActual Estado actual de la malla del estudiante
-     * @returns Array de objetos {codigo, nombre} de las materias faltantes
-     */
-    obtenerPrerrequisitosFaltantes(codigoMateria: string, progresoActual: ProgresoMalla): { codigo: string; nombre: string }[] {
-        const nodo = this.nodes.get(codigoMateria);
-        if (!nodo) return [];
-
-        // Filtramos las materias requeridas que NO estén marcadas como 'aprobada'
-        const requisitosCodigos = this.getMateriasRequeridas(codigoMateria);
-        const faltantesCodigos = requisitosCodigos.filter(reqCodigo => progresoActual[reqCodigo] !== 'aprobada');
-
-        // Mapeamos a un objeto útil compuesto
-        return faltantesCodigos.map(reqCodigo => {
-            const reqNodo = this.nodes.get(reqCodigo);
-            return {
-                codigo: reqCodigo,
-                nombre: reqNodo ? reqNodo.nombre : reqCodigo
-            };
-        });
     }
 
 }

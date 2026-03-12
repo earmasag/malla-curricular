@@ -4,7 +4,7 @@ import type { MallaCurricularGraph } from "../../core/MallaCurricularGraph";
 import { StandardMallaEvaluator } from "../../rules/StandardMallaEvaluator";
 import { PathfindingService } from "../../services/PathfindingService";
 import { GreedyScheduler } from "../../strategies/GreedyScheduler";
-import { calcularUCAcumuladas } from "../../utils/mallaUtils";
+import { calcularUCAcumuladas, obtenerPrerrequisitosFaltantes, obtenerCorrequisitosFaltantes } from "../../utils/mallaUtils";
 import { MateriaRepository } from "../../repository/MateriaRepository";
 import type { MateriaMatricula } from "../../services/MatriculaService";
 import { useToast } from "../../hooks/ui/useToast";
@@ -70,18 +70,67 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
 
     const toggleAprobacion = useCallback((codigoMateria: string) => {
         // Validación preventiva y disparo de TOAST
-        const estadoActual = progreso[codigoMateria];
-        if (estadoActual === "bloqueada") {
-            const faltantes = grafo.obtenerPrerrequisitosFaltantes(codigoMateria, progreso);
-            const nombres = faltantes.map(f => f.nombre).join(", ");
-            const materia = grafo.getNode(codigoMateria);
+        const estadoActual = progreso[codigoMateria] || 'bloqueada';
+        const materia = grafo.getNode(codigoMateria);
 
-            showToast(
-                `Aún no puedes cursar ${materia?.nombre || codigoMateria}`,
-                `Te falta aprobar: ${nombres}`,
-                'warning'
-            );
-            return; // Cortocircuitamos
+        if (estadoActual === 'bloqueada' && materia) {
+            // Evaluamos razones específicas para el Toast
+            const ucActuales = calcularUCAcumuladas(progreso, grafo);
+
+            // 1. Check UC Limit
+            if (materia.ucRequeridas && ucActuales < materia.ucRequeridas) {
+                showToast(
+                    `No puedes cursar ${materia.nombre}`,
+                    `Necesitas ${materia.ucRequeridas} UC, y tienes ${ucActuales} UC aprobadas.`,
+                    'warning'
+                );
+                return;
+            }
+
+            // 2. Check Prerrequisitos
+            const faltantesPre = obtenerPrerrequisitosFaltantes(codigoMateria, progreso, grafo);
+            if (faltantesPre.length > 0) {
+                const nombres = faltantesPre.map(f => f.nombre).join(", ");
+                showToast(
+                    `No puedes cursar ${materia.nombre}`,
+                    `Te falta aprobar: ${nombres}`,
+                    'warning'
+                );
+                return;
+            }
+
+            // 3. Check Correquisitos
+            const faltantesCo = obtenerCorrequisitosFaltantes(codigoMateria, progreso, grafo);
+            if (faltantesCo.length > 0) {
+                const nombres = faltantesCo.map(f => f.nombre).join(", ");
+                showToast(
+                    `No puedes cursar ${materia.nombre}`,
+                    `Debes cursar o tener aprobado: ${nombres}`,
+                    'warning'
+                );
+                return;
+            }
+        }
+
+        // NUEVO CHECK para correquisitos estrictos
+        if (estadoActual === "disponible" || estadoActual === "cursando") {
+            const correqCodigos = grafo.getCorrequisitos(codigoMateria);
+            const faltantesParaAvanzar = correqCodigos.filter(correq => {
+                const estado = progreso[correq];
+                // Para avanzar (a aprobada), el correquisito debe estar al menos cursando o aprobado
+                return estado !== 'aprobada' && estado !== 'cursando';
+            });
+            
+            if (faltantesParaAvanzar.length > 0) {
+                 const nombres = faltantesParaAvanzar.map(c => grafo.getNode(c)?.nombre || c).join(', ');
+                 const materiaNode = grafo.getNode(codigoMateria);
+                 showToast(
+                     `Operación denegada en ${materiaNode?.nombre || codigoMateria}`,
+                     `Su correquisito debe estar en curso o aprobado: ${nombres}`,
+                     'warning'
+                 );
+                 return;
+            }
         }
 
         setProgreso(progresoActual => {
@@ -104,7 +153,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         // Validación preventiva y disparo de TOAST para click derecho
         const estadoActual = progreso[codigoMateria];
         if (estadoActual === "bloqueada") {
-            const faltantes = grafo.obtenerPrerrequisitosFaltantes(codigoMateria, progreso);
+            const faltantes = obtenerPrerrequisitosFaltantes(codigoMateria, progreso, grafo);
             const nombres = faltantes.map(f => f.nombre).join(", ");
             const materia = grafo.getNode(codigoMateria);
 
@@ -118,6 +167,26 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
 
         if (estadoActual === "aprobada") {
             return; // Aprobadas se ignoran en click derecho sin notificar (comportamiento silencioso)
+        }
+
+        if (estadoActual === "disponible") {
+            const correqCodigos = grafo.getCorrequisitos(codigoMateria);
+            const faltantesParaAvanzar = correqCodigos.filter(correq => {
+                const estado = progreso[correq];
+                // Para marcar cursando, el correquisito debe estar cursando o aprobado
+                return estado !== 'aprobada' && estado !== 'cursando';
+            });
+            
+            if (faltantesParaAvanzar.length > 0) {
+                 const nombres = faltantesParaAvanzar.map(c => grafo.getNode(c)?.nombre || c).join(', ');
+                 const materiaNode = grafo.getNode(codigoMateria);
+                 showToast(
+                     `Aún no puedes llevar ${materiaNode?.nombre || codigoMateria}`,
+                     `Debes estar cursando o haber aprobado su correquisito: ${nombres}`,
+                     'warning'
+                 );
+                 return;
+            }
         }
 
         setProgreso(progresoActual => {

@@ -146,7 +146,7 @@ const MallaLayout = () => {
                                 wrapperStyle={{ width: "100%", height: "100%" }}
                             >
                                 <div className="flex flex-col min-w-max min-h-max items-start">
-                                    <div className="relative flex flex-row gap-12 px-20 items-start pt-20 pb-32 min-w-max min-h-max">
+                                    <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-20 pb-32 min-w-max min-h-max">
                                         {semestresArray.map((numeroSemestre) => {
                                             // Le pedimos al Grafo solo las materias de esta columna
                                             const materiasDelSemestre = mallaContext

@@ -49,7 +49,7 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                     </h2>
                     <button
                         onClick={onClose}
-                        className="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-full transition-colors shrink-0"
+                        className="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-full transition-colors shrink-0 cursor-pointer"
                         title="Cerrar"
                     >
                         <X className="w-5 h-5" />

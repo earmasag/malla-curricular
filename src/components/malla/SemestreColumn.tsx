@@ -43,7 +43,7 @@ export const SemestreColumn = ({
                 {!hideActions && (
                     <button
                         onClick={() => onToggleSemestre(numeroSemestre)}
-                        className={`ml-2 w-7 h-7 flex items-center justify-center rounded-full transition-all border-2 
+                        className={`ml-2 w-7 h-7 flex items-center justify-center rounded-full transition-all border-2 cursor-pointer
                             ${todasAprobadas
                                 ? 'bg-green-500 border-green-500 text-white hover:bg-green-600 hover:border-green-600'
                                 : 'bg-white border-gray-300 text-gray-300 hover:text-green-500 hover:border-green-500'}`}

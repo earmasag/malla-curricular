@@ -53,12 +53,12 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
 
             {/* Card del Bloque */}
             <div className="flex-1 bg-white border border-gray-100 rounded-xl shadow-sm p-5 hover:shadow-md transition-shadow min-w-0 w-full">
-                <div className="flex items-center justify-between mb-2 border-b border-gray-50 pb-3">
-                    <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 border-b border-gray-50 pb-3 gap-3">
+                    <h3 className="text-lg font-bold text-gray-800 flex flex-wrap items-center gap-2">
                         Bloque de Estudio {index + 1}
 
                         {/* Cost Estimation Badge */}
-                        <div className="group relative flex items-center">
+                        <div className="group relative flex items-center shrink-0">
                             <span className="bg-green-50 text-green-700 text-xs font-bold px-2 py-1 rounded border border-green-200 flex items-center gap-1 cursor-help">
                                 Est. ${desgloseInscripcion.totalFinal.toFixed(2)}
                                 <Info className="w-3 h-3" />
@@ -86,7 +86,7 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
                         </div>
 
                     </h3>
-                    <div className="flex flex-wrap items-center gap-2 justify-end">
+                    <div className="flex flex-wrap items-center gap-2 sm:justify-end shrink-0">
                         <span className="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-100 whitespace-nowrap">
                             {bloque.length} Mat. • {horasBloque} Hrs • {ucBloque} UC
                         </span>
@@ -94,7 +94,7 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
                 </div>
 
                 {/* Renderizado de MateriaCards escaladas para encajar */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-2 w-full pt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-1 gap-x-2 w-full pt-2 items-center">
                     {bloque.map(codigo => {
                         const materia = grafo.getNode(codigo);
                         if (!materia) return null;
@@ -102,8 +102,10 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
                         const materiaVisual = { ...materia, estado: "disponible" as const };
 
                         return (
-                            <div key={codigo} className="transform scale-[0.80] origin-top-left -mb-6">
-                                <MateriaCard materia={materiaVisual} />
+                            <div key={codigo} className="flex items-center justify-center sm:justify-start overflow-visible h-20">
+                                <div className="transform scale-[0.75] origin-center sm:origin-left transition-transform">
+                                    <MateriaCard materia={materiaVisual} />
+                                </div>
                             </div>
                         );
                     })}

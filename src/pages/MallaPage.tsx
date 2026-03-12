@@ -127,6 +127,7 @@ const MallaLayout = () => {
                     centerOnInit={true}
                     wheel={{ step: 0.1, disabled: !configuraciones.zoomConRueda || isMobile }}
                     pinch={{ disabled: false }} // Pinch-to-zoom (táctil o macpad) siempre habilitado
+                    doubleClick={{ disabled: true }}
                     limitToBounds={true}
                     disablePadding={true}
                     panning={{ velocityDisabled: true }}

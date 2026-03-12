@@ -32,7 +32,7 @@ export const Sidebar = ({ materiaSeleccionada, estadoActual, onToggleAprobacion,
                 </div>
                 <button
                     onClick={onClose}
-                    className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold transition-colors"
+                    className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold transition-colors cursor-pointer"
                 >
                     ✕
                 </button>
@@ -116,8 +116,8 @@ export const Sidebar = ({ materiaSeleccionada, estadoActual, onToggleAprobacion,
                         ${isBloqueada
                             ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                             : isAprobada
-                                ? 'bg-red-100 text-red-700 hover:bg-red-200 border border-red-200'
-                                : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-md'
+                                ? 'bg-red-100 text-red-700 hover:bg-red-200 border border-red-200 cursor-pointer'
+                                : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-md cursor-pointer'
                         }
                     `}
                 >

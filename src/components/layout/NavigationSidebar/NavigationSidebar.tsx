@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard
+    Menu, LayoutDashboard, Info
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
@@ -151,6 +151,14 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     color="gray"
                                 />
                             )}
+                            <SidebarButton
+                                isExpanded={ui.isExpanded}
+                                icon={<Info />}
+                                label="Leyenda"
+                                onClick={(e) => { e.stopPropagation(); ui.setIsLeyendaOpen(true); }}
+                                color="blue"
+                                variant="ghost"
+                            />
                         </>
                     ) : (
                         // Custom Mode Stats & Actions

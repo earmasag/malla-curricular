@@ -5,7 +5,7 @@ import { useIsMobile } from './useIsMobile';
 
 export const useNavigationSidebar = () => {
     const { estadoMalla, accionesMalla, estadoCustom, accionesCustom } = useMallaData();
-    const { modales, handlers } = useMallaUI();
+    const { modales, handlers, ui: mallaUIConfig } = useMallaUI();
     const { confirm } = useNotification();
     const isMobile = useIsMobile();
 
@@ -40,6 +40,8 @@ export const useNavigationSidebar = () => {
             isMobile,
             isExpanded,
             setIsExpanded,
+            isLeyendaOpen: mallaUIConfig.isLeyendaOpen,
+            setIsLeyendaOpen: mallaUIConfig.setIsLeyendaOpen,
             modales
         },
         mallaStats: {

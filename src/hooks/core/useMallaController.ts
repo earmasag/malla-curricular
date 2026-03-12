@@ -19,7 +19,19 @@ export const useMallaController = (
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [isMatriculaModalOpen, setIsMatriculaModalOpen] = useState(false);
     const [isLeyendaOpen, setIsLeyendaOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [savedRoutesList, setSavedRoutesList] = useState<SavedRoute[]>([]);
+
+    // Features
+    const [zoomConRueda, setZoomConRueda] = useState<boolean>(() => {
+        const saved = localStorage.getItem('zoomConRueda');
+        return saved ? JSON.parse(saved) : true;
+    });
+
+    const [modoOscuro, setModoOscuro] = useState<boolean>(() => {
+        const saved = localStorage.getItem('modoOscuro');
+        return saved ? JSON.parse(saved) : false;
+    });
 
     const leyendaRef = useRef<HTMLDivElement>(null);
     const botonLeyendaRef = useRef<HTMLButtonElement>(null);
@@ -46,6 +58,19 @@ export const useMallaController = (
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [isLeyendaOpen]);
+
+    useEffect(() => {
+        localStorage.setItem('zoomConRueda', JSON.stringify(zoomConRueda));
+    }, [zoomConRueda]);
+
+    useEffect(() => {
+        localStorage.setItem('modoOscuro', JSON.stringify(modoOscuro));
+        if (modoOscuro) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [modoOscuro]);
 
     // Repository for loading routes list
     const repository = useMemo(() => new MateriaRepository(), []);
@@ -102,7 +127,15 @@ export const useMallaController = (
             isFeedbackModalOpen,
             setIsFeedbackModalOpen,
             isMatriculaModalOpen,
-            setIsMatriculaModalOpen
+            setIsMatriculaModalOpen,
+            isSettingsOpen,
+            setIsSettingsOpen
+        },
+        configuraciones: {
+            zoomConRueda,
+            setZoomConRueda,
+            modoOscuro,
+            setModoOscuro
         },
         datos: {
             optimaRuta,

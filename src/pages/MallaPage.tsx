@@ -7,7 +7,6 @@ import { Xwrapper, useXarrow } from "react-xarrows";
 // Core y Datos
 import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
 import planEstudioJSON from "../data/plan_estudio.json";
-import areasColorData from '../data/areas_color.json';
 
 // Hook auxiliar
 import { useIsMobile } from "../hooks/ui/useIsMobile";
@@ -20,8 +19,12 @@ import { RutaModal } from "../components/modals/RutaModal/RutaModal";
 import { MisRutasModal } from "../components/modals/MisRutasModal";
 import { FeedbackModal } from "../components/modals/FeedbackModal";
 import { MatriculaModal } from "../components/modals/MatriculaModal";
-import { LeyendaMalla } from "../components/malla/LeyendaMalla";
-import { Info, X } from "lucide-react";
+import { SettingsModal } from "../components/modals/SettingsModal";
+import { LeyendaModal } from "../components/modals/LeyendaModal";
+import { Settings, X } from "lucide-react";
+
+// Datos estáticos
+import areasColorData from '../data/areas_color.json';
 
 const builder = new MallaCurricularBuilder();
 const materiaData = planEstudioJSON as any; // Allow the builder to cast internally
@@ -30,7 +33,7 @@ const malla = builder.build(materiaData);
 const MallaLayout = () => {
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
-    const { ui, modales, datos, handlers } = useMallaUI();
+    const { ui, modales, configuraciones, datos, handlers } = useMallaUI();
 
     const mallaContext = useMemo(() => builder.build(materiaData), []);
 
@@ -58,31 +61,19 @@ const MallaLayout = () => {
     const totalMaterias = mallaContext.getAllNodes().length;
 
     return (
-        <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden">
-            {/* Botón Flotante Leyenda (Top Right) */}
+        <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors">
+            {/* Botón Flotante Settings (Top Right, replaced Legend) */}
             <button
-                ref={ui.botonLeyendaRef}
-                onClick={() => ui.setIsLeyendaOpen(!ui.isLeyendaOpen)}
-                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
-                title="Ver Leyenda y Abreviaturas"
+                onClick={() => modales.setIsSettingsOpen(!modales.isSettingsOpen)}
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all"
+                title="Configuración"
             >
-                {ui.isLeyendaOpen ? <X className="w-6 h-6" /> : <Info className="w-6 h-6" />}
+                {modales.isSettingsOpen ? <X className="w-6 h-6" /> : <Settings className="w-6 h-6" />}
             </button>
 
-            {/* Popover / Modal de Leyenda */}
-            {ui.isLeyendaOpen && (
-                <div ref={ui.leyendaRef} className="absolute top-20 right-2 md:right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-h-[calc(100dvh-100px)] max-w-[calc(100dvw-16px)] md:max-w-none overflow-y-auto overflow-x-hidden rounded-xl shadow-2xl">
-                    <LeyendaMalla
-                        tituloCarrera="Ingeniería Informática"
-                        totalSemestres={totalSemestres}
-                        totalUc={mallaContext.getAllNodes().reduce((acc: number, curr: any) => acc + curr.unidadesCredito, 0)}
-                        areasFormacion={areasColorData}
-                    />
-                </div>
-            )}
-
-            {/* Navigation Sidebar Flotante */}
-            <NavigationSidebar totalMaterias={totalMaterias} />
+            <NavigationSidebar 
+              totalMaterias={totalMaterias} 
+            />
 
             <MatriculaModal
                 isOpen={modales.isMatriculaModalOpen}
@@ -103,6 +94,21 @@ const MallaLayout = () => {
                 onClose={() => modales.setIsFeedbackModalOpen(false)}
             />
 
+            <SettingsModal
+                isOpen={modales.isSettingsOpen}
+                onClose={() => modales.setIsSettingsOpen(false)}
+                configuraciones={configuraciones}
+            />
+
+            <LeyendaModal
+                isOpen={ui.isLeyendaOpen}
+                onClose={() => ui.setIsLeyendaOpen(false)}
+                tituloCarrera="Ingeniería Informática"
+                totalSemestres={totalSemestres}
+                totalUc={mallaContext.getAllNodes().reduce((acc: number, curr: any) => acc + curr.unidadesCredito, 0)}
+                areasFormacion={areasColorData}
+            />
+
             <RutaModal
                 isOpen={modales.isModalOpen}
                 onClose={() => modales.setIsModalOpen(false)}
@@ -119,7 +125,7 @@ const MallaLayout = () => {
                     minScale={0.3}
                     maxScale={2}
                     centerOnInit={true}
-                    wheel={{ step: 0.1, disabled: !isMobile }}
+                    wheel={{ step: 0.1, disabled: !configuraciones.zoomConRueda || isMobile }}
                     pinch={{ disabled: false }} // Pinch-to-zoom (táctil o macpad) siempre habilitado
                     limitToBounds={true}
                     disablePadding={true}

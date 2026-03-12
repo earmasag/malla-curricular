@@ -20,6 +20,7 @@ interface MallaDataContextType {
 interface MallaUIContextType {
     ui: MallaControllerReturn['ui'];
     modales: MallaControllerReturn['modales'];
+    configuraciones: MallaControllerReturn['configuraciones'];
     datos: MallaControllerReturn['datos'];
     handlers: MallaControllerReturn['handlers'];
 }
@@ -53,7 +54,7 @@ export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, children })
     const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(grafo, estadoMalla.progreso);
 
     // B) Ejecución de UI y Controladores
-    const { ui, modales, datos, handlers } = useMallaController(
+    const { ui, modales, configuraciones, datos, handlers } = useMallaController(
         accionesMalla.generarRutaOptima,
         accionesCustom.saveAndFinishRoute,
         accionesCustom.cancelCustomRoute,
@@ -71,6 +72,7 @@ export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, children })
     const uiContextValue: MallaUIContextType = {
         ui,
         modales,
+        configuraciones,
         datos,
         handlers,
     };

@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { MateriaRepository } from "../repository/MateriaRepository";
-import type { SavedRoute } from "../types/materia";
+import { MateriaRepository } from '../../repository/MateriaRepository';
+import type { SavedRoute } from '../../types/materia';
 
 export const useMallaController = (
     generarRutaOptima: (maxUcPorSemestre?: number, maxMateriasPorSemestre?: number, maxHorasPorSemestre?: number) => string[][],

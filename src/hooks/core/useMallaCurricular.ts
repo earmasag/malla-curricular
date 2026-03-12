@@ -1,13 +1,13 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
-import type { ProgresoMalla } from "../types/materia";
-import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
-import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
-import { PathfindingService } from "../services/PathfindingService";
-import { GreedyScheduler } from "../strategies/GreedyScheduler";
-import { calcularUCAcumuladas } from "../utils/mallaUtils";
-import { MateriaRepository } from "../repository/MateriaRepository";
-import type { MateriaMatricula } from "../services/MatriculaService";
-import { useToast } from "./useToast";
+import type { ProgresoMalla } from "../../types/materia";
+import type { MallaCurricularGraph } from "../../core/MallaCurricularGraph";
+import { StandardMallaEvaluator } from "../../rules/StandardMallaEvaluator";
+import { PathfindingService } from "../../services/PathfindingService";
+import { GreedyScheduler } from "../../strategies/GreedyScheduler";
+import { calcularUCAcumuladas } from "../../utils/mallaUtils";
+import { MateriaRepository } from "../../repository/MateriaRepository";
+import type { MateriaMatricula } from "../../services/MatriculaService";
+import { useToast } from "../../hooks/ui/useToast";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     const { showToast } = useToast();

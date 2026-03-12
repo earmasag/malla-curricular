@@ -5,7 +5,7 @@ import {
     Menu, LayoutDashboard
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
-import { useNavigationSidebar } from '../../hooks/useNavigationSidebar';
+import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
 
 export interface NavigationSidebarProps {
     totalMaterias: number;

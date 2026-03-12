@@ -1,5 +1,5 @@
 
-import MateriaCard from '../MateriaCard/MateriaCard';
+import MateriaCard from './MateriaCard';
 import type { MateriaNode } from '../../types/materia';
 
 export interface LeyendaMallaProps {

@@ -47,7 +47,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
     const currentHexColor = colorArea;
 
     // --- Lógica para Simular el Clic Derecho en Móviles (Long Press) ---
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const isLongPress = useRef(false);
 
     const handleTouchStart = () => {

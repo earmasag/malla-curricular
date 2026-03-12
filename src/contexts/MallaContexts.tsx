@@ -1,8 +1,8 @@
 import React, { createContext, useContext, type ReactNode } from 'react';
 import type { MallaCurricularGraph } from '../core/MallaCurricularGraph';
-import { useMallaCurricular } from '../hooks/useMallaCurricular';
-import { useCustomRoute } from '../hooks/useCustomRoute';
-import { useMallaController } from '../hooks/useMallaController';
+import { useMallaCurricular } from '../hooks/core/useMallaCurricular';
+import { useCustomRoute } from '../hooks/malla/useCustomRoute';
+import { useMallaController } from '../hooks/core/useMallaController';
 
 // 1. Definimos los tipos de retorno de nuestros custom hooks refactorizados
 type MallaCurricularReturn = ReturnType<typeof useMallaCurricular>;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Info, AlertCircle, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import type { ToastMessage } from '../../contexts/ToastContext';
-import { useToast } from '../../hooks/useToast';
+import { useToast } from '../../hooks/ui/useToast';
 
 interface ToastItemProps {
     toast: ToastMessage;

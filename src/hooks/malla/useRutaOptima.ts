@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { DEFAULT_MAX_UC, DEFAULT_MAX_MATERIAS, DEFAULT_MAX_HORAS } from '../components/RutaModal/FiltrosRutaOptima';
+
+export const DEFAULT_MAX_UC = 40;
+export const DEFAULT_MAX_MATERIAS = 10;
+export const DEFAULT_MAX_HORAS = 40;
 
 export const useRutaOptima = (
     isOpen: boolean,

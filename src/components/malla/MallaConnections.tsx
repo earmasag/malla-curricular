@@ -1,7 +1,7 @@
 import Xarrow from 'react-xarrows';
 import type { ProgresoMalla } from '../../types/materia';
 import { MallaCurricularGraph } from '../../core/MallaCurricularGraph';
-import { useMallaConnections } from '../../hooks/useMallaConnections';
+import { useMallaConnections } from '../../hooks/malla/useMallaConnections';
 
 interface MallaConnectionsProps {
     grafo: MallaCurricularGraph;

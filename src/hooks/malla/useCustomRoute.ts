@@ -1,10 +1,10 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
-import type { ProgresoMalla } from "../types/materia";
-import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
-import { StandardMallaEvaluator } from "../rules/StandardMallaEvaluator";
-import { MateriaRepository } from "../repository/MateriaRepository";
-import { useNotification } from "./useNotification";
-import { useToast } from "./useToast";
+import type { ProgresoMalla } from "../../types/materia";
+import { MallaCurricularGraph } from "../../core/MallaCurricularGraph";
+import { StandardMallaEvaluator } from "../../rules/StandardMallaEvaluator";
+import { MateriaRepository } from "../../repository/MateriaRepository";
+import { useNotification } from "../ui/useNotification";
+import { useToast } from "../ui/useToast";
 
 export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: ProgresoMalla) => {
     const { confirm } = useNotification();

@@ -1,7 +1,7 @@
 import React from 'react';
-import type { MallaCurricularGraph } from '../../core/MallaCurricularGraph';
-import MateriaCard from '../MateriaCard/MateriaCard';
-import { MatriculaService, type StudentProfile, type MateriaMatricula } from '../../services/MatriculaService';
+import type { MallaCurricularGraph } from '../../../core/MallaCurricularGraph';
+import MateriaCard from '../../malla/MateriaCard';
+import { MatriculaService, type StudentProfile, type MateriaMatricula } from '../../../services/MatriculaService';
 import { Info } from 'lucide-react';
 
 const matriculaService = new MatriculaService();

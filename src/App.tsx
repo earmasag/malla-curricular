@@ -2,10 +2,9 @@ import './App.css'
 import { MallaPage } from './pages/MallaPage';
 
 import { NotificationProvider } from './contexts/NotificationContext';
-import { CustomNotification } from './components/CustomNotification/CustomNotification';
-
+import { CustomNotification } from './components/ui/CustomNotification';
 import { ToastProvider } from './contexts/ToastContext';
-import { ToastContainer } from './components/Toast/ToastContainer';
+import { ToastContainer } from './components/ui/ToastContainer';
 
 function App() {
 

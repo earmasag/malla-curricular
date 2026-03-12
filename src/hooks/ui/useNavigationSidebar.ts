@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNotification } from './useNotification';
-import { useMallaData, useMallaUI } from '../contexts/MallaContexts';
+import { useMallaData, useMallaUI } from '../../contexts/MallaContexts';
 import { useIsMobile } from './useIsMobile';
 
 export const useNavigationSidebar = () => {

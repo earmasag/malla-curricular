@@ -1,7 +1,7 @@
 import React from 'react';
 import type { SavedRoute } from '../../types/materia';
 import { Library, FolderOpen, Calendar, Clock, Eye, X, Trash2 } from 'lucide-react';
-import { useNotification } from '../../hooks/useNotification';
+import { useNotification } from '../../hooks/ui/useNotification';
 
 interface MisRutasModalProps {
     isOpen: boolean;

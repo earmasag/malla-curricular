@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
-import { SemestreColumn } from "../components/SemestreColumn/SemestreColumn";
-import MallaConnections from "../components/MallaConnections/MallaConnections";
+import { SemestreColumn } from "../components/malla/SemestreColumn";
+import MallaConnections from "../components/malla/MallaConnections";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Xwrapper, useXarrow } from "react-xarrows";
 
@@ -10,17 +10,17 @@ import planEstudioJSON from "../data/plan_estudio.json";
 import areasColorData from '../data/areas_color.json';
 
 // Hook auxiliar
-import { useIsMobile } from "../hooks/useIsMobile";
+import { useIsMobile } from "../hooks/ui/useIsMobile";
 
 // Provider
 import { MallaProvider, useMallaData, useMallaUI } from "../contexts/MallaContexts";
-import { NavigationSidebar } from "../components/NavigationSidebar/NavigationSidebar";
-import { ZoomControls } from "../components/ZoomControls/ZoomControls";
-import { RutaModal } from "../components/RutaModal/RutaModal";
-import { MisRutasModal } from "../components/MisRutasModal/MisRutasModal";
-import { FeedbackModal } from "../components/FeedbackModal/FeedbackModal";
-import { MatriculaModal } from "../components/MatriculaModal/MatriculaModal";
-import { LeyendaMalla } from "../components/LeyendaMalla/LeyendaMalla";
+import { NavigationSidebar } from "../components/layout/NavigationSidebar/NavigationSidebar";
+import { ZoomControls } from "../components/ui/ZoomControls";
+import { RutaModal } from "../components/modals/RutaModal/RutaModal";
+import { MisRutasModal } from "../components/modals/MisRutasModal";
+import { FeedbackModal } from "../components/modals/FeedbackModal";
+import { MatriculaModal } from "../components/modals/MatriculaModal";
+import { LeyendaMalla } from "../components/malla/LeyendaMalla";
 import { Info, X } from "lucide-react";
 
 const builder = new MallaCurricularBuilder();

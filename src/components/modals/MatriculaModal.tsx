@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { X, Calculator, Info, AlertTriangle } from 'lucide-react';
 import { MatriculaService, type StudentProfile, type MateriaMatricula } from '../../services/MatriculaService';
-import { CustomSelect } from '../CustomSelect';
-import { CustomCheckbox } from '../CustomCheckbox';
+import { CustomSelect } from '../ui/CustomSelect';
+import { CustomCheckbox } from '../ui/CustomCheckbox';
 
 interface MatriculaModalProps {
     isOpen: boolean;

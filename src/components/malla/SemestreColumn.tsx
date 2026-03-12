@@ -1,4 +1,4 @@
-import MateriaCard from '../MateriaCard/MateriaCard';
+import MateriaCard from './MateriaCard';
 import type { MateriaNode } from '../../types/materia';
 import { useMallaData, useMallaUI } from '../../contexts/MallaContexts';
 

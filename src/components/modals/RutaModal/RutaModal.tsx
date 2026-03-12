@@ -1,7 +1,7 @@
 import React from 'react';
 import { Map as MapPath, Wrench, X } from 'lucide-react';
-import type { MallaCurricularGraph } from '../../core/MallaCurricularGraph';
-import { useRutaOptima } from '../../hooks/useRutaOptima';
+import type { MallaCurricularGraph } from '../../../core/MallaCurricularGraph';
+import { useRutaOptima } from '../../../hooks/malla/useRutaOptima';
 import { BloqueEstudioCard } from './BloqueEstudioCard';
 import { FiltrosRutaOptimaButton, FiltrosRutaOptimaPanel } from './FiltrosRutaOptima';
 

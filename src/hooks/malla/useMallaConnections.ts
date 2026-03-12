@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { MallaCurricularGraph } from '../core/MallaCurricularGraph';
-import type { ProgresoMalla } from '../types/materia';
-import type { MateriaNode } from '../types/materia';
+import type { MallaCurricularGraph } from '../../core/MallaCurricularGraph';
+import type { ProgresoMalla } from '../../types/materia';
+import type { MateriaNode } from '../../types/materia';
 
 export interface ArrowConfig {
     start: string;

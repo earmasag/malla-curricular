@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info
+    Menu, LayoutDashboard, Info, MousePointer2, Fingerprint
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
@@ -257,6 +257,54 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 color="gray"
                             />
                         </>
+                    )}
+
+                    {/* Quick Guide - Only expanded */}
+                    {ui.isExpanded && (
+                        <div className="mt-4 px-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                            <div className="bg-blue-50/50 rounded-2xl p-4 border border-blue-100/50">
+                                <h3 className="text-[11px] font-bold text-blue-900/40 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                                    <Info className="w-3 h-3" /> Guía de Uso
+                                </h3>
+                                
+                                <div className="space-y-3">
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-1.5 bg-white rounded-lg shadow-sm text-blue-600">
+                                            <MousePointer2 className="w-3.5 h-3.5" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[12px] font-bold text-gray-700 leading-tight">Click / Tap</p>
+                                            <p className="text-[10px] text-gray-500 leading-tight mt-0.5">Aprobar o desaprobar materia.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-1.5 bg-white rounded-lg shadow-sm text-indigo-600">
+                                            <Fingerprint className="w-3.5 h-3.5" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[12px] font-bold text-gray-700 leading-tight">Click Derecho / Larga</p>
+                                            <p className="text-[10px] text-gray-500 leading-tight mt-0.5">Marcar materia como cursando.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 flex flex-wrap gap-1.5">
+                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
+                                            <span className="w-2 h-2 rounded-full bg-green-500"></span> Aprobada
+                                        </span>
+                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
+                                            <span className="w-2 h-2 rounded-full bg-blue-500"></span> Disponible
+                                        </span>
+                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
+                                            <span className="w-2 h-2 rounded-full bg-blue-300"></span> Cursando
+                                        </span>
+                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
+                                            <span className="w-2 h-2 rounded-full bg-gray-300"></span> Bloqueada
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
             )}

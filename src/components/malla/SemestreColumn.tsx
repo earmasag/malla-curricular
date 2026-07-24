@@ -55,11 +55,9 @@ export const SemestreColumn = memo(({
     const onToggleCursandoMateria = isCustomRouteMode ? () => { } : accionesMalla.toggleCursando;
     const onToggleSemestre = isCustomRouteMode ? () => { } : accionesMalla.toggleSemestre;
 
-    // Verificamos si TODAS las materias están aprobadas visualmente, 
-    // ignorando las que ni siquiera se pueden aprobar estructuralmente (bloqueadas absolutas).
-    // Para simplificar, asumimos que si todas las cursables están aprobadas, check = verde.
-    const materiasCursables = materiasDelSemestre.filter(m => progreso[m.codigoMateria] !== 'bloqueada');
-    const todasAprobadas = materiasCursables.length > 0 && materiasCursables.every(m => progreso[m.codigoMateria] === 'aprobada');
+    // Verificamos si TODAS las materias del semestre están aprobadas visualmente.
+    // Un semestre solo se marca con check verde si no queda ninguna materia pendiente, sin importar su estado.
+    const todasAprobadas = materiasDelSemestre.length > 0 && materiasDelSemestre.every(m => progreso[m.codigoMateria] === 'aprobada');
 
     return (
         <div className="flex flex-col gap-3 min-w-50">

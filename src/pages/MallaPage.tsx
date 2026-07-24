@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
 import { SemestreColumn } from "../components/malla/SemestreColumn";
 import MallaConnections from "../components/malla/MallaConnections";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Xwrapper, useXarrow } from "react-xarrows";
-
 // Core y Datos
 import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
 import planEstudioJSON from "../data/plan_estudio_nuevo.json";
@@ -45,15 +43,13 @@ const semestresMaterias = semestresArray.map(numeroSemestre => {
 });
 
 const MallaLayout = () => {
+    const contentRef = useRef<HTMLDivElement>(null);
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
     const { ui, modales, configuraciones, datos, handlers } = useMallaUI();
 
     // 2. Estado local para renders del componente (Zoom, Mobile, Flechas)
     const isMobile = useIsMobile();
-
-    // Helpers locales
-    const updateXarrow = useXarrow();
 
     // Determinar qué progreso usar visualmente en las cajas
     const activeProgreso = estadoCustom.isCustomRouteMode ? estadoCustom.customProgreso : estadoMalla.progreso;
@@ -156,27 +152,22 @@ const MallaLayout = () => {
                     disablePadding={true}
                     panning={{ velocityDisabled: true }}
                     alignmentAnimation={{ animationTime: 0, animationType: "linear" }}
-                    // Aseguramos que las flechas se redibujen interactivamente al mover la cámara
-                    onTransformed={updateXarrow}
-                    onPanning={updateXarrow}
-                    onZoom={updateXarrow}
                 >
                     {({ zoomIn, zoomOut, resetTransform }) => (
                         <React.Fragment>
                             {/* Botones de Control de Zoom (Flotantes Inferior Derecha) */}
                             {!isMobile && <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} />}
 
-                            {/* Overlay de Flechas, movido fuera del contenedor escalable para evitar el bug del doble escalado (css scale + boudning rect) */}
-                            <MallaConnections
-                                grafo={malla}
-                                progreso={activeProgreso}
-                                hoveredMateria={ui.hoveredMateria}
-                            />
-
                             <TransformComponent
                                 wrapperStyle={{ width: "100%", height: "100%" }}
                             >
-                                <div className="flex flex-col min-w-max min-h-max items-start">
+                                <div ref={contentRef} className="relative flex flex-col min-w-max min-h-max items-start">
+                                    <MallaConnections
+                                        grafo={malla}
+                                        progreso={activeProgreso}
+                                        hoveredMateria={ui.hoveredMateria}
+                                        containerRef={contentRef}
+                                    />
                                     <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-20 pb-32 min-w-max min-h-max">
                                         {semestresArray.map((numeroSemestre, index) => {
                                             return (
@@ -199,9 +190,7 @@ const MallaLayout = () => {
 };
 
 export const MallaPage = () => (
-    <Xwrapper>
-        <MallaProvider grafo={malla}>
-            <MallaLayout />
-        </MallaProvider>
-    </Xwrapper>
+    <MallaProvider grafo={malla}>
+        <MallaLayout />
+    </MallaProvider>
 );

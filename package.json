@@ -21,8 +21,6 @@
     "lucide-react": "^0.577.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-draggable": "^4.5.0",
-    "react-xarrows": "^2.0.2",
     "react-zoom-pan-pinch": "^3.7.0"
   },
   "devDependencies": {

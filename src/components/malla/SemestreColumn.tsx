@@ -1,7 +1,36 @@
 import { memo } from 'react';
 import MateriaCard from './MateriaCard';
-import type { MateriaNode } from '../../types/materia';
-import { useMallaData, useMallaUI } from '../../contexts/MallaContexts';
+import type { MateriaNode, ProgresoMalla } from '../../types/materia';
+import { useMallaData, useMallaHover } from '../../contexts/MallaContexts';
+
+// Wrapper memoizado que se conecta al micro-contexto de hover
+// Solo los wrappers re-evalúan en hover, protegiendo a las columnas
+const MateriaCardWrapper = memo(({ 
+    materiaInmutable, 
+    progreso, 
+    onSelectMateria, 
+    onToggleCursandoMateria 
+}: {
+    materiaInmutable: MateriaNode;
+    progreso: ProgresoMalla;
+    onSelectMateria: (id: string) => void;
+    onToggleCursandoMateria: (id: string) => void;
+}) => {
+    const { hover: { hoveredMateria, setHoveredMateria } } = useMallaHover();
+    const estadoDinamico = progreso[materiaInmutable.codigoMateria] || 'bloqueada';
+    const materiaPaPintar = { ...materiaInmutable, estado: estadoDinamico };
+
+    return (
+        <MateriaCard
+            materia={materiaPaPintar}
+            onClick={() => onSelectMateria(materiaInmutable.codigoMateria)}
+            onRightClick={() => onToggleCursandoMateria(materiaInmutable.codigoMateria)}
+            onMouseEnter={() => setHoveredMateria(materiaInmutable.codigoMateria)}
+            onMouseLeave={() => setHoveredMateria(null)}
+            isHovered={hoveredMateria === materiaInmutable.codigoMateria}
+        />
+    );
+});
 
 interface SemestreColumnProps {
     numeroSemestre: number;
@@ -15,18 +44,16 @@ export const SemestreColumn = memo(({
 
     // 1. Contextos para mitigar el Prop Bloat
     const { estadoMalla, estadoCustom, accionesMalla, accionesCustom } = useMallaData();
-    const { ui } = useMallaUI();
+    // Ya no consumimos useMallaUI ni useMallaHover aquí, protegiendo la columna de re-renders por hover
 
     // 2. Data Mapeada
     const { isCustomRouteMode, customProgreso } = estadoCustom;
     const progreso = isCustomRouteMode ? customProgreso : estadoMalla.progreso;
     const hideActions = isCustomRouteMode;
-    const hoveredMateria = ui.hoveredMateria;
 
     const onSelectMateria = isCustomRouteMode ? accionesCustom.toggleCustomMateria : accionesMalla.toggleAprobacion;
     const onToggleCursandoMateria = isCustomRouteMode ? () => { } : accionesMalla.toggleCursando;
     const onToggleSemestre = isCustomRouteMode ? () => { } : accionesMalla.toggleSemestre;
-    const onHoverMateria = ui.setHoveredMateria;
 
     // Verificamos si TODAS las materias están aprobadas visualmente, 
     // ignorando las que ni siquiera se pueden aprobar estructuralmente (bloqueadas absolutas).
@@ -58,23 +85,15 @@ export const SemestreColumn = memo(({
             </div>
 
             {/* Las Tarjetas de esa Columna vertical */}
-            {materiasDelSemestre.map(materiaInmutable => {
-                // Combinamos los datos estáticos del Grafo con el Estado reactivo actual de la Malla
-                const estadoDinamico = progreso[materiaInmutable.codigoMateria] || 'bloqueada';
-                const materiaPaPintar = { ...materiaInmutable, estado: estadoDinamico };
-
-                return (
-                    <MateriaCard
-                        key={materiaInmutable.codigoMateria}
-                        materia={materiaPaPintar}
-                        onClick={() => onSelectMateria(materiaInmutable.codigoMateria)}
-                        onRightClick={() => onToggleCursandoMateria(materiaInmutable.codigoMateria)}
-                        onMouseEnter={() => onHoverMateria(materiaInmutable.codigoMateria)}
-                        onMouseLeave={() => onHoverMateria(null)}
-                        isHovered={hoveredMateria === materiaInmutable.codigoMateria}
-                    />
-                );
-            })}
+            {materiasDelSemestre.map(materiaInmutable => (
+                <MateriaCardWrapper
+                    key={materiaInmutable.codigoMateria}
+                    materiaInmutable={materiaInmutable}
+                    progreso={progreso}
+                    onSelectMateria={onSelectMateria}
+                    onToggleCursandoMateria={onToggleCursandoMateria}
+                />
+            ))}
         </div>
     );
 });

@@ -9,12 +9,16 @@ type MallaCurricularReturn = ReturnType<typeof useMallaCurricular>;
 type CustomRouteReturn = ReturnType<typeof useCustomRoute>;
 type MallaControllerReturn = ReturnType<typeof useMallaController>;
 
-// 2. Interfaces para nuestros dos Contextos Separados (Re-render Trap Avoidance)
+// 2. Interfaces para nuestros Contextos Separados (Re-render Trap Avoidance)
 interface MallaDataContextType {
     estadoMalla: MallaCurricularReturn['estado'];
     accionesMalla: MallaCurricularReturn['acciones'];
     estadoCustom: CustomRouteReturn['estado'];
     accionesCustom: CustomRouteReturn['acciones'];
+}
+
+interface MallaHoverContextType {
+    hover: MallaControllerReturn['hover'];
 }
 
 interface MallaUIContextType {
@@ -25,14 +29,21 @@ interface MallaUIContextType {
     handlers: MallaControllerReturn['handlers'];
 }
 
-// 3. Creación de los dos Contextos
+// 3. Creación de los Contextos
 const MallaDataContext = createContext<MallaDataContextType | undefined>(undefined);
+const MallaHoverContext = createContext<MallaHoverContextType | undefined>(undefined);
 const MallaUIContext = createContext<MallaUIContextType | undefined>(undefined);
 
 // 4. Custom Hooks inyectores seguros
 export const useMallaData = () => {
     const context = useContext(MallaDataContext);
     if (!context) throw new Error("useMallaData debe usarse dentro de un MallaProvider");
+    return context;
+};
+
+export const useMallaHover = () => {
+    const context = useContext(MallaHoverContext);
+    if (!context) throw new Error("useMallaHover debe usarse dentro de un MallaProvider");
     return context;
 };
 
@@ -54,7 +65,7 @@ export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, children })
     const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(grafo, estadoMalla.progreso);
 
     // B) Ejecución de UI y Controladores
-    const { ui, modales, configuraciones, datos, handlers } = useMallaController(
+    const { hover, ui, modales, configuraciones, datos, handlers } = useMallaController(
         accionesMalla.generarRutaOptima,
         accionesCustom.saveAndFinishRoute,
         accionesCustom.cancelCustomRoute,
@@ -62,25 +73,31 @@ export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, children })
     );
 
     // C) Empaquetado
-    const dataContextValue: MallaDataContextType = {
+    const dataContextValue: MallaDataContextType = React.useMemo(() => ({
         estadoMalla,
         accionesMalla,
         estadoCustom,
         accionesCustom,
-    };
+    }), [estadoMalla, accionesMalla, estadoCustom, accionesCustom]);
 
-    const uiContextValue: MallaUIContextType = {
+    const hoverContextValue: MallaHoverContextType = React.useMemo(() => ({
+        hover
+    }), [hover]);
+
+    const uiContextValue: MallaUIContextType = React.useMemo(() => ({
         ui,
         modales,
         configuraciones,
         datos,
         handlers,
-    };
+    }), [ui, modales, configuraciones, datos, handlers]);
 
     return (
         <MallaDataContext.Provider value={dataContextValue}>
             <MallaUIContext.Provider value={uiContextValue}>
-                {children}
+                <MallaHoverContext.Provider value={hoverContextValue}>
+                    {children}
+                </MallaHoverContext.Provider>
             </MallaUIContext.Provider>
         </MallaDataContext.Provider>
     );

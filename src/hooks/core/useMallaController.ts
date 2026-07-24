@@ -112,9 +112,11 @@ export const useMallaController = (
     };
 
     return {
-        ui: {
+        hover: {
             hoveredMateria,
-            setHoveredMateria,
+            setHoveredMateria
+        },
+        ui: {
             isLeyendaOpen,
             setIsLeyendaOpen,
             leyendaRef,

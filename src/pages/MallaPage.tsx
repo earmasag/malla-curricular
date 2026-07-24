@@ -10,7 +10,7 @@ import planEstudioJSON from "../data/plan_estudio_nuevo.json";
 import { useIsMobile } from "../hooks/ui/useIsMobile";
 
 // Provider
-import { MallaProvider, useMallaData, useMallaUI } from "../contexts/MallaContexts";
+import { MallaProvider, useMallaData, useMallaUI, useMallaHover } from "../contexts/MallaContexts";
 import { NavigationSidebar } from "../components/layout/NavigationSidebar/NavigationSidebar";
 import { ZoomControls } from "../components/ui/ZoomControls";
 import { RutaModal } from "../components/modals/RutaModal/RutaModal";
@@ -47,6 +47,7 @@ const MallaLayout = () => {
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
     const { ui, modales, configuraciones, datos, handlers } = useMallaUI();
+    const { hover: { hoveredMateria } } = useMallaHover();
 
     // 2. Estado local para renders del componente (Zoom, Mobile, Flechas)
     const isMobile = useIsMobile();
@@ -158,14 +159,12 @@ const MallaLayout = () => {
                             {/* Botones de Control de Zoom (Flotantes Inferior Derecha) */}
                             {!isMobile && <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} />}
 
-                            <TransformComponent
-                                wrapperStyle={{ width: "100%", height: "100%" }}
-                            >
+                            <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
                                 <div ref={contentRef} className="relative flex flex-col min-w-max min-h-max items-start">
                                     <MallaConnections
                                         grafo={malla}
                                         progreso={activeProgreso}
-                                        hoveredMateria={ui.hoveredMateria}
+                                        hoveredMateria={hoveredMateria}
                                         containerRef={contentRef}
                                     />
                                     <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-20 pb-32 min-w-max min-h-max">

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState, useRef } from 'react';
 import type { ArrowConfig } from './useMallaConnections';
 
 export interface SvgPathData {
@@ -30,6 +30,16 @@ export const useConnectionPaths = (
     containerRef: React.RefObject<HTMLElement | null>
 ) => {
     const [paths, setPaths] = useState<SvgPathData[]>([]);
+    
+    // Caché de posiciones DOM para evitar layout thrashing en cada hover
+    const positionCache = useRef<Map<string, {x: number, y: number, width: number, height: number}>>(new Map());
+
+    // Invalidar el caché si la ventana cambia de tamaño (el layout podría cambiar)
+    useLayoutEffect(() => {
+        const handleResize = () => positionCache.current.clear();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useLayoutEffect(() => {
         if (!containerRef.current || arrows.length === 0) {
@@ -39,14 +49,22 @@ export const useConnectionPaths = (
 
         const container = containerRef.current;
 
+        const getCachedPosition = (id: string) => {
+            if (positionCache.current.has(id)) {
+                return positionCache.current.get(id);
+            }
+            const el = document.getElementById(id);
+            if (!el) return null;
+            const pos = getRelativeOffset(el, container);
+            positionCache.current.set(id, pos);
+            return pos;
+        };
+
         const newPaths: SvgPathData[] = arrows.map((arrow) => {
-            const startEl = document.getElementById(arrow.start);
-            const endEl = document.getElementById(arrow.end);
+            const startPos = getCachedPosition(arrow.start);
+            const endPos = getCachedPosition(arrow.end);
 
-            if (!startEl || !endEl) return null;
-
-            const startPos = getRelativeOffset(startEl, container);
-            const endPos = getRelativeOffset(endEl, container);
+            if (!startPos || !endPos) return null;
 
             // Start at the right-center of the start element
             const startX = startPos.x + startPos.width;

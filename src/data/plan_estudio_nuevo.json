@@ -1030,7 +1030,7 @@
     "tipo": "-",
     "modalidad": "VIT",
     "taxonomia": "TA-7",
-    "prelacion": [],
+    "prelacion": ["INFO-02018"],
     "semestre": 7,
     "areaFormacion": "Ingeniería de Software",
     "ucRequeridas": 0,

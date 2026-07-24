@@ -3,26 +3,33 @@ import type { IStorageWrapper } from "../core/IStorageWrapper";
 import { LocalStorageWrapper } from "../core/LocalStorageWrapper";
 
 export class MateriaRepository {
-    private readonly storageKey = 'malla-progreso'; // Manteniendo compatibilidad con datos previos
-    private readonly customRouteDraftKey = 'malla-custom-route-draft'; // Para el autoguardado de la ruta en edición
-    private readonly savedRoutesKey = 'malla-saved-routes'; // Para las rutas terminadas y guardadas
-    private readonly pensumAnteriorKey = 'malla-pensum-anterior'; // Para materias aprobadas del pensum anterior
     private storage: IStorageWrapper;
+    private activePlanId: string;
 
     // Inyectamos el storage wrapper, por defecto usamos el Singleton de localStorage
-    constructor(storageWrapper: IStorageWrapper = LocalStorageWrapper.getInstance()) {
+    constructor(activePlanId: string, storageWrapper: IStorageWrapper = LocalStorageWrapper.getInstance()) {
+        this.activePlanId = activePlanId;
         this.storage = storageWrapper;
     }
+
+    private get storageKey() { return `malla-progreso-${this.activePlanId}`; }
+    private get customRouteDraftKey() { return `malla-custom-route-draft-${this.activePlanId}`; }
+    private get savedRoutesKey() { return `malla-saved-routes-${this.activePlanId}`; }
+    private get pensumAnteriorKey() { return `malla-pensum-anterior-${this.activePlanId}`; }
 
     /**
      * Recupera el progreso de estudio previamente guardado.
      * Retorna un objeto vacío si no existe progreso persistido o si hubo un error.
      */
     public getStudentProgress(): ProgresoMalla {
+        // Fallback for legacy key if migrating for the first time
+        const legacyProgress = this.storage.get<ProgresoMalla>('malla-progreso');
         const progress = this.storage.get<ProgresoMalla>(this.storageKey);
-        // Validamos que sea un objeto real y no un tipo primitivo que se coló
-        if (progress && typeof progress === 'object' && Object.keys(progress).length > 0) {
-            return progress;
+        
+        const activeProgress = progress || (this.activePlanId === "202415" ? legacyProgress : null);
+
+        if (activeProgress && typeof activeProgress === 'object' && Object.keys(activeProgress).length > 0) {
+            return activeProgress;
         }
         return {};
     }

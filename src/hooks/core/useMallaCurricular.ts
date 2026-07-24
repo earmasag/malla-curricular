@@ -10,13 +10,13 @@ import type { MateriaMatricula } from "../../services/MatriculaService";
 import { useToast } from "../../hooks/ui/useToast";
 import semestresData from "../../data/semestres.json";
 
-export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
+export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: string) => {
     const { showToast } = useToast();
     // Instanciamos el evaluador estándar de la malla (Service Layer / Strategy)
     const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
 
     // Instanciamos el Repositorio para independizarnos del localStorage crudo
-    const repository = useMemo(() => new MateriaRepository(), []);
+    const repository = useMemo(() => new MateriaRepository(activePlanId), [activePlanId]);
 
     const [progreso, setProgreso] = useState<ProgresoMalla>(
         () => {
@@ -59,8 +59,11 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     const ucPensumAnterior = useMemo(() => {
         let total = 0;
         if (pensumAnterior['ingles1']) total += 4;
+        if (pensumAnterior['ingles2']) total += 4;
+        if (pensumAnterior['inglesCompensacion5']) total += 5;
         if (pensumAnterior['labFisica']) total += 2;
         if (pensumAnterior['progWeb']) total += 3;
+        if (pensumAnterior['electiva2']) total += 4;
         return total;
     }, [pensumAnterior]);
 

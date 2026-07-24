@@ -7,13 +7,13 @@ import { obtenerPrerrequisitosFaltantes, obtenerCorrequisitosFaltantes } from ".
 import { useNotification } from "../ui/useNotification";
 import { useToast } from "../ui/useToast";
 
-export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: ProgresoMalla) => {
+export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: ProgresoMalla, activePlanId: string) => {
     const { confirm } = useNotification();
     const { showToast } = useToast();
 
     // Instanciamos Evaluator y Repository independientemente para el hook
     const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
-    const repository = useMemo(() => new MateriaRepository(), []);
+    const repository = useMemo(() => new MateriaRepository(activePlanId), [activePlanId]);
 
     const [isCustomRouteMode, setIsCustomRouteMode] = useState(false);
     const [customProgreso, setCustomProgreso] = useState<ProgresoMalla>({});

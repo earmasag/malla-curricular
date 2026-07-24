@@ -6,7 +6,8 @@ export const useMallaController = (
     generarRutaOptima: (maxUcPorSemestre?: number, maxMateriasPorSemestre?: number, maxHorasPorSemestre?: number) => string[][],
     saveAndFinishRoute: (id: string, name: string) => void,
     cancelCustomRoute: () => void,
-    customSemesters: string[][]
+    customSemesters: string[][],
+    activePlanId: string
 ) => {
     const [hoveredMateria, setHoveredMateria] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,7 +75,7 @@ export const useMallaController = (
     }, [modoOscuro]);
 
     // Repository for loading routes list
-    const repository = useMemo(() => new MateriaRepository(), []);
+    const repository = useMemo(() => new MateriaRepository(activePlanId), [activePlanId]);
 
     const handleShowRutaOptima = () => {
         const ruta = generarRutaOptima(24, 6, undefined);

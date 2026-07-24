@@ -56,20 +56,22 @@ export const useMallaUI = () => {
 // 5. El Provider Global (Combina la ejecución de los hooks y mapea a Contextos Duales)
 interface MallaProviderProps {
     grafo: MallaCurricularGraph;
+    activePlanId: string;
     children: ReactNode;
 }
 
-export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, children }) => {
+export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, activePlanId, children }) => {
     // A) Ejecución de Dominio / Datos
-    const { estado: estadoMalla, acciones: accionesMalla } = useMallaCurricular(grafo);
-    const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(grafo, estadoMalla.progreso);
+    const { estado: estadoMalla, acciones: accionesMalla } = useMallaCurricular(grafo, activePlanId);
+    const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(grafo, estadoMalla.progreso, activePlanId);
 
     // B) Ejecución de UI y Controladores
     const { hover, ui, modales, configuraciones, datos, handlers } = useMallaController(
         accionesMalla.generarRutaOptima,
         accionesCustom.saveAndFinishRoute,
         accionesCustom.cancelCustomRoute,
-        estadoCustom.customSemesters
+        estadoCustom.customSemesters,
+        activePlanId
     );
 
     // C) Empaquetado

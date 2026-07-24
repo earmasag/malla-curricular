@@ -1,4 +1,3 @@
-import React from 'react';
 import { X, MousePointer2, Moon, Sun } from 'lucide-react';
 
 export interface SettingsModalProps {
@@ -17,7 +16,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
 
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">
-            <div
+                <div
                 className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-sm shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
                 onClick={(e) => e.stopPropagation()}
             >

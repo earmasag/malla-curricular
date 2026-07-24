@@ -2,10 +2,6 @@ import React, { useRef } from "react";
 import { SemestreColumn } from "../components/malla/SemestreColumn";
 import MallaConnections from "../components/malla/MallaConnections";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-// Core y Datos
-import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
-import planEstudioJSON from "../data/plan_estudio_nuevo.json";
-
 // Hook auxiliar
 import { useIsMobile } from "../hooks/ui/useIsMobile";
 
@@ -25,24 +21,12 @@ import { Settings, X } from "lucide-react";
 // Datos estáticos
 import areasColorData from '../data/areas_color.json';
 
-const builder = new MallaCurricularBuilder();
-const materiaData = planEstudioJSON as any; // Allow the builder to cast internally
-const malla = builder.build(materiaData);
+import { usePlanEstudio } from "../contexts/PlanContext";
+import { WelcomeModal } from "../components/modals/WelcomeModal";
+import { PlanSwitcherFloat } from "../components/layout/PlanSwitcherFloat";
 
-const allNodes = malla.getAllNodes();
-const totalMaterias = allNodes.length;
-const totalUc = allNodes.reduce((acc: number, curr: any) => acc + curr.unidadesCredito, 0);
-const totalSemestres = malla.getTotalSemestres();
-const semestresArray = Array.from({ length: totalSemestres }, (_, i) => i + 1);
-
-// Precomputar las materias por semestre y ordenarlas (una sola vez)
-const semestresMaterias = semestresArray.map(numeroSemestre => {
-    return malla
-        .getMateriasPorSemestre(numeroSemestre)
-        .sort((a: any, b: any) => b.areaFormacion.localeCompare(a.areaFormacion));
-});
-
-const MallaLayout = () => {
+const MallaLayout = ({ planData }: { planData: any }) => {
+    const { grafo, semestresArray, semestresMaterias, totalMaterias, totalUc, totalSemestres } = planData;
     const contentRef = useRef<HTMLDivElement>(null);
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
@@ -133,7 +117,7 @@ const MallaLayout = () => {
                     isOpen={modales.isModalOpen}
                     onClose={() => modales.setIsModalOpen(false)}
                     generarRutaOptima={accionesMalla.generarRutaOptima}
-                    grafo={malla}
+                    grafo={grafo}
                     optimaRuta={datos.optimaRuta}
                     customRoute={datos.customRouteResult}
                 />
@@ -162,13 +146,13 @@ const MallaLayout = () => {
                             <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
                                 <div ref={contentRef} className="relative flex flex-col min-w-max min-h-max items-start">
                                     <MallaConnections
-                                        grafo={malla}
+                                        grafo={grafo}
                                         progreso={activeProgreso}
                                         hoveredMateria={hoveredMateria}
                                         containerRef={contentRef}
                                     />
                                     <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-20 pb-32 min-w-max min-h-max">
-                                        {semestresArray.map((numeroSemestre, index) => {
+                                        {semestresArray.map((numeroSemestre: number, index: number) => {
                                             return (
                                                 <SemestreColumn
                                                     key={`semestre-${numeroSemestre}`}
@@ -188,8 +172,19 @@ const MallaLayout = () => {
     );
 };
 
-export const MallaPage = () => (
-    <MallaProvider grafo={malla}>
-        <MallaLayout />
-    </MallaProvider>
-);
+export const MallaPage = () => {
+    const { activePlanId, planData } = usePlanEstudio();
+
+    if (!activePlanId || !planData) {
+        return <WelcomeModal />;
+    }
+
+    return (
+        <>
+            <PlanSwitcherFloat />
+            <MallaProvider key={activePlanId} grafo={planData.grafo} activePlanId={activePlanId}>
+                <MallaLayout planData={planData} />
+            </MallaProvider>
+        </>
+    );
+};

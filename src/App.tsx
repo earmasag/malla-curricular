@@ -5,15 +5,18 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import { CustomNotification } from './components/ui/CustomNotification';
 import { ToastProvider } from './contexts/ToastContext';
 import { ToastContainer } from './components/ui/ToastContainer';
+import { PlanProvider } from './contexts/PlanContext';
 
 function App() {
 
   return (
     <ToastProvider>
       <NotificationProvider>
-        <MallaPage />
-        <CustomNotification />
-        <ToastContainer />
+        <PlanProvider>
+          <MallaPage />
+          <CustomNotification />
+          <ToastContainer />
+        </PlanProvider>
       </NotificationProvider>
     </ToastProvider>
   )

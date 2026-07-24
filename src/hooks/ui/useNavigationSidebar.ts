@@ -9,7 +9,7 @@ export const useNavigationSidebar = () => {
     const { confirm } = useNotification();
     const isMobile = useIsMobile();
 
-    const { cantidadAprobadas, ucAcumuladas, materiasCursando } = estadoMalla;
+    const { cantidadAprobadas, ucAcumuladas, semestreActual, materiasCursando } = estadoMalla;
     const {
         isCustomRouteMode,
         currentSemesterUCs,
@@ -47,6 +47,7 @@ export const useNavigationSidebar = () => {
         mallaStats: {
             cantidadAprobadas,
             ucAcumuladas,
+            semestreActual,
             ucCursando
         },
         customRouteState: {

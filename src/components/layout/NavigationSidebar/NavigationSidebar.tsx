@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info, MousePointer2, Fingerprint, BookCheck
+    Menu, LayoutDashboard, Info, MousePointer2, Fingerprint, BookCheck, GraduationCap
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
@@ -79,6 +79,19 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                         </div>
                                     ) : (
                                         <span className="text-xs font-black text-amber-600 leading-none">{mallaStats.ucAcumuladas}</span>
+                                    )}
+                                </div>
+
+                                {/* Semestre Actual Stat */}
+                                <div className={`flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                    <GraduationCap className={`text-purple-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
+                                    {ui.isExpanded ? (
+                                        <div className="flex-1 flex justify-between items-center">
+                                            <span className="text-sm font-semibold text-gray-600">Semestre Actual</span>
+                                            <span className="text-purple-600 font-black">{mallaStats.semestreActual}</span>
+                                        </div>
+                                    ) : (
+                                        <span className="text-xs font-black text-purple-600 leading-none">{mallaStats.semestreActual}</span>
                                     )}
                                 </div>
 

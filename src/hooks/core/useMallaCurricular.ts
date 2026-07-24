@@ -8,6 +8,7 @@ import { calcularUCAcumuladas, obtenerPrerrequisitosFaltantes, obtenerCorrequisi
 import { MateriaRepository } from "../../repository/MateriaRepository";
 import type { MateriaMatricula } from "../../services/MatriculaService";
 import { useToast } from "../../hooks/ui/useToast";
+import semestresData from "../../data/semestres.json";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
     const { showToast } = useToast();
@@ -65,7 +66,21 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
 
     const ucAcumuladas = useMemo(() => {
         return calcularUCAcumuladas(progreso, grafo) + ucPensumAnterior;
-    }, [progreso, grafo, ucPensumAnterior])
+    }, [progreso, grafo, ucPensumAnterior]);
+
+    const semestreActual = useMemo(() => {
+        let curr = 1;
+        const semestres = Object.keys(semestresData).map(Number).sort((a, b) => a - b);
+        for (const s of semestres) {
+            const threshold = (semestresData as Record<string, { ucAcumulada: number }>)[s.toString()].ucAcumulada;
+            if (ucAcumuladas >= threshold) {
+                curr = s + 1;
+            } else {
+                break;
+            }
+        }
+        return Math.min(curr, 8); // Assuming 8 is the max semester in semestres.json
+    }, [ucAcumuladas]);
 
     // Obtener las materias que actualmente están "cursando"
     const materiasCursando = useMemo(() => {
@@ -277,6 +292,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
             progreso,
             cantidadAprobadas,
             ucAcumuladas,
+            semestreActual,
             materiasCursando,
             pensumAnterior
         },

@@ -1,0 +1,34 @@
+{
+    "1": {
+      "uc": 25,
+      "ucAcumulada": 25
+    },
+    "2": {
+      "uc": 31,
+      "ucAcumulada": 56
+    },
+    "3": {
+      "uc": 32,
+      "ucAcumulada": 88
+    },
+    "4": {
+      "uc": 33,
+      "ucAcumulada": 121
+    },
+    "5": {
+      "uc": 33,
+      "ucAcumulada": 154
+    },
+    "6": {
+      "uc": 30,
+      "ucAcumulada": 184
+    },
+    "7": {
+      "uc": 34,
+      "ucAcumulada": 218
+    },
+    "8": {
+      "uc": 23,
+      "ucAcumulada": 241
+    }
+  }

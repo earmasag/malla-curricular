@@ -158,7 +158,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
                     </div>
                 </div>
             )}
-            
+
 
             {/* Cuadro principal blanco o con grilla */}
             <div

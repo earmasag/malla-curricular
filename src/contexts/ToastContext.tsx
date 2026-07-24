@@ -9,7 +9,7 @@ export interface ToastMessage {
     type: ToastType;
 }
 
-interface ToastContextType {
+export interface ToastContextType {
     toasts: ToastMessage[];
     showToast: (title: string, description?: string, type?: ToastType) => void;
     removeToast: (id: string) => void;

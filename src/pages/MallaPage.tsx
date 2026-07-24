@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { SemestreColumn } from "../components/malla/SemestreColumn";
 import MallaConnections from "../components/malla/MallaConnections";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -6,7 +6,7 @@ import { Xwrapper, useXarrow } from "react-xarrows";
 
 // Core y Datos
 import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
-import planEstudioJSON from "../data/plan_estudio.json";
+import planEstudioJSON from "../data/plan_estudio_nuevo.json";
 
 // Hook auxiliar
 import { useIsMobile } from "../hooks/ui/useIsMobile";
@@ -30,25 +30,29 @@ const builder = new MallaCurricularBuilder();
 const materiaData = planEstudioJSON as any; // Allow the builder to cast internally
 const malla = builder.build(materiaData);
 
+const allNodes = malla.getAllNodes();
+const totalMaterias = allNodes.length;
+const totalUc = allNodes.reduce((acc: number, curr: any) => acc + curr.unidadesCredito, 0);
+const totalSemestres = malla.getTotalSemestres();
+const semestresArray = Array.from({ length: totalSemestres }, (_, i) => i + 1);
+
+// Precomputar las materias por semestre y ordenarlas (una sola vez)
+const semestresMaterias = semestresArray.map(numeroSemestre => {
+    return malla
+        .getMateriasPorSemestre(numeroSemestre)
+        .sort((a: any, b: any) => b.areaFormacion.localeCompare(a.areaFormacion));
+});
+
 const MallaLayout = () => {
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
     const { ui, modales, configuraciones, datos, handlers } = useMallaUI();
 
-    const mallaContext = useMemo(() => builder.build(materiaData), []);
-
     // 2. Estado local para renders del componente (Zoom, Mobile, Flechas)
     const isMobile = useIsMobile();
 
-    // 3. Helpers locales
+    // Helpers locales
     const updateXarrow = useXarrow();
-
-    // 1. Array de los números de semestre [1, 2, 3...]
-    const totalSemestres = mallaContext.getTotalSemestres();
-    const semestresArray = Array.from(
-        { length: totalSemestres },
-        (_, i) => i + 1
-    );
 
     // Determinar qué progreso usar visualmente en las cajas
     const activeProgreso = estadoCustom.isCustomRouteMode ? estadoCustom.customProgreso : estadoMalla.progreso;
@@ -57,8 +61,6 @@ const MallaLayout = () => {
         // En modo personalizado simulamos que no cursa nada
         ? []
         : estadoMalla.materiasCursando;
-
-    const totalMaterias = mallaContext.getAllNodes().length;
 
     return (
         <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors">
@@ -75,48 +77,60 @@ const MallaLayout = () => {
               totalMaterias={totalMaterias} 
             />
 
-            <MatriculaModal
-                isOpen={modales.isMatriculaModalOpen}
-                onClose={() => modales.setIsMatriculaModalOpen(false)}
-                materiasCursando={materiasCursando}
-            />
+            {modales.isMatriculaModalOpen && (
+                <MatriculaModal
+                    isOpen={modales.isMatriculaModalOpen}
+                    onClose={() => modales.setIsMatriculaModalOpen(false)}
+                    materiasCursando={materiasCursando}
+                />
+            )}
 
-            <MisRutasModal
-                isOpen={modales.isMisRutasModalOpen}
-                onClose={() => modales.setIsMisRutasModalOpen(false)}
-                savedRoutes={datos.savedRoutesList}
-                onViewRoute={handlers.handleViewSavedRoute}
-                onDeleteRoute={handlers.handleDeleteSavedRoute}
-            />
+            {modales.isMisRutasModalOpen && (
+                <MisRutasModal
+                    isOpen={modales.isMisRutasModalOpen}
+                    onClose={() => modales.setIsMisRutasModalOpen(false)}
+                    savedRoutes={datos.savedRoutesList}
+                    onViewRoute={handlers.handleViewSavedRoute}
+                    onDeleteRoute={handlers.handleDeleteSavedRoute}
+                />
+            )}
 
-            <FeedbackModal
-                isOpen={modales.isFeedbackModalOpen}
-                onClose={() => modales.setIsFeedbackModalOpen(false)}
-            />
+            {modales.isFeedbackModalOpen && (
+                <FeedbackModal
+                    isOpen={modales.isFeedbackModalOpen}
+                    onClose={() => modales.setIsFeedbackModalOpen(false)}
+                />
+            )}
 
-            <SettingsModal
-                isOpen={modales.isSettingsOpen}
-                onClose={() => modales.setIsSettingsOpen(false)}
-                configuraciones={configuraciones}
-            />
+            {modales.isSettingsOpen && (
+                <SettingsModal
+                    isOpen={modales.isSettingsOpen}
+                    onClose={() => modales.setIsSettingsOpen(false)}
+                    configuraciones={configuraciones}
+                />
+            )}
 
-            <LeyendaModal
-                isOpen={ui.isLeyendaOpen}
-                onClose={() => ui.setIsLeyendaOpen(false)}
-                tituloCarrera="Ingeniería Informática"
-                totalSemestres={totalSemestres}
-                totalUc={mallaContext.getAllNodes().reduce((acc: number, curr: any) => acc + curr.unidadesCredito, 0)}
-                areasFormacion={areasColorData}
-            />
+            {ui.isLeyendaOpen && (
+                <LeyendaModal
+                    isOpen={ui.isLeyendaOpen}
+                    onClose={() => ui.setIsLeyendaOpen(false)}
+                    tituloCarrera="Ingeniería Informática"
+                    totalSemestres={totalSemestres}
+                    totalUc={totalUc}
+                    areasFormacion={areasColorData}
+                />
+            )}
 
-            <RutaModal
-                isOpen={modales.isModalOpen}
-                onClose={() => modales.setIsModalOpen(false)}
-                generarRutaOptima={accionesMalla.generarRutaOptima}
-                grafo={mallaContext}
-                optimaRuta={datos.optimaRuta}
-                customRoute={datos.customRouteResult}
-            />
+            {modales.isModalOpen && (
+                <RutaModal
+                    isOpen={modales.isModalOpen}
+                    onClose={() => modales.setIsModalOpen(false)}
+                    generarRutaOptima={accionesMalla.generarRutaOptima}
+                    grafo={malla}
+                    optimaRuta={datos.optimaRuta}
+                    customRoute={datos.customRouteResult}
+                />
+            )}
 
             {/* Main Content Area (Grilla Horizontal Libre de Zoom y Paneo) */}
             <div className="w-full h-full relative cursor-grab active:cursor-grabbing">
@@ -144,7 +158,7 @@ const MallaLayout = () => {
 
                             {/* Overlay de Flechas, movido fuera del contenedor escalable para evitar el bug del doble escalado (css scale + boudning rect) */}
                             <MallaConnections
-                                grafo={mallaContext}
+                                grafo={malla}
                                 progreso={activeProgreso}
                                 hoveredMateria={ui.hoveredMateria}
                             />
@@ -154,19 +168,12 @@ const MallaLayout = () => {
                             >
                                 <div className="flex flex-col min-w-max min-h-max items-start">
                                     <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-20 pb-32 min-w-max min-h-max">
-                                        {semestresArray.map((numeroSemestre) => {
-                                            // Le pedimos al Grafo solo las materias de esta columna
-                                            const materiasDelSemestre = mallaContext
-                                                .getMateriasPorSemestre(numeroSemestre)
-                                                .sort((a: any, b: any) =>
-                                                    b.areaFormacion.localeCompare(a.areaFormacion)
-                                                );
-
+                                        {semestresArray.map((numeroSemestre, index) => {
                                             return (
                                                 <SemestreColumn
                                                     key={`semestre-${numeroSemestre}`}
                                                     numeroSemestre={numeroSemestre}
-                                                    materiasDelSemestre={materiasDelSemestre}
+                                                    materiasDelSemestre={semestresMaterias[index]}
                                                 />
                                             );
                                         })}

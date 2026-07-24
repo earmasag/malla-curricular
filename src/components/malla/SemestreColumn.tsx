@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import MateriaCard from './MateriaCard';
 import type { MateriaNode } from '../../types/materia';
 import { useMallaData, useMallaUI } from '../../contexts/MallaContexts';
@@ -7,7 +8,7 @@ interface SemestreColumnProps {
     materiasDelSemestre: MateriaNode[];
 }
 
-export const SemestreColumn = ({
+export const SemestreColumn = memo(({
     numeroSemestre,
     materiasDelSemestre,
 }: SemestreColumnProps) => {
@@ -76,4 +77,4 @@ export const SemestreColumn = ({
             })}
         </div>
     );
-};
+});

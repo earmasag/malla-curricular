@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info, MousePointer2, Fingerprint, BookCheck, GraduationCap
+    Menu, LayoutDashboard, Info, BookCheck, GraduationCap
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
@@ -50,71 +50,71 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
             {/* Content Area (Hidden on mobile if collapsed) */}
             {(!ui.isMobile || ui.isExpanded) && (
-                <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-2 p-3 hide-scrollbar">
+                <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-3 p-3 hide-scrollbar">
 
                     {/* Regular Mode Stats */}
                     {!customRouteState.isCustomRouteMode ? (
                         <>
-                            <div className={`flex flex-col gap-2 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
+                            <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
                                 {/* Aprobadas Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <BookOpen className={`text-blue-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-gray-600">Aprobadas</span>
-                                            <span className="text-blue-600 font-black">{mallaStats.cantidadAprobadas}/{totalMaterias}</span>
+                                            <span className="text-sm font-semibold text-slate-700">Aprobadas</span>
+                                            <span className="text-slate-800 font-black">{mallaStats.cantidadAprobadas}/{totalMaterias}</span>
                                         </div>
                                     ) : (
-                                        <span className="text-xs font-black text-blue-600 leading-none">{mallaStats.cantidadAprobadas}</span>
+                                        <span className="text-xs font-black text-slate-800 leading-none">{mallaStats.cantidadAprobadas}</span>
                                     )}
                                 </div>
 
                                 {/* UC Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <Lightbulb className={`text-amber-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-gray-600">UC Aprobadas</span>
-                                            <span className="text-amber-600 font-black">{mallaStats.ucAcumuladas}</span>
+                                            <span className="text-sm font-semibold text-slate-700">UC Aprobadas</span>
+                                            <span className="text-slate-800 font-black">{mallaStats.ucAcumuladas}</span>
                                         </div>
                                     ) : (
-                                        <span className="text-xs font-black text-amber-600 leading-none">{mallaStats.ucAcumuladas}</span>
+                                        <span className="text-xs font-black text-slate-800 leading-none">{mallaStats.ucAcumuladas}</span>
                                     )}
                                 </div>
 
                                 {/* Semestre Actual Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <GraduationCap className={`text-purple-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-gray-600">Semestre Actual</span>
-                                            <span className="text-purple-600 font-black">{mallaStats.semestreActual}</span>
+                                            <span className="text-sm font-semibold text-slate-700">Semestre Actual</span>
+                                            <span className="text-slate-800 font-black">{mallaStats.semestreActual}</span>
                                         </div>
                                     ) : (
-                                        <span className="text-xs font-black text-purple-600 leading-none">{mallaStats.semestreActual}</span>
+                                        <span className="text-xs font-black text-slate-800 leading-none">{mallaStats.semestreActual}</span>
                                     )}
                                 </div>
 
                                 {/* UC Cursando */}
                                 {mallaStats.ucCursando > 0 && (
-                                    <div className={`flex items-center gap-3 p-3 bg-blue-50 rounded-2xl border border-blue-100 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                    <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                         <div className="relative shrink-0 flex items-center justify-center w-5 h-5">
                                             <span className="absolute w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping opacity-75"></span>
                                             <span className="relative w-2 h-2 rounded-full bg-blue-600"></span>
                                         </div>
                                         {ui.isExpanded ? (
                                             <div className="flex-1 flex justify-between items-center">
-                                                <span className="text-sm font-semibold text-blue-800">UC Cursando</span>
-                                                <span className="text-blue-700 font-black">{mallaStats.ucCursando}</span>
+                                                <span className="text-sm font-semibold text-slate-700">UC Cursando</span>
+                                                <span className="text-slate-800 font-black">{mallaStats.ucCursando}</span>
                                             </div>
                                         ) : (
-                                            <span className="text-[10px] sm:text-xs font-black text-blue-700 leading-none">{mallaStats.ucCursando}</span>
+                                            <span className="text-[10px] sm:text-xs font-black text-slate-800 leading-none">{mallaStats.ucCursando}</span>
                                         )}
                                     </div>
                                 )}
                             </div>
 
-                            <div className="h-px bg-gray-100 my-2 mx-2"></div>
+                            <div className="h-px bg-slate-200 my-2 mx-2"></div>
 
                             {/* Actions */}
                             <SidebarButton
@@ -123,6 +123,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 label="Ruta Óptima"
                                 onClick={(e) => { e.stopPropagation(); actions.handlers.handleShowRutaOptima(); }}
                                 color="blue"
+                                variant="solid"
                             />
 
                             {actions.accionesCustom.startCustomRoute && (
@@ -180,43 +181,42 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 label="Leyenda"
                                 onClick={(e) => { e.stopPropagation(); ui.setIsLeyendaOpen(true); }}
                                 color="blue"
-                                variant="ghost"
                             />
                         </>
                     ) : (
                         // Custom Mode Stats & Actions
                         <>
-                            <div className={`flex flex-col gap-2 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
-                                <div className={`flex justify-center items-center gap-3 p-3 bg-purple-50 rounded-2xl border border-purple-100 transition-all ${!ui.isExpanded ? 'w-14 aspect-square flex-col gap-1 p-2' : ''}`}>
+                            <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
+                                <div className={`flex justify-center items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <Wrench className={`text-purple-600 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'} animate-pulse`} />
-                                    {ui.isExpanded && <span className="font-bold text-sm text-purple-800">Modo Constructor</span>}
+                                    {ui.isExpanded && <span className="font-bold text-sm text-slate-800">Modo Constructor</span>}
                                 </div>
 
-                                <div className={`flex items-center gap-3 p-4 bg-gray-50 border border-gray-100 border-t-2 border-t-dashed border-t-indigo-200 rounded-2xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex flex-col items-center">
-                                            <span className="text-3xl font-black text-blue-900 leading-none">{customRouteState.currentSemesterUCs}/{customRouteState.totalCustomUCs}</span>
-                                            <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1">UCs</span>
+                                            <span className="text-3xl font-black text-slate-800 leading-none">{customRouteState.currentSemesterUCs}/{customRouteState.totalCustomUCs}</span>
+                                            <span className="text-xs font-bold text-slate-700 uppercase tracking-widest mt-1">UCs</span>
                                         </div>
                                     ) : (
-                                        <span className="text-xs font-black text-blue-900 leading-none">{customRouteState.currentSemesterUCs}</span>
+                                        <span className="text-xs font-black text-slate-800 leading-none">{customRouteState.currentSemesterUCs}</span>
                                     )}
                                 </div>
 
-                                <div className={`flex items-center gap-3 p-3 bg-white rounded-2xl border border-gray-100 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <BookOpen className={`text-blue-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-gray-600">Materias selec.</span>
-                                            <span className="text-blue-600 font-black">{customRouteState.customCurrentSemesterCount}</span>
+                                            <span className="text-sm font-semibold text-slate-700">Materias selec.</span>
+                                            <span className="text-slate-800 font-black">{customRouteState.customCurrentSemesterCount}</span>
                                         </div>
                                     ) : (
-                                        <span className="text-xs font-black text-blue-600 leading-none">{customRouteState.customCurrentSemesterCount}</span>
+                                        <span className="text-xs font-black text-slate-800 leading-none">{customRouteState.customCurrentSemesterCount}</span>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="h-px bg-gray-100 my-2 mx-2"></div>
+                            <div className="h-px bg-slate-200 my-2 mx-2"></div>
 
                             <SidebarButton
                                 isExpanded={ui.isExpanded}
@@ -269,7 +269,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 label="Descartar"
                                 onClick={(e) => { e.stopPropagation(); actions.accionesCustom.deleteDraftRoute(); }}
                                 color="red"
-                                variant="ghost"
                             />
 
                             <SidebarButton
@@ -282,53 +281,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                         </>
                     )}
 
-                    {/* Quick Guide - Only expanded */}
-                    {ui.isExpanded && (
-                        <div className="mt-4 px-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                            <div className="bg-blue-50/50 rounded-2xl p-4 border border-blue-100/50">
-                                <h3 className="text-[11px] font-bold text-blue-900/40 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
-                                    <Info className="w-3 h-3" /> Guía de Uso
-                                </h3>
-                                
-                                <div className="space-y-3">
-                                    <div className="flex items-start gap-3">
-                                        <div className="p-1.5 bg-white rounded-lg shadow-sm text-blue-600">
-                                            <MousePointer2 className="w-3.5 h-3.5" />
-                                        </div>
-                                        <div>
-                                            <p className="text-[12px] font-bold text-gray-700 leading-tight">Click / Tap</p>
-                                            <p className="text-[10px] text-gray-500 leading-tight mt-0.5">Aprobar o desaprobar materia.</p>
-                                        </div>
-                                    </div>
 
-                                    <div className="flex items-start gap-3">
-                                        <div className="p-1.5 bg-white rounded-lg shadow-sm text-indigo-600">
-                                            <Fingerprint className="w-3.5 h-3.5" />
-                                        </div>
-                                        <div>
-                                            <p className="text-[12px] font-bold text-gray-700 leading-tight">Click Derecho / Larga</p>
-                                            <p className="text-[10px] text-gray-500 leading-tight mt-0.5">Marcar materia como cursando.</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="pt-2 flex flex-wrap gap-1.5">
-                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
-                                            <span className="w-2 h-2 rounded-full bg-green-500"></span> Aprobada
-                                        </span>
-                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
-                                            <span className="w-2 h-2 rounded-full bg-blue-500"></span> Disponible
-                                        </span>
-                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
-                                            <span className="w-2 h-2 rounded-full bg-blue-300"></span> Cursando
-                                        </span>
-                                        <span className="flex items-center gap-1 text-[9px] font-bold text-gray-600 bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-xs uppercase tracking-wider">
-                                            <span className="w-2 h-2 rounded-full bg-gray-300"></span> Bloqueada
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
             )}
 

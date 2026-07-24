@@ -24,6 +24,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vscode
 
 *storybook.log
 storybook-static

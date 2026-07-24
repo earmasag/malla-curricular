@@ -21,6 +21,7 @@ import { FeedbackModal } from "../components/modals/FeedbackModal";
 import { MatriculaModal } from "../components/modals/MatriculaModal";
 import { SettingsModal } from "../components/modals/SettingsModal";
 import { LeyendaModal } from "../components/modals/LeyendaModal";
+import { PensumAnteriorModal } from "../components/modals/PensumAnteriorModal";
 import { Settings, X } from "lucide-react";
 
 // Datos estáticos
@@ -107,6 +108,15 @@ const MallaLayout = () => {
                     isOpen={modales.isSettingsOpen}
                     onClose={() => modales.setIsSettingsOpen(false)}
                     configuraciones={configuraciones}
+                />
+            )}
+
+            {modales.isPensumAnteriorModalOpen && (
+                <PensumAnteriorModal
+                    isOpen={modales.isPensumAnteriorModalOpen}
+                    onClose={() => modales.setIsPensumAnteriorModalOpen(false)}
+                    pensumAnterior={estadoMalla.pensumAnterior}
+                    updatePensumAnterior={accionesMalla.updatePensumAnterior}
                 />
             )}
 

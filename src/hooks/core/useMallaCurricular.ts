@@ -47,9 +47,25 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         return Object.values(progreso).filter(estado => estado === "aprobada").length;
     }, [progreso]);
 
+    const [pensumAnterior, setPensumAnterior] = useState<Record<string, boolean>>(
+        () => repository.getPensumAnterior()
+    );
+
+    useEffect(() => {
+        repository.savePensumAnterior(pensumAnterior);
+    }, [pensumAnterior, repository]);
+
+    const ucPensumAnterior = useMemo(() => {
+        let total = 0;
+        if (pensumAnterior['ingles1']) total += 4;
+        if (pensumAnterior['labFisica']) total += 2;
+        if (pensumAnterior['progWeb']) total += 3;
+        return total;
+    }, [pensumAnterior]);
+
     const ucAcumuladas = useMemo(() => {
-        return calcularUCAcumuladas(progreso, grafo);
-    }, [progreso, grafo])
+        return calcularUCAcumuladas(progreso, grafo) + ucPensumAnterior;
+    }, [progreso, grafo, ucPensumAnterior])
 
     // Obtener las materias que actualmente están "cursando"
     const materiasCursando = useMemo(() => {
@@ -252,19 +268,25 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph) => {
         return pathfinder.calcularRutaOptima(progreso, maxUcPorSemestre, maxMateriasPorSemestre, maxHorasPorSemestre);
     }, [grafo, progreso, evaluator]); // Evaluator no cambia porque está envuelto en un useMemo vacío
 
+    const updatePensumAnterior = useCallback((key: string, value: boolean) => {
+        setPensumAnterior(prev => ({ ...prev, [key]: value }));
+    }, []);
+
     return {
         estado: {
             progreso,
             cantidadAprobadas,
             ucAcumuladas,
-            materiasCursando
+            materiasCursando,
+            pensumAnterior
         },
         acciones: {
             toggleAprobacion,
             toggleCursando,
             toggleSemestre,
             resetProgreso,
-            generarRutaOptima
+            generarRutaOptima,
+            updatePensumAnterior
         }
     };
 }

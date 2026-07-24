@@ -834,12 +834,11 @@
     "modalidad": "PRE",
     "taxonomia": "TA-9",
     "prelacion": [
-      "INFO-02012"
     ],
     "semestre": 6,
     "areaFormacion": "Ingeniería de Software",
     "ucRequeridas": 0,
-    "correquisito": []
+    "correquisito": ["INFO-02017"]
   },
   {
     "departamento": "INFO",
@@ -984,13 +983,11 @@
     "tipo": "EVC",
     "modalidad": "PRE",
     "taxonomia": "TA-9",
-    "prelacion": [
-      "INFO-02016"
-    ],
+    "prelacion": [],
     "semestre": 7,
     "areaFormacion": "Telemática",
     "ucRequeridas": 0,
-    "correquisito": []
+    "correquisito": ["INFO-02032"]
   },
   {
     "departamento": "INFO",

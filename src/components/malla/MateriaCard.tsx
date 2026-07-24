@@ -132,7 +132,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
 
             {/* Indicador de Unidades de Crédito Requeridas On Hover */}
             {isHovered && ucRequeridas > 0 && (
-                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-1 flex items-center justify-end h-full max-h-[30px] z-50 pointer-events-none">
+                <div className="absolute right-full top-1/2 -translate-y-1/2 mr-1 flex items-center justify-end h-full max-h-7.5 z-50 pointer-events-none">
                     <div className="relative flex items-center">
                         {/* Texto re-posicionado arriba de la flecha con menor tamaño */}
                         <span
@@ -143,7 +143,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
                         </span>
                         {/* Cuerpo de la flecha */}
                         <div
-                            className="h-[3px] w-6"
+                            className="h-0.75 w-6"
                             style={{ backgroundColor: currentHexColor }}
                         />
                         {/* Punta de la flecha usando bordes CSS transparentes */}
@@ -158,6 +158,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
                     </div>
                 </div>
             )}
+            
 
             {/* Cuadro principal blanco o con grilla */}
             <div
@@ -181,7 +182,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
             {/* Símbolo de Modalidad */}
             <div className="absolute w-5 h-7 left-0 bottom-0 z-10 leading-none overflow-hidden">
                 <div className="absolute inset-0 bg-white [clip-path:polygon(50%_0%,100%_30%,100%_100%,0%_100%,0%_30%)]"></div>
-                <div className={`absolute top-[2px] left-0 right-0 bottom-[-2px] ${isBloqueada ? 'bg-gray-400' : 'bg-[#4B4B4B]'} [clip-path:polygon(50%_0%,100%_30%,100%_100%,0%_100%,0%_30%)] flex items-center justify-center`}>
+                <div className={`absolute top-0.5 left-0 right-0 -bottom-0.5 ${isBloqueada ? 'bg-gray-400' : 'bg-[#4B4B4B]'} [clip-path:polygon(50%_0%,100%_30%,100%_100%,0%_100%,0%_30%)] flex items-center justify-center`}>
                     <p className="text-white font-bold text-[10px] pt-1" style={{ fontFamily: "'Oswald', sans-serif" }}>
                         {modalidad}
                     </p>
@@ -193,22 +194,22 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
                 className={`absolute bottom-0 left-5 flex z-10 border-t-2 border-b-0 mask-[linear-gradient(to_right,transparent_0%,black_5%,black_95%,transparent_100%)]`}
                 style={{ borderColor: currentHexColor, fontFamily: "'Oswald', sans-serif" }}
             >
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-4 bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasTeoricas}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-4 bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasPracticas}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-4 bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasLaboratorio}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-4 bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasAutonomas}
                 </div>
-                <div className={`flex items-center justify-center w-5 h-[16px] bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
+                <div className={`flex items-center justify-center w-5 h-4 bg-white border-r-2 text-[12px] font-semibold ${textClass}`} style={{ borderColor: currentHexColor }}>
                     {horasTotales}
                 </div>
-                <div className={`flex items-center justify-center w-10 h-[16px] bg-white text-[12px] font-semibold ${textClass}`}>
+                <div className={`flex items-center justify-center w-10 h-4 bg-white text-[12px] font-semibold ${textClass}`}>
                     {taxonomia}
                 </div>
             </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info, MousePointer2, Fingerprint
+    Menu, LayoutDashboard, Info, MousePointer2, Fingerprint, BookCheck
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
@@ -139,6 +139,16 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     label="Mis Rutas"
                                     onClick={(e) => { e.stopPropagation(); actions.handlers.handleOpenMisRutas(); }}
                                     color="indigo"
+                                />
+                            )}
+
+                            {ui.modales.setIsPensumAnteriorModalOpen !== undefined && (
+                                <SidebarButton
+                                    isExpanded={ui.isExpanded}
+                                    icon={<BookCheck />}
+                                    label="Pensum Anterior"
+                                    onClick={(e) => { e.stopPropagation(); ui.modales.setIsPensumAnteriorModalOpen(true); }}
+                                    color="amber"
                                 />
                             )}
 

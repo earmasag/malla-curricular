@@ -74,13 +74,18 @@ export const useMallaConnections = (
                 const isTargetOfCorrequisito = hoveredMateria === codigoCorrequisito;
 
                 if (hoveredMateria !== null && (isCorrequisitoQuery || isTargetOfCorrequisito)) {
-                    // Flechas de Correquisitos: Punteadas y Violetas
-                    let color = "#8b5cf6"; // Violeta/Púrpura por defecto para correquisitos
-                    let opacity = 0.7;
+                    let color = "#94a3b8"; // slate-400 por defecto
+                    let opacity = 0.6;
 
-                    if (estadoCorrequisito === "aprobada") {
-                        color = "#c084fc"; // Violeta más claro si ya está aprobado
+                    // Usar la misma lógica de colores que las prelaciones
+                    if (estadoCorrequisito === "aprobada" && estadoDestino === "disponible") {
+                        color = "#3b82f6"; // Azul brillante
+                        opacity = 1;
+                    } else if (estadoCorrequisito === "aprobada" && estadoDestino === "aprobada") {
+                        color = "#22c55e"; // Verde éxito
                         opacity = 0.4;
+                    } else if (estadoCorrequisito !== "aprobada" && estadoDestino !== "aprobada") {
+                        color = "#ef4444"; // Rojo (Bloqueada)
                     }
 
                     arrows.push({

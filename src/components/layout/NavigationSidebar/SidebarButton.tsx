@@ -5,7 +5,7 @@ export interface SidebarButtonProps {
     icon: React.ReactNode;
     label: string;
     onClick: (e: React.MouseEvent) => void;
-    color?: 'blue' | 'purple' | 'green' | 'indigo' | 'red' | 'gray';
+    color?: 'blue' | 'purple' | 'green' | 'indigo' | 'red' | 'gray' | 'amber';
     variant?: 'solid' | 'light' | 'ghost';
     disabled?: boolean;
 }
@@ -40,6 +40,11 @@ const colorStyles = {
         solid: "bg-gray-800 text-white hover:bg-gray-900 active:bg-black border-gray-800",
         light: "bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-200",
         ghost: "bg-transparent text-gray-500 hover:bg-gray-100 border-transparent hover:text-gray-700",
+    },
+    amber: {
+        solid: "bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-700 border-amber-500",
+        light: "bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-100",
+        ghost: "bg-transparent text-amber-600 hover:bg-amber-50 border-transparent hover:text-amber-700",
     }
 };
 

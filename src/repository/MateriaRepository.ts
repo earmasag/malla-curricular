@@ -6,6 +6,7 @@ export class MateriaRepository {
     private readonly storageKey = 'malla-progreso'; // Manteniendo compatibilidad con datos previos
     private readonly customRouteDraftKey = 'malla-custom-route-draft'; // Para el autoguardado de la ruta en edición
     private readonly savedRoutesKey = 'malla-saved-routes'; // Para las rutas terminadas y guardadas
+    private readonly pensumAnteriorKey = 'malla-pensum-anterior'; // Para materias aprobadas del pensum anterior
     private storage: IStorageWrapper;
 
     // Inyectamos el storage wrapper, por defecto usamos el Singleton de localStorage
@@ -41,6 +42,7 @@ export class MateriaRepository {
      */
     public clearProgress(): void {
         this.storage.remove(this.storageKey);
+        this.storage.remove(this.pensumAnteriorKey);
     }
 
     /**
@@ -66,6 +68,20 @@ export class MateriaRepository {
      */
     public clearDraftRoute(): void {
         this.storage.remove(this.customRouteDraftKey);
+    }
+
+    // --- Pensum Anterior --- //
+    
+    public getPensumAnterior(): Record<string, boolean> {
+        const data = this.storage.get<Record<string, boolean>>(this.pensumAnteriorKey);
+        if (data && typeof data === 'object') {
+            return data;
+        }
+        return {};
+    }
+
+    public savePensumAnterior(data: Record<string, boolean>): void {
+        this.storage.set(this.pensumAnteriorKey, data);
     }
 
     // --- Saved Routes Collection --- //

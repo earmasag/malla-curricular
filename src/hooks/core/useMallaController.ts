@@ -20,6 +20,7 @@ export const useMallaController = (
     const [isMatriculaModalOpen, setIsMatriculaModalOpen] = useState(false);
     const [isLeyendaOpen, setIsLeyendaOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isPensumAnteriorModalOpen, setIsPensumAnteriorModalOpen] = useState(false);
     const [savedRoutesList, setSavedRoutesList] = useState<SavedRoute[]>([]);
 
     // Features
@@ -129,7 +130,9 @@ export const useMallaController = (
             isMatriculaModalOpen,
             setIsMatriculaModalOpen,
             isSettingsOpen,
-            setIsSettingsOpen
+            setIsSettingsOpen,
+            isPensumAnteriorModalOpen,
+            setIsPensumAnteriorModalOpen
         },
         configuraciones: {
             zoomConRueda,

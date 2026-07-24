@@ -12,9 +12,8 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
     if (!isOpen) return null;
 
     const materias = [
-        { key: 'ingles1', nombre: 'Inglés I (Sin convalidar)', uc: 4 },
-        { key: 'ingles2', nombre: 'Inglés II (Sin convalidar)', uc: 4 },
-        { key: 'inglesCompensacion5', nombre: 'Compensación Inglés I y II (Convalidados)', uc: 5 },
+        { key: 'ingles1', nombre: 'Inglés I', uc: 4 },
+        { key: 'ingles2', nombre: 'Inglés II', uc: 4 },
         { key: 'labFisica', nombre: 'Laboratorio de Física', uc: 2 },
         { key: 'progWeb', nombre: 'Programación Orientada a la Web', uc: 3 },
         { key: 'electiva2', nombre: 'Electiva (Informática) II', uc: 4 },

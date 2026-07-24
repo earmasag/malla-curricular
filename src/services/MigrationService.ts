@@ -55,20 +55,12 @@ export class MigrationService {
         if (isApprovedInOld("FING-02013")) pensumAnterior['labFisica'] = true; // Lab. de Física (2 UC)
         if (isApprovedInOld("VARIABLE-1")) pensumAnterior['electiva2'] = true; // Electiva Informática II (4 UC)
 
-        // 2. Lógica Especial para Inglés
+        // 2. Conservar Inglés I y II del pensum anterior
         const hasIngles1 = isApprovedInOld("INFO-02014"); // 4 UC
         const hasIngles2 = isApprovedInOld("INFO-02021"); // 4 UC
 
-        if (hasIngles1 && hasIngles2) {
-            // Tienen ambos (8 UC). Se les aprueba el nuevo (3 UC), así que les compensamos 5 UC.
-            pensumAnterior['inglesCompensacion5'] = true; 
-        } else if (hasIngles1 && !hasIngles2) {
-            // Solo tienen Inglés 1 (4 UC). No se les aprueba el nuevo, compensamos 4 UC.
-            pensumAnterior['ingles1'] = true;
-        } else if (!hasIngles1 && hasIngles2) {
-            // Solo tienen Inglés 2 (4 UC). No se les aprueba el nuevo, compensamos 4 UC.
-            pensumAnterior['ingles2'] = true;
-        }
+        if (hasIngles1) pensumAnterior['ingles1'] = true;
+        if (hasIngles2) pensumAnterior['ingles2'] = true;
 
         // Obtener todos los nodos del nuevo grafo
         const newNodes = newGraph.getAllNodes();

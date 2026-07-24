@@ -60,7 +60,14 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
         let total = 0;
         if (pensumAnterior['ingles1']) total += 4;
         if (pensumAnterior['ingles2']) total += 4;
-        if (pensumAnterior['inglesCompensacion5']) total += 5;
+        
+        // Ajuste: Si tiene ambos ingles, se le convalidó el nuevo (3 UC). 
+        // Para "no anexar esas 3uc" del nuevo pensum, las restamos aquí.
+        // Así el neto será exactamente 8 UC (4+4 del viejo + 3 del nuevo - 3 de ajuste).
+        if (pensumAnterior['ingles1'] && pensumAnterior['ingles2']) {
+            total -= 3;
+        }
+
         if (pensumAnterior['labFisica']) total += 2;
         if (pensumAnterior['progWeb']) total += 3;
         if (pensumAnterior['electiva2']) total += 4;

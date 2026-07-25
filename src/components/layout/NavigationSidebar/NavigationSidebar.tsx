@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
@@ -17,6 +18,30 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 }) => {
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
     const { theme, setTheme } = useTheme();
+    const [showThemeOptions, setShowThemeOptions] = useState(false);
+    const themeButtonRef = useRef<HTMLDivElement>(null);
+    const [themeMenuPos, setThemeMenuPos] = useState({ top: 0, left: 0 });
+
+    useEffect(() => {
+        if (showThemeOptions && themeButtonRef.current) {
+            const rect = themeButtonRef.current.getBoundingClientRect();
+            setThemeMenuPos({ top: rect.top + rect.height / 2, left: rect.right + 16 });
+        }
+    }, [showThemeOptions]);
+
+    useEffect(() => {
+        const handleHide = () => setShowThemeOptions(false);
+        if (showThemeOptions) {
+            window.addEventListener('resize', handleHide);
+            document.addEventListener('scroll', handleHide, true);
+            document.addEventListener('click', handleHide);
+        }
+        return () => {
+            window.removeEventListener('resize', handleHide);
+            document.removeEventListener('scroll', handleHide, true);
+            document.removeEventListener('click', handleHide);
+        };
+    }, [showThemeOptions]);
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
@@ -175,15 +200,41 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                             <div className="h-px bg-slate-200 my-2 mx-2"></div>
 
                             {/* Theme Toggle */}
-                            <SidebarButton
-                                isExpanded={ui.isExpanded}
-                                icon={<Palette />}
-                                label={theme === 'blue' ? 'Tema Rosado' : 'Tema Azul'}
-                                onClick={(e) => { 
-                                    e.stopPropagation(); 
-                                    setTheme(theme === 'blue' ? 'pink' : 'blue'); 
-                                }}
-                            />
+                            <div ref={themeButtonRef} className="flex flex-col gap-1 relative">
+                                <SidebarButton
+                                    isExpanded={ui.isExpanded}
+                                    icon={<Palette />}
+                                    label="Temas"
+                                    onClick={(e) => { 
+                                        e.stopPropagation(); 
+                                        setShowThemeOptions(!showThemeOptions);
+                                    }}
+                                />
+                                {showThemeOptions && createPortal(
+                                    <div 
+                                        style={{ top: themeMenuPos.top, left: themeMenuPos.left, transform: 'translateY(-50%)' }}
+                                        className="fixed z-9999 flex gap-3 p-3 bg-theme-50/70 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/20 rounded-2xl"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setTheme('blue'); setShowThemeOptions(false); }}
+                                            className={`w-7 h-7 rounded-full bg-[#3b82f6] shadow-md border-2 ${theme === 'blue' ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
+                                            title="Azul"
+                                        />
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setTheme('pink'); setShowThemeOptions(false); }}
+                                            className={`w-7 h-7 rounded-full bg-[#ec4899] shadow-md border-2 ${theme === 'pink' ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
+                                            title="Rosado"
+                                        />
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setTheme('purple'); setShowThemeOptions(false); }}
+                                            className={`w-7 h-7 rounded-full bg-[#7B2CBF] shadow-md border-2 ${theme === 'purple' ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
+                                            title="Morado"
+                                        />
+                                    </div>,
+                                    document.body
+                                )}
+                            </div>
 
                             {/* Settings */}
                             <SidebarButton

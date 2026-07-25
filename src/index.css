@@ -45,3 +45,15 @@
   
   --bg-app: var(--theme-50);
 }
+
+:root[data-theme="purple"] {
+  /* Tema Morado */
+  --theme-50: #f8f3ff;
+  --theme-100: #f0e6ff;
+  --theme-200: #dfc7ff;
+  --theme-500: #9d4edd;
+  --theme-600: #7b2cbf;
+  --theme-700: #5a189a;
+  
+  --bg-app: var(--theme-50);
+}

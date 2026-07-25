@@ -23,7 +23,7 @@ export const MigrationConfirmModal: React.FC<MigrationConfirmModalProps> = ({
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-[var(--color-theme-)] text-[var(--color-theme-)] rounded-xl">
+                        <div className="p-2 bg-(--color-theme-) text-(--color-theme-) rounded-xl">
                             <ArrowRightLeft className="w-6 h-6" />
                         </div>
                         <h2 className="text-xl md:text-2xl font-black text-gray-800">
@@ -65,7 +65,7 @@ export const MigrationConfirmModal: React.FC<MigrationConfirmModalProps> = ({
                             onConfirm();
                             onClose();
                         }}
-                        className="px-5 py-2.5 text-sm font-semibold text-white bg-[var(--color-theme-)] hover:bg-[var(--color-theme-)] shadow-md shadow-[var(--color-theme-)]/20 rounded-xl transition-all"
+                        className="px-5 py-2.5 text-sm font-semibold text-white bg-(--color-theme-) hover:bg-(--color-theme-) shadow-md shadow-(--color-theme-)/20 rounded-xl transition-all"
                     >
                         Sí, migrar progreso
                     </button>

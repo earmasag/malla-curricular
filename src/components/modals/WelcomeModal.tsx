@@ -14,7 +14,7 @@ export const WelcomeModal = () => {
             <div className="bg-white rounded-3xl p-8 md:p-10 w-full max-w-lg shadow-2xl relative animate-in zoom-in-95 duration-300">
                 
                 <div className="flex flex-col items-center text-center mb-8">
-                    <div className="bg-[var(--color-theme-)] text-[var(--color-theme-)] p-4 rounded-full mb-4">
+                    <div className="bg-(--color-theme-) text-(--color-theme-) p-4 rounded-full mb-4">
                         <BookOpen className="w-10 h-10" />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-black text-gray-800 tracking-tight">
@@ -28,10 +28,10 @@ export const WelcomeModal = () => {
                 <div className="flex flex-col gap-4">
                     <button
                         onClick={() => handleSelectPlan("202415")}
-                        className="flex flex-col items-center justify-center p-5 bg-white border-2 border-gray-200 rounded-2xl hover:border-[var(--color-theme-)] hover:bg-[var(--color-theme-)] transition-all group cursor-pointer"
+                        className="flex flex-col items-center justify-center p-5 bg-white border-2 border-gray-200 rounded-2xl hover:border-(--color-theme-) hover:bg-(--color-theme-) transition-all group cursor-pointer"
                     >
-                        <span className="text-xl font-bold text-gray-700 group-hover:text-[var(--color-theme-)]">Plan Antiguo</span>
-                        <span className="text-sm text-gray-500 group-hover:text-[var(--color-theme-)] mt-1">Septiembre 2023 - TERM 202415</span>
+                        <span className="text-xl font-bold text-gray-700 group-hover:text-(--color-theme-)">Plan Antiguo</span>
+                        <span className="text-sm text-gray-500 group-hover:text-(--color-theme-) mt-1">Septiembre 2023 - TERM 202415</span>
                     </button>
 
                     <button

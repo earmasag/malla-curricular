@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://malla-curricular-alpha.vercel.app/sitemap.xml

@@ -104,6 +104,21 @@ export const LeyendaModal: React.FC<LeyendaModalProps> = ({
                                     <div className="flex sm:items-center gap-2.5"><span className="font-black bg-white text-gray-800 px-1.5 py-0.5 border border-gray-200 rounded shadow-sm text-xs w-10 text-center">TI</span> Trabajo Indep.</div>
                                     <div className="flex sm:items-center gap-2.5"><span className="font-black bg-white text-gray-800 px-1.5 py-0.5 border border-gray-200 rounded shadow-sm text-xs w-10 text-center">TH</span> Total (clas.+ind.)</div>
                                 </div>
+
+                                {/* Estados */}
+                                <div className="flex flex-col sm:flex-row items-center gap-4 w-full text-sm text-gray-800 bg-white p-4 rounded-xl border border-gray-200">
+                                    <div className="font-black uppercase text-xs tracking-widest text-gray-500 w-full sm:w-auto text-center sm:text-left" style={{ fontFamily: "'Oswald', sans-serif" }}>ESTADOS:</div>
+                                    <div className="flex flex-wrap justify-center sm:justify-start gap-5 flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-5 h-5 flex items-center justify-center bg-emerald-500 text-white rounded text-xs font-bold shadow-sm">✓</span>
+                                            <span className="font-semibold text-gray-700">Aprobada</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-5 h-5 flex items-center justify-center bg-blue-500 text-white rounded text-[10px] font-bold shadow-sm ring-1 ring-blue-300 ring-offset-1">✏️</span>
+                                            <span className="font-semibold text-gray-700">Cursando</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

@@ -165,9 +165,11 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             const nuevoProgreso = { ...progresoActual };
             const estadoActualDeLaMateria = nuevoProgreso[codigoMateria];
 
-            if (estadoActualDeLaMateria === "disponible" || estadoActualDeLaMateria === "cursando") {
+            if (estadoActualDeLaMateria === "disponible") {
                 nuevoProgreso[codigoMateria] = "aprobada";
             } else if (estadoActualDeLaMateria === "aprobada") {
+                nuevoProgreso[codigoMateria] = "cursando";
+            } else if (estadoActualDeLaMateria === "cursando") {
                 nuevoProgreso[codigoMateria] = "disponible";
             }
 

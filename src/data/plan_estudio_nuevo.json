@@ -1171,11 +1171,10 @@
     "modalidad": "PRE",
     "taxonomia": "TA-7",
     "prelacion": [
-      "INFO-IILCT"
     ],
     "semestre": 8,
     "areaFormacion": "Prácticas Profesionales",
     "ucRequeridas": 0,
-    "correquisito": []
+    "correquisito": ["INFO-IILCT"]
   }
 ]

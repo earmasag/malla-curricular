@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, BookCheck } from 'lucide-react';
+import ajustesData from '../../data/ajustes_pensum_viejo.json';
 
 export interface PensumAnteriorModalProps {
     isOpen: boolean;
@@ -11,13 +12,11 @@ export interface PensumAnteriorModalProps {
 export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen, onClose, pensumAnterior, updatePensumAnterior }) => {
     if (!isOpen) return null;
 
-    const materias = [
-        { key: 'ingles1', nombre: 'Inglés I', uc: 4 },
-        { key: 'ingles2', nombre: 'Inglés II', uc: 4 },
-        { key: 'labFisica', nombre: 'Laboratorio de Física', uc: 2 },
-        { key: 'progWeb', nombre: 'Programación Orientada a la Web', uc: 3 },
-        { key: 'electiva2', nombre: 'Electiva (Informática) II', uc: 4 },
-    ];
+    const materias = ajustesData.map(item => ({
+        key: item.key,
+        nombre: item.nombre,
+        uc: item.uc
+    }));
 
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">

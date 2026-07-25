@@ -26,7 +26,8 @@ export class PathfindingService {
         progresoActual: ProgresoMalla,
         maxUcPorSemestre: number = Infinity,
         maxMateriasPorSemestre: number = Infinity,
-        maxHorasPorSemestre: number = Infinity
+        maxHorasPorSemestre: number = Infinity,
+        ucAdicionales: number = 0
     ): string[][] {
 
         let simulacion = { ...progresoActual };
@@ -41,7 +42,7 @@ export class PathfindingService {
         });
 
         // Reevaluamos antes de arrancar para que las "cursando" desbloqueen sus consecuentes
-        simulacion = this.evaluator.evaluate(simulacion, this.graph);
+        simulacion = this.evaluator.evaluate(simulacion, this.graph, ucAdicionales);
 
         // Por seguridad contra grafos cíclicos teóricos (deadlock), limitamos las iteraciones
         const maxIteraciones = this.graph.getAllNodes().length;
@@ -134,7 +135,7 @@ export class PathfindingService {
 
             // 4. Reevaluar la malla entera para desbloquear el siguiente bloque
             // USANDO EL EVALUADOR INYECTADO
-            simulacion = this.evaluator.evaluate(simulacion, this.graph);
+            simulacion = this.evaluator.evaluate(simulacion, this.graph, ucAdicionales);
 
             iteracion++;
         }

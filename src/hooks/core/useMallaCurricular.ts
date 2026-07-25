@@ -4,7 +4,7 @@ import type { MallaCurricularGraph } from "../../core/MallaCurricularGraph";
 import { StandardMallaEvaluator } from "../../rules/StandardMallaEvaluator";
 import { PathfindingService } from "../../services/PathfindingService";
 import { GreedyScheduler } from "../../strategies/GreedyScheduler";
-import { calcularUCAcumuladas, obtenerPrerrequisitosFaltantes, obtenerCorrequisitosFaltantes } from "../../utils/mallaUtils";
+import { calcularUCAcumuladas, obtenerPrerrequisitosFaltantes, obtenerCorrequisitosFaltantes, calcularUCPensumAnterior } from "../../utils/mallaUtils";
 import { MateriaRepository } from "../../repository/MateriaRepository";
 import type { MateriaMatricula } from "../../services/MatriculaService";
 import { useToast } from "../../hooks/ui/useToast";
@@ -22,10 +22,11 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
         () => {
             // Intentamos recuperar el progreso guardado a través del Repository
             const progresoGuardado = repository.getStudentProgress();
+            const ucPensum = calcularUCPensumAnterior(repository.getPensumAnterior());
 
             // Si el objeto no está vacío, cargamos los datos y los pasamos por el evaluador
             if (Object.keys(progresoGuardado).length > 0) {
-                return evaluator.evaluate(progresoGuardado, grafo);
+                return evaluator.evaluate(progresoGuardado, grafo, ucPensum);
             }
 
             // Fallback: Progreso desde cero
@@ -35,7 +36,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
                 estadoInicial[materia.codigoMateria] = "bloqueada";
             });
             // La función evaluará y liberará automáticamente las que no tengan requisitos (ej. Semestre 1)
-            return evaluator.evaluate(estadoInicial, grafo);
+            return evaluator.evaluate(estadoInicial, grafo, ucPensum);
         }
     );
 
@@ -57,21 +58,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
     }, [pensumAnterior, repository]);
 
     const ucPensumAnterior = useMemo(() => {
-        let total = 0;
-        if (pensumAnterior['ingles1']) total += 4;
-        if (pensumAnterior['ingles2']) total += 4;
-        
-        // Ajuste: Si tiene ambos ingles, se le convalidó el nuevo (3 UC). 
-        // Para "no anexar esas 3uc" del nuevo pensum, las restamos aquí.
-        // Así el neto será exactamente 8 UC (4+4 del viejo + 3 del nuevo - 3 de ajuste).
-        if (pensumAnterior['ingles1'] && pensumAnterior['ingles2']) {
-            total -= 3;
-        }
-
-        if (pensumAnterior['labFisica']) total += 2;
-        if (pensumAnterior['progWeb']) total += 3;
-        if (pensumAnterior['electiva2']) total += 4;
-        return total;
+        return calcularUCPensumAnterior(pensumAnterior);
     }, [pensumAnterior]);
 
     const ucAcumuladas = useMemo(() => {
@@ -185,7 +172,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             }
 
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
-            return evaluator.evaluate(nuevoProgreso, grafo);
+            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior);
         });
     }, [grafo, evaluator, progreso, showToast]);
 
@@ -241,7 +228,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             }
 
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
-            return evaluator.evaluate(nuevoProgreso, grafo);
+            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior);
         });
     }, [grafo, evaluator, progreso, showToast]);
 
@@ -269,7 +256,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
 
             // Forzamos la reevaluación estricta de la malla para revertir aprobaciones inválidas o 
             // bloquear materias que dependían de las que acabamos de desaprobar.
-            return evaluator.evaluate(nuevoProgreso, grafo);
+            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior);
         });
     }, [grafo, evaluator]);
 
@@ -282,7 +269,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             estadoInicial[materia.codigoMateria] = "bloqueada";
         });
 
-        setProgreso(evaluator.evaluate(estadoInicial, grafo));
+        setProgreso(evaluator.evaluate(estadoInicial, grafo, ucPensumAnterior));
     }, [grafo, evaluator]);
 
     // Función que calcula y retorna los bloques óptimos de estudio (Topological Sort / Algoritmo de Kahn)
@@ -304,7 +291,8 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             ucAcumuladas,
             semestreActual,
             materiasCursando,
-            pensumAnterior
+            pensumAnterior,
+            ucPensumAnterior
         },
         acciones: {
             toggleAprobacion,

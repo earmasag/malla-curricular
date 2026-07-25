@@ -1,5 +1,6 @@
 import type { ProgresoMalla } from "../types/materia";
 import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
+import ajustesData from "../data/ajustes_pensum_viejo.json";
 
 export const calcularUCAcumuladas = (progreso: ProgresoMalla, grafo: MallaCurricularGraph): number => {
     let total = 0;
@@ -45,4 +46,22 @@ export const obtenerCorrequisitosFaltantes = (codigoMateria: string, progresoAct
             nombre: reqNodo ? reqNodo.nombre : correq
         };
     });
+};
+
+export const calcularUCPensumAnterior = (pensumAnterior: Record<string, boolean>): number => {
+    let total = 0;
+    // Ajuste: Si tiene ambos ingles, se le convalidó el nuevo (3 UC). 
+    // Para "no anexar esas 3uc" del nuevo pensum, las restamos aquí.
+    // Así el neto será exactamente 8 UC (4+4 del viejo + 3 del nuevo - 3 de ajuste).
+    if (pensumAnterior['INFO-02014'] && pensumAnterior['INFO-02021']) {
+        total -= 3;
+    }
+
+    ajustesData.forEach(ajuste => {
+        if (pensumAnterior[ajuste.key]) {
+            total += ajuste.uc;
+        }
+    });
+
+    return total;
 };

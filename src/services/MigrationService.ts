@@ -1,6 +1,8 @@
 import type { ProgresoMalla } from "../types/materia";
 import type { IMallaEvaluator } from "../rules/IMallaEvaluator";
 import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
+import { calcularUCPensumAnterior } from "../utils/mallaUtils";
+import ajustesData from "../data/ajustes_pensum_viejo.json";
 
 // ==========================================
 // MIGRATION RULES (202415 -> 202715)
@@ -8,8 +10,6 @@ import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 
 export const MIGRATION_RULES = {
     // 1:1 Mappings (Old Code -> New Code)
-    // Only those where the code actually changed need to be here.
-    // If the code is the same (e.g. INFO-02010 -> INFO-02010), we map it automatically.
     oneToOne: {
         "ADCO-00350": "INFO-00002", // Principios de Marketing -> Estrategia y Proyección Profesional
         "FING-02015": "FING-02017", // Física General -> Mecánica
@@ -32,6 +32,10 @@ export const MIGRATION_RULES = {
     } as Record<string, string[]>
 };
 
+// ==========================================
+// MIGRATION RULES (202415 -> 202715)
+// ==========================================
+
 export class MigrationService {
     constructor(private evaluator: IMallaEvaluator) { }
 
@@ -50,17 +54,21 @@ export class MigrationService {
 
         // --- LÓGICA DE COMPENSACIÓN DE UC ---
         
-        // 1. Materias Derogadas
-        if (isApprovedInOld("INFO-02006")) pensumAnterior['progWeb'] = true; // Prog. Orientada a la Web (3 UC)
-        if (isApprovedInOld("FING-02013")) pensumAnterior['labFisica'] = true; // Lab. de Física (2 UC)
-        if (isApprovedInOld("VARIABLE-1")) pensumAnterior['electiva2'] = true; // Electiva Informática II (4 UC)
+        // 1 y 3. Marcar materias derogadas y ajustes por materias que cambiaron de UC
+        ajustesData.forEach(ajuste => {
+            // Si la regla requiere varios "oldCodes" (e.g. Algoritmos + Fundamentos = Algoritmos 7 UC)
+            // Se deben cumplir todos para aplicar el ajuste
+            if (ajuste.oldCodes.every(code => isApprovedInOld(code))) {
+                pensumAnterior[ajuste.key] = true;
+            }
+        });
 
         // 2. Conservar Inglés I y II del pensum anterior
         const hasIngles1 = isApprovedInOld("INFO-02014"); // 4 UC
         const hasIngles2 = isApprovedInOld("INFO-02021"); // 4 UC
 
-        if (hasIngles1) pensumAnterior['ingles1'] = true;
-        if (hasIngles2) pensumAnterior['ingles2'] = true;
+        if (hasIngles1) pensumAnterior['INFO-02014'] = true;
+        if (hasIngles2) pensumAnterior['INFO-02021'] = true;
 
         // Obtener todos los nodos del nuevo grafo
         const newNodes = newGraph.getAllNodes();
@@ -94,7 +102,8 @@ export class MigrationService {
             }
 
             // 4. Mapeo implícito 1:1 (Mismo código)
-            if (isApprovedInOld(newCode)) {
+            // Evitamos mapear INFO-02006 porque en el pensum viejo era Prog Web y en el nuevo es Inglés Técnico
+            if (newCode !== "INFO-02006" && isApprovedInOld(newCode)) {
                 baseNewProgreso[newCode] = "aprobada";
             }
         });
@@ -102,7 +111,8 @@ export class MigrationService {
         // Una vez que tenemos las aprobaciones crudas mapeadas, 
         // pasamos el progreso por el evaluador de reglas para desbloquear
         // las materias disponibles, cursando, etc.
-        const evaluatedProgreso = this.evaluator.evaluate(baseNewProgreso, newGraph);
+        const ucAdicionales = calcularUCPensumAnterior(pensumAnterior);
+        const evaluatedProgreso = this.evaluator.evaluate(baseNewProgreso, newGraph, ucAdicionales);
 
         return {
             newProgreso: evaluatedProgreso,

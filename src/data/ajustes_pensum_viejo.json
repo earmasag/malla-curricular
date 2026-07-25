@@ -1,0 +1,16 @@
+[
+  { "key": "INFO-02014", "oldCodes": ["INFO-02014"], "nombre": "Inglés I", "uc": 4, "tipo": "derogada" },
+  { "key": "INFO-02021", "oldCodes": ["INFO-02021"], "nombre": "Inglés II", "uc": 4, "tipo": "derogada" },
+  { "key": "FING-02013", "oldCodes": ["FING-02013"], "nombre": "Laboratorio de Física", "uc": 2, "tipo": "derogada" },
+  { "key": "INFO-02006", "oldCodes": ["INFO-02006"], "nombre": "Programación Orientada a la Web", "uc": 3, "tipo": "derogada" },
+  { "key": "VARIABLE-1", "oldCodes": ["VARIABLE-1"], "nombre": "Electiva (Informática) II", "uc": 4, "tipo": "derogada" },
+  { "key": "FING-02001-AJUSTE", "oldCodes": ["FING-02001"], "nombre": "Álgebra Lineal (Ajuste Pensum Viejo)", "uc": 1, "tipo": "ajuste" },
+  { "key": "INFO-02003-AJUSTE", "oldCodes": ["INFO-02003"], "nombre": "POO (Ajuste Pensum Viejo)", "uc": 2, "tipo": "ajuste" },
+  { "key": "INFO-02012-AJUSTE", "oldCodes": ["INFO-02012"], "nombre": "Bases de Datos (Ajuste Pensum Viejo)", "uc": 1, "tipo": "ajuste" },
+  { "key": "INFO-02015-AJUSTE", "oldCodes": ["INFO-02015"], "nombre": "Arq. del Computador (Ajuste Pensum Viejo)", "uc": 2, "tipo": "ajuste" },
+  { "key": "INFO-IILTG-AJUSTE", "oldCodes": ["INFO-IILTG"], "nombre": "Trabajo de Grado (Ajuste Pensum Viejo)", "uc": 17, "tipo": "ajuste" },
+  { "key": "INFO-02008-AJUSTE", "oldCodes": ["INFO-02008"], "nombre": "Interacción Humano-Computador (Ajuste Pensum Viejo)", "uc": 1, "tipo": "ajuste" },
+  { "key": "FING-02005-AJUSTE", "oldCodes": ["FING-02005"], "nombre": "Cálculo Vectorial (Ajuste Pensum Viejo)", "uc": -1, "tipo": "ajuste" },
+  { "key": "INFO-02011-AJUSTE", "oldCodes": ["INFO-02011"], "nombre": "Tópicos Esp. de Programación (Ajuste Pensum Viejo)", "uc": -1, "tipo": "ajuste" },
+  { "key": "INFO-02001-AJUSTE", "oldCodes": ["FING-02008", "INFO-02001"], "nombre": "Algoritmos y Programación (Ajuste Pensum Viejo)", "uc": -1, "tipo": "ajuste" }
+]

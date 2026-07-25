@@ -63,7 +63,7 @@ interface MallaProviderProps {
 export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, activePlanId, children }) => {
     // A) Ejecución de Dominio / Datos
     const { estado: estadoMalla, acciones: accionesMalla } = useMallaCurricular(grafo, activePlanId);
-    const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(grafo, estadoMalla.progreso, activePlanId);
+    const { estado: estadoCustom, acciones: accionesCustom } = useCustomRoute(grafo, estadoMalla.progreso, activePlanId, estadoMalla.ucPensumAnterior);
 
     // B) Ejecución de UI y Controladores
     const { hover, ui, modales, configuraciones, datos, handlers } = useMallaController(

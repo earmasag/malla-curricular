@@ -5,14 +5,14 @@ import { calcularUCAcumuladas } from "../utils/mallaUtils";
 
 export class StandardMallaEvaluator implements IMallaEvaluator {
     // Función pura que reevalúa toda la malla hasta estabilizar todos los bloqueos y desbloqueos
-    public evaluate(progresoBase: ProgresoMalla, grafo: MallaCurricularGraph): ProgresoMalla {
+    public evaluate(progresoBase: ProgresoMalla, grafo: MallaCurricularGraph, ucAdicionales: number = 0): ProgresoMalla {
         const nuevoProgreso = { ...progresoBase };
         let cambiado = true;
 
         // Repetimos hasta que ningún estado cambie (efecto dominó global)
         while (cambiado) {
             cambiado = false;
-            const ucActual = calcularUCAcumuladas(nuevoProgreso, grafo);
+            const ucActual = calcularUCAcumuladas(nuevoProgreso, grafo) + ucAdicionales;
 
             for (const materia of grafo.getAllNodes()) {
                 const cod = materia.codigoMateria;

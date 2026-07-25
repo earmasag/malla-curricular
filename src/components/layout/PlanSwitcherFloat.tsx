@@ -44,7 +44,7 @@ export const PlanSwitcherFloat: React.FC = () => {
                 onConfirm={confirmMigration}
             />
             
-            <div className="fixed top-6 left-1/2 -translate-x-1/2 z-60 flex items-center gap-2">
+            <div className="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2">
                 {/* Selector de Plan */}
                 <div className="bg-white/80 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100 rounded-full p-1.5 flex items-center animate-in slide-in-from-top-4 duration-500">
                     <button

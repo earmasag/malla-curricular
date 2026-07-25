@@ -18,8 +18,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
-        ? 'inset-x-4 top-4 bottom-4 w-auto rounded-3xl h-[calc(100dvh-2rem)]' // Full screen with margins
-        : 'left-4 top-4 w-15 h-15 rounded-full justify-center items-center shadow-lg'; // Floating button top-left
+        ? 'left-4 top-4 w-[calc(100vw-2rem)] h-[calc(100dvh-2rem)] rounded-3xl origin-top-left' // Ancla superior izquierda, expande w/h
+        : 'left-4 top-4 w-15 h-15 rounded-full justify-center items-center shadow-lg origin-top-left'; // Botón flotante
 
     const desktopClasses = ui.isExpanded
         ? 'left-4 top-4 bottom-4 w-72 rounded-3xl'

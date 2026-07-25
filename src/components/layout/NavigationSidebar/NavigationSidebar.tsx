@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info, BookCheck, GraduationCap, Settings, Palette
+    Menu, LayoutDashboard, Info,  GraduationCap, Settings, Palette
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';

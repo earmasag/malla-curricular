@@ -27,7 +27,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     return (
         <aside
-            className={`fixed z-50 flex flex-col bg-white/95 backdrop-blur-xl border border-gray-200/80 shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] 
+            className={`fixed z-50 flex flex-col bg-white/95 backdrop-blur-xl border border-gray-200/80 shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu
                 ${ui.isMobile ? mobileClasses : desktopClasses}`}
         >
             {/* Toggle Button */}

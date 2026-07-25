@@ -37,9 +37,9 @@ export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, 
     let iconColorClass = "";
 
     const ghostColors = {
-        theme: { color: "hover:bg-theme-50 hover:text-theme-700", icon: "group-hover:text-theme-600" },
-        red: { color: "hover:bg-red-50 hover:text-red-700", icon: "group-hover:text-red-600" },
-        gray: { color: "hover:bg-slate-100 hover:text-slate-900", icon: "group-hover:text-slate-700" },
+        theme: { color: "hover:bg-theme-100 hover:text-theme-800", icon: "group-hover:text-theme-700" },
+        red: { color: "hover:bg-red-100 hover:text-red-800", icon: "group-hover:text-red-700" },
+        gray: { color: "hover:bg-slate-200 hover:text-slate-900", icon: "group-hover:text-slate-800" },
     };
 
     if (variant === 'ghost') {

@@ -30,10 +30,6 @@ export const useMallaController = (
         return saved ? JSON.parse(saved) : false;
     });
 
-    const [modoOscuro, setModoOscuro] = useState<boolean>(() => {
-        const saved = localStorage.getItem('modoOscuro');
-        return saved ? JSON.parse(saved) : false;
-    });
 
     const leyendaRef = useRef<HTMLDivElement>(null);
     const botonLeyendaRef = useRef<HTMLButtonElement>(null);
@@ -65,14 +61,6 @@ export const useMallaController = (
         localStorage.setItem('zoomConRueda', JSON.stringify(zoomConRueda));
     }, [zoomConRueda]);
 
-    useEffect(() => {
-        localStorage.setItem('modoOscuro', JSON.stringify(modoOscuro));
-        if (modoOscuro) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [modoOscuro]);
 
     // Repository for loading routes list
     const repository = useMemo(() => new MateriaRepository(activePlanId), [activePlanId]);
@@ -139,9 +127,7 @@ export const useMallaController = (
         },
         configuraciones: {
             zoomConRueda,
-            setZoomConRueda,
-            modoOscuro,
-            setModoOscuro
+            setZoomConRueda
         },
         datos: {
             optimaRuta,

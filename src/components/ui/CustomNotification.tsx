@@ -23,7 +23,7 @@ export const CustomNotification: React.FC = () => {
                         </div>
                     )}
                     {notification.type === 'confirm' && !notification.isDestructive && (
-                        <div className="bg-blue-100 p-2 rounded-full text-blue-600">
+                        <div className="bg-[var(--color-theme-)] p-2 rounded-full text-[var(--color-theme-)]">
                             <Info className="w-5 h-5" />
                         </div>
                     )}
@@ -62,7 +62,7 @@ export const CustomNotification: React.FC = () => {
                         onClick={handleConfirm}
                         className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors focus:ring-2 focus:outline-none ${notification.isDestructive
                             ? 'bg-red-600 hover:bg-red-700 focus:ring-red-200'
-                            : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-200'
+                            : 'bg-[var(--color-theme-)] hover:bg-[var(--color-theme-)] focus:ring-[var(--color-theme-)]'
                             }`}
                     >
                         {notification.confirmText || 'Aceptar'}

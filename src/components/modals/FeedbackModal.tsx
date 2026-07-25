@@ -12,7 +12,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-linear-to-r from-blue-50 to-white">
+                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-linear-to-r from-[var(--color-theme-)] to-white">
                     <div className="flex items-center gap-3">
                         <MessageSquareWarning className="w-6 h-6 text-yellow-500" />
                         <h2 className="text-xl font-bold text-gray-800">
@@ -53,7 +53,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
                         href="https://forms.gle/wyb4PjqYG9xQgviT8"
                         target="_blank"
                         rel="noreferrer"
-                        className="w-full bg-blue-100 text-blue-700 hover:bg-blue-200 font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 transition-colors shadow-sm"
+                        className="w-full bg-[var(--color-theme-)] text-[var(--color-theme-)] hover:bg-[var(--color-theme-)] font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 transition-colors shadow-sm"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         <span>Llenar Formulario de Sugerencias</span>

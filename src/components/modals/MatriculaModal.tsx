@@ -122,7 +122,7 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                                 <div className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Materias</div>
                                             </div>
                                             <div className="bg-white p-2 rounded-lg shadow-sm font-bold text-gray-700 text-center flex-1 sm:flex-none min-w-20">
-                                                <div className="text-xl leading-none text-blue-600">{totalUc}</div>
+                                                <div className="text-xl leading-none text-[var(--color-theme-)]">{totalUc}</div>
                                                 <div className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Total UC</div>
                                             </div>
                                         </div>
@@ -172,11 +172,11 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                             </h4>
                                             <ul className="space-y-2 text-sm font-medium">
                                                 {desglose.pagosMensuales.map((pago: number, idx: number) => (
-                                                    <li key={idx} className={`flex justify-between items-center p-2 rounded ${idx === 0 || idx === 3 ? 'bg-blue-50 text-blue-800' : 'text-gray-600 hover:bg-gray-100'}`}>
+                                                    <li key={idx} className={`flex justify-between items-center p-2 rounded ${idx === 0 || idx === 3 ? 'bg-[var(--color-theme-)] text-[var(--color-theme-)]' : 'text-gray-600 hover:bg-gray-100'}`}>
                                                         <span className="flex items-center gap-2">
                                                             {idx + 1}° Pago
-                                                            {idx === 0 && <span className="text-[10px] bg-blue-100 px-1.5 py-0.5 rounded text-blue-700 hidden sm:inline">Incluye Inscrip.</span>}
-                                                            {idx === 3 && <span className="text-[10px] bg-blue-100 px-1.5 py-0.5 rounded text-blue-700 hidden sm:inline">Incluye Confirm.</span>}
+                                                            {idx === 0 && <span className="text-[10px] bg-[var(--color-theme-)] px-1.5 py-0.5 rounded text-[var(--color-theme-)] hidden sm:inline">Incluye Inscrip.</span>}
+                                                            {idx === 3 && <span className="text-[10px] bg-[var(--color-theme-)] px-1.5 py-0.5 rounded text-[var(--color-theme-)] hidden sm:inline">Incluye Confirm.</span>}
                                                         </span>
                                                         <span className="font-bold shrink-0">${pago.toFixed(2)}</span>
                                                     </li>

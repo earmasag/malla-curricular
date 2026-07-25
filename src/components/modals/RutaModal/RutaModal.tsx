@@ -33,7 +33,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-4 bg-gray-50 border-b border-gray-100">
                     <div className="flex items-center gap-4">
                         <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
-                            {customRoute ? <Wrench className="w-6 h-6 text-purple-500" /> : <MapPath className="w-6 h-6 text-blue-500" />} {customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
+                            {customRoute ? <Wrench className="w-6 h-6 text-purple-500" /> : <MapPath className="w-6 h-6 text-[var(--color-theme-)]" />} {customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
                         </h2>
                         {!customRoute && (
                             <FiltrosRutaOptimaButton
@@ -72,7 +72,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                     ) : (
                         <div className="flex flex-col gap-6 relative">
                             {/* Línea conectora de la línea de tiempo */}
-                            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-blue-200 hidden sm:block"></div>
+                            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-[var(--color-theme-)] hidden sm:block"></div>
 
                             {rutaParaMostrar.map((bloque: string[], index: number) => (
                                 <BloqueEstudioCard

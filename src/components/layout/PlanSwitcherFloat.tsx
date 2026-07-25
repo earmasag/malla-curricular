@@ -51,7 +51,7 @@ export const PlanSwitcherFloat: React.FC = () => {
                         onClick={() => handleSwitchPlan("202415")}
                         className={`px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
                             activePlanId === "202415" 
-                            ? 'bg-blue-600 text-white shadow-md' 
+                            ? 'bg-[var(--color-theme-600)] text-white shadow-md' 
                             : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100/50'
                         }`}
                     >
@@ -73,7 +73,7 @@ export const PlanSwitcherFloat: React.FC = () => {
                 {activePlanId === "202415" && (
                     <button
                         onClick={() => setShowMigrationModal(true)}
-                        className="group flex items-center justify-center w-11 h-11 bg-linear-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full shadow-lg shadow-blue-500/30 border border-blue-500 transition-all duration-300 animate-in slide-in-from-left-4 fade-in"
+                        className="group flex items-center justify-center w-11 h-11 bg-linear-to-br from-[var(--color-theme-500)] to-[var(--color-theme-600)] hover:from-[var(--color-theme-600)] hover:to-[var(--color-theme-700)] text-white rounded-full shadow-lg shadow-[var(--color-theme-500)]/30 border border-[var(--color-theme-500)] transition-all duration-300 animate-in slide-in-from-left-4 fade-in"
                         title="Migrar progreso al Plan 2027"
                     >
                         <RefreshCw className="w-5 h-5 transition-transform group-hover:rotate-180 duration-500" />

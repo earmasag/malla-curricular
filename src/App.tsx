@@ -6,19 +6,22 @@ import { CustomNotification } from './components/ui/CustomNotification';
 import { ToastProvider } from './contexts/ToastContext';
 import { ToastContainer } from './components/ui/ToastContainer';
 import { PlanProvider } from './contexts/PlanContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
 
   return (
-    <ToastProvider>
-      <NotificationProvider>
-        <PlanProvider>
-          <MallaPage />
-          <CustomNotification />
-          <ToastContainer />
-        </PlanProvider>
-      </NotificationProvider>
-    </ToastProvider>
+    <ThemeProvider>
+      <ToastProvider>
+        <NotificationProvider>
+          <PlanProvider>
+            <MallaPage />
+            <CustomNotification />
+            <ToastContainer />
+          </PlanProvider>
+        </NotificationProvider>
+      </ToastProvider>
+    </ThemeProvider>
   )
 }
 

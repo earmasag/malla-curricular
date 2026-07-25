@@ -12,3 +12,36 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+@theme {
+  --color-theme-50: var(--theme-50);
+  --color-theme-100: var(--theme-100);
+  --color-theme-200: var(--theme-200);
+  --color-theme-500: var(--theme-500);
+  --color-theme-600: var(--theme-600);
+  --color-theme-700: var(--theme-700);
+}
+
+:root {
+  /* Tema Azul (Default) */
+  --theme-50: #eff6ff;
+  --theme-100: #dbeafe;
+  --theme-200: #bfdbfe;
+  --theme-500: #3b82f6;
+  --theme-600: #2563eb;
+  --theme-700: #1d4ed8;
+  
+  --bg-app: var(--theme-50);
+}
+
+:root[data-theme="pink"] {
+  /* Tema Rosado */
+  --theme-50: #fdf2f8;
+  --theme-100: #fce7f3;
+  --theme-200: #fbcfe8;
+  --theme-500: #ec4899;
+  --theme-600: #db2777;
+  --theme-700: #be185d;
+  
+  --bg-app: var(--theme-50);
+}

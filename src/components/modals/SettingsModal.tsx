@@ -1,4 +1,4 @@
-import { X, MousePointer2, Moon, Sun } from 'lucide-react';
+import { X, MousePointer2 } from 'lucide-react';
 
 export interface SettingsModalProps {
     isOpen: boolean;
@@ -6,8 +6,6 @@ export interface SettingsModalProps {
     configuraciones: {
         zoomConRueda: boolean;
         setZoomConRueda: (val: boolean) => void;
-        modoOscuro: boolean;
-        setModoOscuro: (val: boolean) => void;
     };
 }
 
@@ -42,7 +40,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
                     {/* Setting 1: Scroll to Zoom */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
+                            <div className="p-2 rounded-xl bg-[var(--color-theme-50)] text-[var(--color-theme-600)]">
                                 <MousePointer2 className="w-5 h-5" />
                             </div>
                             <div>
@@ -53,27 +51,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
 
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" className="sr-only peer" checked={configuraciones.zoomConRueda} onChange={(e) => configuraciones.setZoomConRueda(e.target.checked)} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--color-theme-600)]"></div>
                         </label>
                     </div>
 
-                    {/* Setting 2: Dark Mode */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-xl ${configuraciones.modoOscuro ? 'bg-indigo-50 text-indigo-600' : 'bg-amber-50 text-amber-500'}`}>
-                                {configuraciones.modoOscuro ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-                            </div>
-                            <div>
-                                <p className="font-semibold text-gray-700">Modo Oscuro</p>
-                                <p className="text-xs text-gray-500 max-w-37.5">Protégete de la luz azul en la noche.</p>
-                            </div>
-                        </div>
 
-                        <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" checked={configuraciones.modoOscuro} onChange={(e) => configuraciones.setModoOscuro(e.target.checked)} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                        </label>
-                    </div>
 
                 </div>
             </div>

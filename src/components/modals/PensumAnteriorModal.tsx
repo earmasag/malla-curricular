@@ -28,7 +28,7 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
                 <div className="flex justify-between items-center mb-6">
                     <div>
                         <h2 className="text-xl md:text-2xl font-black text-gray-800 flex items-center gap-2">
-                            <BookCheck className="w-6 h-6 text-blue-600" /> Pensum Anterior
+                            <BookCheck className="w-6 h-6 text-[var(--color-theme-)]" /> Pensum Anterior
                         </h2>
                         <p className="text-sm text-gray-500 mt-1">Marca las materias que aprobaste del pensum viejo. Sus UC se sumarán automáticamente a tus UC Acumuladas.</p>
                     </div>
@@ -43,7 +43,7 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
                 {/* Content */}
                 <div className="flex flex-col gap-4">
                     {materias.map((materia) => (
-                        <div key={materia.key} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-blue-100 transition-colors">
+                        <div key={materia.key} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-[var(--color-theme-)] transition-colors">
                             <div className="flex flex-col">
                                 <span className="font-semibold text-gray-700">{materia.nombre}</span>
                                 <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">{materia.uc} UC</span>
@@ -55,7 +55,7 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
                                     checked={!!pensumAnterior[materia.key]}
                                     onChange={(e) => updatePensumAnterior(materia.key, e.target.checked)}
                                 />
-                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--color-theme-)]"></div>
                             </label>
                         </div>
                     ))}
@@ -64,7 +64,7 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
                 <div className="mt-6 flex justify-end">
                     <button
                         onClick={onClose}
-                        className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-md shadow-blue-200 cursor-pointer"
+                        className="px-6 py-2 bg-[var(--color-theme-)] hover:bg-[var(--color-theme-)] text-white font-bold rounded-xl transition-colors shadow-md shadow-[var(--color-theme-)] cursor-pointer"
                     >
                         Listo
                     </button>

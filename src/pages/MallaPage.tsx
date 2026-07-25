@@ -45,15 +45,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
         : estadoMalla.materiasCursando;
 
     return (
-        <div className="flex relative h-dvh w-dvw bg-gray-100 font-sans m-0 overflow-hidden text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors">
-            {/* Botón Flotante Settings (Top Right, replaced Legend) */}
-            <button
-                onClick={() => modales.setIsSettingsOpen(!modales.isSettingsOpen)}
-                className="absolute cursor-pointer top-4 right-4 md:top-6 md:right-6 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-3 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all"
-                title="Configuración"
-            >
-                {modales.isSettingsOpen ? <X className="w-6 h-6" /> : <Settings className="w-6 h-6" />}
-            </button>
+        <div className="flex relative h-dvh w-dvw bg-[var(--bg-app)] font-sans m-0 overflow-hidden text-gray-800 transition-colors">
 
             <NavigationSidebar 
               totalMaterias={totalMaterias} 

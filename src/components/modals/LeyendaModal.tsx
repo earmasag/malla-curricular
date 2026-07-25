@@ -34,7 +34,7 @@ export const LeyendaModal: React.FC<LeyendaModalProps> = ({
                     <div className="font-extrabold text-[12px] sm:text-lg tracking-wider uppercase flex-1 text-[#1e293b] flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center">
                         <span>{tituloCarrera}</span> 
                         <span className="hidden sm:inline text-gray-300">|</span> 
-                        <span className="text-blue-700">{totalSemestres} SEMESTRES</span> 
+                        <span className="text-[var(--color-theme-)]">{totalSemestres} SEMESTRES</span> 
                         <span className="text-gray-300">|</span> 
                         <span className="text-amber-600">{totalUc} UC</span>
                     </div>
@@ -52,7 +52,7 @@ export const LeyendaModal: React.FC<LeyendaModalProps> = ({
                         <div className="flex flex-col gap-4 w-full">
                             <span className="font-black text-lg text-gray-800 uppercase tracking-wider relative w-max pb-1">
                                 Áreas de Formación
-                                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-blue-500 rounded-full"></div>
+                                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[var(--color-theme-)] rounded-full"></div>
                             </span>
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3">
                                 {areasFormacion.map((area, idx) => (

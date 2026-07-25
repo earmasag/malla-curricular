@@ -84,7 +84,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                         <>
                             <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
                                 {/* Aprobadas Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <BookOpen className={`text-theme-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
@@ -97,7 +97,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 </div>
 
                                 {/* UC Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <Lightbulb className={`text-amber-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
@@ -110,7 +110,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 </div>
 
                                 {/* Semestre Actual Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <GraduationCap className={`text-purple-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
@@ -124,7 +124,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                                 {/* UC Cursando */}
                                 {mallaStats.ucCursando > 0 && (
-                                    <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                    <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                         <div className="relative shrink-0 flex items-center justify-center w-5 h-5">
                                             <span className="absolute w-2.5 h-2.5 rounded-full bg-theme-500 animate-ping opacity-75"></span>
                                             <span className="relative w-2 h-2 rounded-full bg-theme-500"></span>
@@ -248,12 +248,12 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                         // Custom Mode Stats & Actions
                         <>
                             <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
-                                <div className={`flex justify-center items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex justify-center items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <Wrench className={`text-purple-600 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'} animate-pulse`} />
                                     {ui.isExpanded && <span className="font-bold text-sm text-slate-800">Modo Constructor</span>}
                                 </div>
 
-                                <div className={`flex items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-4 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex flex-col items-center">
                                             <span className="text-3xl font-black text-slate-800 leading-none">{customRouteState.currentSemesterUCs}/{customRouteState.totalCustomUCs}</span>
@@ -264,7 +264,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     )}
                                 </div>
 
-                                <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
+                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <BookOpen className={`text-theme-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">

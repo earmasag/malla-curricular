@@ -155,14 +155,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 />
                             )}
 
-                            {ui.modales.setIsPensumAnteriorModalOpen !== undefined && (
-                                <SidebarButton
-                                    isExpanded={ui.isExpanded}
-                                    icon={<BookCheck />}
-                                    label="Pensum Anterior"
-                                    onClick={(e) => { e.stopPropagation(); ui.modales.setIsPensumAnteriorModalOpen(true); }}
-                                />
-                            )}
 
                             {ui.modales.setIsFeedbackModalOpen && (
                                 <SidebarButton

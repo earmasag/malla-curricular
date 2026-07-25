@@ -45,7 +45,7 @@ export const Sidebar = ({ materiaSeleccionada, estadoActual, onToggleAprobacion,
                 <div className="flex flex-wrap gap-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide
                         ${isAprobada ? 'bg-green-100 text-green-700' :
-                            isDisponible ? 'bg-[var(--color-theme-100)] text-[var(--color-theme-700)]' :
+                            isDisponible ? 'bg-theme- text-theme-' :
                                 'bg-gray-100 text-gray-600'}`}>
                         {estadoActual}
                     </span>

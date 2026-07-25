@@ -9,14 +9,14 @@ interface ToastItemProps {
 }
 
 const ICONS = {
-    info: <Info className="w-5 h-5 text-[var(--color-theme-)]" />,
+    info: <Info className="w-5 h-5 text-theme-500" />,
     success: <CheckCircle className="w-5 h-5 text-green-500" />,
     warning: <AlertTriangle className="w-5 h-5 text-amber-500" />,
     error: <AlertCircle className="w-5 h-5 text-red-500" />
 };
 
 const BORDERS = {
-    info: 'border-l-blue-500',
+    info: 'border-l-theme-500',
     success: 'border-l-green-500',
     warning: 'border-l-amber-500',
     error: 'border-l-red-500'

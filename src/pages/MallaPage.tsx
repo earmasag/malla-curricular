@@ -16,7 +16,7 @@ import { MatriculaModal } from "../components/modals/MatriculaModal";
 import { SettingsModal } from "../components/modals/SettingsModal";
 import { LeyendaModal } from "../components/modals/LeyendaModal";
 import { PensumAnteriorModal } from "../components/modals/PensumAnteriorModal";
-import { Settings, X } from "lucide-react";
+
 
 // Datos estáticos
 import areasColorData from '../data/areas_color.json';
@@ -45,8 +45,8 @@ const MallaLayout = ({ planData }: { planData: any }) => {
         : estadoMalla.materiasCursando;
 
     return (
-        <div className="flex relative h-dvh w-dvw bg-[var(--bg-app)] font-sans m-0 overflow-hidden text-gray-800 transition-colors">
-
+        <div className="flex relative h-dvh w-dvw bg-(--bg-app) font-sans m-0 overflow-hidden text-gray-800 transition-colors">
+            
             <NavigationSidebar 
               totalMaterias={totalMaterias} 
             />

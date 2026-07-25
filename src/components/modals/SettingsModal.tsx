@@ -40,7 +40,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
                     {/* Setting 1: Scroll to Zoom */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-xl bg-[var(--color-theme-50)] text-[var(--color-theme-600)]">
+                            <div className="p-2 rounded-xl bg-theme- text-theme-">
                                 <MousePointer2 className="w-5 h-5" />
                             </div>
                             <div>
@@ -51,7 +51,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
 
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" className="sr-only peer" checked={configuraciones.zoomConRueda} onChange={(e) => configuraciones.setZoomConRueda(e.target.checked)} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--color-theme-600)]"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-"></div>
                         </label>
                     </div>
 

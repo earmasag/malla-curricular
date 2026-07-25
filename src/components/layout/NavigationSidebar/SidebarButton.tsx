@@ -47,9 +47,9 @@ const colorStyles = {
         icon: "text-amber-500",
     },
     theme: {
-        solid: "bg-[var(--color-theme-600)] text-white hover:bg-[var(--color-theme-700)] active:bg-[var(--color-theme-800)] border-[var(--color-theme-600)]",
-        light: "bg-[var(--color-theme-50)] text-[var(--color-theme-700)] hover:bg-[var(--color-theme-100)] border-[var(--color-theme-100)]",
-        icon: "text-[var(--color-theme-600)]",
+        solid: "bg-theme- text-white hover:bg-theme- active:bg-theme- border-theme-",
+        light: "bg-theme- text-theme- hover:bg-theme- border-theme-",
+        icon: "text-theme-",
     },
     pink: {
         solid: "bg-pink-600 text-white hover:bg-pink-700 active:bg-pink-800 border-pink-600",

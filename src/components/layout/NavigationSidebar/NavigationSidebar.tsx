@@ -36,7 +36,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
             <div className={`${ui.isExpanded ? 'p-4 border-b border-gray-100' : ui.isMobile ? 'p-2' : 'p-4'} flex items-center ${ui.isExpanded || ui.isMobile ? 'justify-between' : 'justify-center'} w-full shrink-0`}>
                 {ui.isExpanded && (
                     <div className="flex items-center gap-2 overflow-hidden">
-                        <div className="p-2 bg-[var(--color-theme-50)] text-[var(--color-theme-600)] rounded-xl">
+                        <div className="p-2 bg-theme- text-theme- rounded-xl">
                             <LayoutDashboard className="w-5 h-5" />
                         </div>
                         <h1 className="text-lg font-bold text-gray-800 whitespace-nowrap">Mi Malla</h1>
@@ -60,7 +60,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                             <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
                                 {/* Aprobadas Stat */}
                                 <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <BookOpen className={`text-[var(--color-theme-500)] shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
+                                    <BookOpen className={`text-theme- shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
                                             <span className="text-sm font-semibold text-slate-700">Aprobadas</span>
@@ -101,8 +101,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 {mallaStats.ucCursando > 0 && (
                                     <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                         <div className="relative shrink-0 flex items-center justify-center w-5 h-5">
-                                            <span className="absolute w-2.5 h-2.5 rounded-full bg-[var(--color-theme-500)] animate-ping opacity-75"></span>
-                                            <span className="relative w-2 h-2 rounded-full bg-[var(--color-theme-600)]"></span>
+                                            <span className="absolute w-2.5 h-2.5 rounded-full bg-theme- animate-ping opacity-75"></span>
+                                            <span className="relative w-2 h-2 rounded-full bg-theme-"></span>
                                         </div>
                                         {ui.isExpanded ? (
                                             <div className="flex-1 flex justify-between items-center">
@@ -229,7 +229,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 </div>
 
                                 <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <BookOpen className={`text-[var(--color-theme-500)] shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
+                                    <BookOpen className={`text-theme- shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
                                             <span className="text-sm font-semibold text-slate-700">Materias selec.</span>

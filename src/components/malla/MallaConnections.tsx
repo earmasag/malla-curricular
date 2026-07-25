@@ -21,7 +21,7 @@ export default function MallaConnections({ grafo, progreso, hoveredMateria, cont
 
     return (
         <svg
-            className="absolute top-0 left-0 pointer-events-none z-0 overflow-visible"
+            className="absolute top-0 left-0 pointer-events-none z-0 overflow-visible will-change-transform transform-gpu"
             style={{ width: '100%', height: '100%' }}
         >
             {/* Definimos animaciones SVG si las necesitamos (reemplazo de xarrows animation) */}

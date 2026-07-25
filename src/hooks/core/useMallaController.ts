@@ -27,7 +27,7 @@ export const useMallaController = (
     // Features
     const [zoomConRueda, setZoomConRueda] = useState<boolean>(() => {
         const saved = localStorage.getItem('zoomConRueda');
-        return saved ? JSON.parse(saved) : true;
+        return saved ? JSON.parse(saved) : false;
     });
 
     const [modoOscuro, setModoOscuro] = useState<boolean>(() => {

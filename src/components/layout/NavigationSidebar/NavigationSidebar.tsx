@@ -64,7 +64,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                         <div className="p-2 bg-theme-100 text-theme-600 rounded-xl">
                             <LayoutDashboard className="w-5 h-5" />
                         </div>
-                        <h1 className="text-lg font-bold text-gray-800 whitespace-nowrap">Grafo Curricular</h1>
+                        <h1 className="text-lg font-bold text-gray-800 whitespace-nowrap">MallaSandBox</h1>
                     </div>
                 )}
                 <button

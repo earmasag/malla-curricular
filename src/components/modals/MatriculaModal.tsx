@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { X, Calculator, Info, AlertTriangle } from 'lucide-react';
+import { Calculator, Info, AlertTriangle } from 'lucide-react';
 import { MatriculaService, type StudentProfile, type MateriaMatricula } from '../../services/MatriculaService';
 import { CustomSelect } from '../ui/CustomSelect';
 import { CustomCheckbox } from '../ui/CustomCheckbox';
+import { ModalHeader } from './shared/ModalHeader';
 
 interface MatriculaModalProps {
     isOpen: boolean;
@@ -41,20 +42,11 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                     <div className="w-12 h-1.5 bg-white/30 rounded-full"></div>
                 </div>
 
-                {/* Header */}
-                <div className="flex items-center justify-between px-5 sm:px-6 py-4 sm:py-4 pt-6 bg-green-500 border-b border-green-600 text-white shrink-0">
-                    <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
-                        <Calculator className="w-5 h-5 sm:w-6 sm:h-6" />
-                        Cálculo de Matrícula
-                    </h2>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-full transition-colors shrink-0 cursor-pointer"
-                        title="Cerrar"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
+                <ModalHeader 
+                    title="Cálculo de Matrícula" 
+                    icon={<Calculator />} 
+                    onClose={onClose} 
+                />
 
                 {/* Área con scroll */}
                 <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 bg-gray-50 flex flex-col gap-5 sm:gap-6 pb-8 sm:pb-6">
@@ -70,7 +62,7 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                             <div className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm shrink-0">
                                 <h3 className="font-bold text-gray-800 mb-3 sm:mb-4 border-b pb-2">Configuración del Estudiante</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <label className="flex flex-col gap-1.5 focus-within:text-green-600 transition-colors">
+                                    <label className="flex flex-col gap-1.5 focus-within:text-theme-600 transition-colors">
                                         <span className="text-xs font-semibold uppercase tracking-wide">Carrera:</span>
                                         <CustomSelect
                                             value={perfil.carrera}
@@ -112,23 +104,41 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                 </div>
                             </div>
 
+                            {/* Lista de Materias Cursando */}
+                            <div className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm shrink-0">
+                                <h3 className="font-bold text-gray-800 mb-3 sm:mb-4 border-b pb-2">Materias a Cursar</h3>
+                                <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
+                                    {materiasCursando.map(materia => (
+                                        <div key={materia.codigoMateria} className="flex justify-between items-center text-sm p-2 sm:p-3 rounded-lg hover:bg-gray-50 border border-gray-100 transition-colors">
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-gray-700">{materia.nombre}</span>
+                                                <span className="text-xs text-gray-500 font-mono mt-0.5">{materia.codigoMateria}</span>
+                                            </div>
+                                            <div className="bg-theme-50 text-theme-700 font-bold px-2.5 py-1 rounded-md text-xs border border-theme-100 shrink-0 ml-3">
+                                                {materia.unidadesCredito} UC
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                             {/* Panel Principal Desglose */}
                             {desglose && (
-                                <div className="bg-white rounded-xl border border-green-200 overflow-hidden shadow-sm shrink-0">
-                                    <div className="bg-green-50 p-4 border-b border-green-100 flex flex-col sm:flex-row gap-4 items-center justify-between shrink-0">
+                                <div className="bg-white rounded-xl border border-theme-200 overflow-hidden shadow-sm shrink-0">
+                                    <div className="bg-theme-50 p-4 border-b border-theme-100 flex flex-col sm:flex-row gap-4 items-center justify-between shrink-0">
                                         <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
                                             <div className="bg-white p-2 rounded-lg shadow-sm font-bold text-gray-700 text-center flex-1 sm:flex-none min-w-20">
-                                                <div className="text-xl leading-none text-green-600">{materiasCursando.length}</div>
+                                                <div className="text-xl leading-none text-theme-600">{materiasCursando.length}</div>
                                                 <div className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Materias</div>
                                             </div>
                                             <div className="bg-white p-2 rounded-lg shadow-sm font-bold text-gray-700 text-center flex-1 sm:flex-none min-w-20">
-                                                <div className="text-xl leading-none text-[var(--color-theme-)]">{totalUc}</div>
+                                                <div className="text-xl leading-none text-theme-600">{totalUc}</div>
                                                 <div className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Total UC</div>
                                             </div>
                                         </div>
 
-                                        <div className="text-center sm:text-right w-full sm:w-auto flex-1 bg-white sm:bg-transparent p-3 sm:p-0 rounded-lg shadow-sm sm:shadow-none border border-green-100 sm:border-none">
-                                            <div className="text-xs text-green-600 font-bold uppercase tracking-wider mb-1">Total Semestre</div>
+                                        <div className="text-center sm:text-right w-full sm:w-auto flex-1 bg-white sm:bg-transparent p-3 sm:p-0 rounded-lg shadow-sm sm:shadow-none border border-theme-100 sm:border-none">
+                                            <div className="text-xs text-theme-600 font-bold uppercase tracking-wider mb-1">Total Semestre</div>
                                             <div className="text-3xl font-black text-gray-800">${desglose.totalFinal.toFixed(2)}</div>
                                         </div>
                                     </div>
@@ -147,7 +157,7 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                                     <span className="font-semibold">${(desglose.derechoInscripcion + desglose.derechoConfirmacion).toFixed(2)}</span>
                                                 </li>
                                                 {(desglose.descuentoSede + desglose.descuentoCarrera) > 0 && (
-                                                    <li className="flex justify-between items-center text-green-600">
+                                                    <li className="flex justify-between items-center text-theme-600">
                                                         <span>Descuentos (Becas/Sede):</span>
                                                         <span className="font-bold">-${(desglose.descuentoSede + desglose.descuentoCarrera).toFixed(2)}</span>
                                                     </li>
@@ -172,11 +182,11 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                             </h4>
                                             <ul className="space-y-2 text-sm font-medium">
                                                 {desglose.pagosMensuales.map((pago: number, idx: number) => (
-                                                    <li key={idx} className={`flex justify-between items-center p-2 rounded ${idx === 0 || idx === 3 ? 'bg-[var(--color-theme-)] text-[var(--color-theme-)]' : 'text-gray-600 hover:bg-gray-100'}`}>
+                                                    <li key={idx} className={`flex justify-between items-center p-2 rounded ${idx === 0 || idx === 3 ? 'bg-theme-100 text-theme-800' : 'text-gray-600 hover:bg-gray-100'}`}>
                                                         <span className="flex items-center gap-2">
                                                             {idx + 1}° Pago
-                                                            {idx === 0 && <span className="text-[10px] bg-[var(--color-theme-)] px-1.5 py-0.5 rounded text-[var(--color-theme-)] hidden sm:inline">Incluye Inscrip.</span>}
-                                                            {idx === 3 && <span className="text-[10px] bg-[var(--color-theme-)] px-1.5 py-0.5 rounded text-[var(--color-theme-)] hidden sm:inline">Incluye Confirm.</span>}
+                                                            {idx === 0 && <span className="text-[10px] bg-theme-200 px-1.5 py-0.5 rounded text-theme-800 hidden sm:inline">Incluye Inscrip.</span>}
+                                                            {idx === 3 && <span className="text-[10px] bg-theme-200 px-1.5 py-0.5 rounded text-theme-800 hidden sm:inline">Incluye Confirm.</span>}
                                                         </span>
                                                         <span className="font-bold shrink-0">${pago.toFixed(2)}</span>
                                                     </li>

@@ -47,7 +47,7 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
     return (
         <div className="relative flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
             {/* Timeline Dot (Solo visible en Desktop/Tablet) */}
-            <div className="hidden sm:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 border-4 border-white shadow-sm z-10 shrink-0 text-blue-600 font-bold">
+            <div className="hidden sm:flex items-center justify-center w-12 h-12 rounded-full bg-theme-100 border-4 border-white shadow-sm z-10 shrink-0 text-theme-600 font-bold">
                 {index + 1}
             </div>
 
@@ -59,24 +59,24 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
 
                         {/* Cost Estimation Badge */}
                         <div className="group relative flex items-center shrink-0">
-                            <span className="bg-green-50 text-green-700 text-xs font-bold px-2 py-1 rounded border border-green-200 flex items-center gap-1 cursor-help">
+                            <span className="bg-theme-50 text-theme-700 text-xs font-bold px-2 py-1 rounded border border-theme-200 flex items-center gap-1 cursor-help">
                                 Est. ${desgloseInscripcion.totalFinal.toFixed(2)}
                                 <Info className="w-3 h-3" />
                             </span>
 
                             {/* Tooltip for Installments */}
                             <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 shadow-xl pointer-events-none">
-                                <p className="font-bold border-b border-gray-700 pb-1 mb-2 text-green-400">Desglose Estimado:</p>
+                                <p className="font-bold border-b border-gray-700 pb-1 mb-2 text-theme-400">Desglose Estimado:</p>
                                 <ul className="space-y-1">
                                     <li className="flex justify-between"><span>Materias:</span> <span>${desgloseInscripcion.costoMaterias.toFixed(2)}</span></li>
                                     <li className="flex justify-between"><span>Inscripción:</span> <span>${desgloseInscripcion.derechoInscripcion.toFixed(2)}</span></li>
                                 </ul>
-                                <p className="font-bold border-b border-gray-700 pb-1 mt-2 mb-2 text-blue-300">Plan de Pagos:</p>
+                                <p className="font-bold border-b border-gray-700 pb-1 mt-2 mb-2 text-theme-500">Plan de Pagos:</p>
                                 <ul className="space-y-1 text-gray-300">
                                     {desgloseInscripcion.pagosMensuales.map((pago, i) => (
                                         <li key={i} className="flex justify-between">
                                             <span>Cuota {i + 1}:</span>
-                                            <span className={i === 0 || i === 3 ? "text-blue-300 font-semibold" : ""}>${pago.toFixed(2)}</span>
+                                            <span className={i === 0 || i === 3 ? "text-theme-500 font-semibold" : ""}>${pago.toFixed(2)}</span>
                                         </li>
                                     ))}
                                 </ul>
@@ -87,7 +87,7 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
 
                     </h3>
                     <div className="flex flex-wrap items-center gap-2 sm:justify-end shrink-0">
-                        <span className="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-100 whitespace-nowrap">
+                        <span className="bg-theme-50 text-theme-700 text-xs font-bold px-3 py-1 rounded-full border border-theme-100 whitespace-nowrap">
                             {bloque.length} Mat. • {horasBloque} Hrs • {ucBloque} UC
                         </span>
                     </div>

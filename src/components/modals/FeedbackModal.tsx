@@ -1,5 +1,6 @@
 import React from 'react';
-import { MessageSquareWarning, X } from 'lucide-react';
+import { MessageSquareWarning } from 'lucide-react';
+import { ModalHeader } from './shared/ModalHeader';
 
 interface FeedbackModalProps {
     isOpen: boolean;
@@ -12,21 +13,11 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-linear-to-r from-[var(--color-theme-)] to-white">
-                    <div className="flex items-center gap-3">
-                        <MessageSquareWarning className="w-6 h-6 text-yellow-500" />
-                        <h2 className="text-xl font-bold text-gray-800">
-                            Sugerencias y Reportes
-                        </h2>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors shrink-0 cursor-pointer"
-                        title="Cerrar modal"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
+                <ModalHeader 
+                    title="Sugerencias y Reportes"
+                    icon={<MessageSquareWarning className="text-yellow-500" />}
+                    onClose={onClose}
+                />
 
                 <div className="p-6 bg-gray-50 flex flex-col gap-4 text-center">
                     <p className="text-gray-600 mb-2 text-sm">
@@ -53,7 +44,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose })
                         href="https://forms.gle/wyb4PjqYG9xQgviT8"
                         target="_blank"
                         rel="noreferrer"
-                        className="w-full bg-[var(--color-theme-)] text-[var(--color-theme-)] hover:bg-[var(--color-theme-)] font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 transition-colors shadow-sm"
+                        className="w-full bg-theme-100 text-theme-700 hover:bg-theme-200 font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 transition-colors shadow-sm cursor-pointer"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                         <span>Llenar Formulario de Sugerencias</span>

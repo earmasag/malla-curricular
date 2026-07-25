@@ -1,9 +1,10 @@
 import React from 'react';
-import { Map as MapPath, Wrench, X } from 'lucide-react';
+import { Map as MapPath, Wrench } from 'lucide-react';
 import type { MallaCurricularGraph } from '../../../core/MallaCurricularGraph';
 import { useRutaOptima } from '../../../hooks/malla/useRutaOptima';
 import { BloqueEstudioCard } from './BloqueEstudioCard';
 import { FiltrosRutaOptimaButton, FiltrosRutaOptimaPanel } from './FiltrosRutaOptima';
+import { ModalHeader } from '../shared/ModalHeader';
 
 interface RutaModalProps {
     isOpen: boolean;
@@ -29,28 +30,19 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden animate-fade-in-up">
 
-                {/* Header Dinámico */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-4 bg-gray-50 border-b border-gray-100">
-                    <div className="flex items-center gap-4">
-                        <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
-                            {customRoute ? <Wrench className="w-6 h-6 text-purple-500" /> : <MapPath className="w-6 h-6 text-[var(--color-theme-)]" />} {customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
-                        </h2>
-                        {!customRoute && (
+                <ModalHeader 
+                    title={customRoute ? 'Tu Ruta Personalizada' : 'Ruta Óptima'}
+                    icon={customRoute ? <Wrench /> : <MapPath />}
+                    onClose={onClose}
+                    rightContent={
+                        !customRoute ? (
                             <FiltrosRutaOptimaButton
                                 isOpen={isFiltrosOpen}
                                 setIsOpen={setIsFiltrosOpen}
                             />
-                        )}
-                    </div>
-
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-full transition-colors self-end sm:self-auto shrink-0 cursor-pointer"
-                        title="Cerrar"
-                    >
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
+                        ) : null
+                    }
+                />
 
                 {/* Filtros Accordion Panel */}
                 {!customRoute && (
@@ -72,7 +64,7 @@ export const RutaModal: React.FC<RutaModalProps> = ({ isOpen, onClose, generarRu
                     ) : (
                         <div className="flex flex-col gap-6 relative">
                             {/* Línea conectora de la línea de tiempo */}
-                            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-[var(--color-theme-)] hidden sm:block"></div>
+                            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-theme-500 hidden sm:block"></div>
 
                             {rutaParaMostrar.map((bloque: string[], index: number) => (
                                 <BloqueEstudioCard

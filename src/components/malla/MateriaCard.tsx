@@ -111,7 +111,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
                 handleTouchEnd();
                 if (onMouseLeave) onMouseLeave();
             }}
-            className={`relative w-48 h-20 rounded-br-[20px] my-1 shadow-sm border-[3px] select-none ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-(--color-theme-) z-50' : 'z-10'}`}
+            className={`relative w-48 h-20 rounded-br-[20px] my-1 shadow-sm border-[3px] select-none ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-theme-500 z-50' : 'z-10'}`}
             style={{
                 backgroundColor: currentHexColor,
                 borderColor: currentHexColor,
@@ -123,7 +123,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
             {(isAprobada || isCursando) && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit] z-30">
                     <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
-                        <div className={`absolute top-5 -right-5 w-28 text-white text-center transform rotate-45 py-0.5 shadow-sm ${isAprobada ? 'bg-emerald-500' : 'bg-(--color-theme-)'}`}>
+                        <div className={`absolute top-5 -right-5 w-28 text-white text-center transform rotate-45 py-0.5 shadow-sm ${isAprobada ? 'bg-emerald-500' : 'bg-blue-500'}`}>
                             <span className="font-bold text-sm">✓</span>
                         </div>
                     </div>

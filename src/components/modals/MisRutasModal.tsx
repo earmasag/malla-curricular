@@ -1,7 +1,8 @@
 import React from 'react';
 import type { SavedRoute } from '../../types/materia';
-import { Library, FolderOpen, Calendar, Clock, Eye, X, Trash2 } from 'lucide-react';
+import { Library, FolderOpen, Calendar, Clock, Eye, Trash2 } from 'lucide-react';
 import { useNotification } from '../../hooks/ui/useNotification';
+import { ModalHeader } from './shared/ModalHeader';
 
 interface MisRutasModalProps {
     isOpen: boolean;
@@ -26,22 +27,11 @@ export const MisRutasModal: React.FC<MisRutasModalProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
 
-                {/* Header */}
-                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-linear-to-r from-indigo-50 to-white">
-                    <div className="flex items-center gap-3">
-                        <Library className="w-6 h-6 text-indigo-500" />
-                        <h2 className="text-xl font-bold text-gray-800">
-                            Mis Rutas Guardadas
-                        </h2>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors shrink-0 cursor-pointer"
-                        title="Cerrar modal"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
+                <ModalHeader 
+                    title="Mis Rutas Guardadas"
+                    icon={<Library />}
+                    onClose={onClose}
+                />
 
                 {/* Content */}
                 <div className="p-6 overflow-y-auto flex-1 bg-gray-50">
@@ -85,7 +75,7 @@ export const MisRutasModal: React.FC<MisRutasModalProps> = ({
 
                                     <button
                                         onClick={() => onViewRoute(route.semesters)}
-                                        className="w-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                                        className="w-full bg-theme-50 text-theme-700 hover:bg-theme-100 font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer"
                                     >
                                         <Eye className="w-4 h-4" /> Ver Ruta
                                     </button>

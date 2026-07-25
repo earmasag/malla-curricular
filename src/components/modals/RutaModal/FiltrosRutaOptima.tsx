@@ -16,8 +16,8 @@ export const FiltrosRutaOptimaButton: React.FC<FiltrosRutaOptimaProps> = ({
     return (
         <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full transition-all border focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-sm z-10 ${isOpen
-                ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-inner'
+            className={`flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full transition-all border focus:outline-none focus:ring-2 focus:ring-theme-500/50 shadow-sm z-10 ${isOpen
+                ? 'bg-theme-50 text-theme-700 border-theme-200 shadow-inner'
                 : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
                 }`}
             title="Filtros y configuración"
@@ -48,7 +48,7 @@ export const FiltrosRutaOptimaPanel: React.FC<FiltrosRutaOptimaPanelProps> = ({
     if (!isOpen) return null;
 
     return (
-        <div className="w-full bg-blue-50/50 border-b border-gray-200 px-6 py-4 shadow-inner flex flex-col sm:flex-row gap-6 sm:items-center animate-slide-down">
+        <div className="w-full bg-theme-50/50 border-b border-gray-200 px-6 py-4 shadow-inner flex flex-col sm:flex-row gap-6 sm:items-center animate-slide-down">
             <span className="text-sm font-semibold text-gray-600 hidden sm:inline-block">Límites:</span>
             <div className="flex flex-row flex-wrap gap-6 items-center w-full">
                 <NumberInput

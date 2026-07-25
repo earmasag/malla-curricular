@@ -1,6 +1,7 @@
 import React from 'react';
-import { X, BookCheck } from 'lucide-react';
+import { BookCheck } from 'lucide-react';
 import ajustesData from '../../data/ajustes_pensum_viejo.json';
+import { ModalHeader } from './shared/ModalHeader';
 
 export interface PensumAnteriorModalProps {
     isOpen: boolean;
@@ -21,27 +22,22 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">
             <div
-                className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
+                className="bg-white rounded-3xl w-full max-w-md shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Header */}
-                <div className="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 className="text-xl md:text-2xl font-black text-gray-800 flex items-center gap-2">
-                            <BookCheck className="w-6 h-6 text-theme-600" /> Pensum Anterior
-                        </h2>
-                        <p className="text-sm text-gray-500 mt-1">Marca las materias que aprobaste del pensum viejo. Sus UC se sumarán automáticamente a tus UC Acumuladas.</p>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
+                <ModalHeader
+                    title={
+                        <div className="flex flex-col">
+                            <span>Pensum Anterior</span>
+                            <span className="text-sm font-normal text-gray-500 mt-1 leading-tight max-w-70 sm:max-w-xs whitespace-normal">Marca las materias que aprobaste del pensum viejo. Sus UC se sumarán automáticamente.</span>
+                        </div>
+                    }
+                    icon={<BookCheck />}
+                    onClose={onClose}
+                />
 
                 {/* Content */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 p-6 md:p-8 bg-white">
                     {materias.map((materia) => (
                         <div key={materia.key} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-theme-100 transition-colors">
                             <div className="flex flex-col">
@@ -61,7 +57,7 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
                     ))}
                 </div>
 
-                <div className="mt-6 flex justify-end">
+                <div className="px-6 md:px-8 pb-6 md:pb-8 flex justify-end bg-white">
                     <button
                         onClick={onClose}
                         className="px-6 py-2 bg-theme-600 hover:bg-theme-700 text-white font-bold rounded-xl transition-colors shadow-md shadow-theme-200 cursor-pointer"

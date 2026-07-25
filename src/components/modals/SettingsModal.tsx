@@ -1,4 +1,5 @@
-import { X, MousePointer2 } from 'lucide-react';
+import { MousePointer2, Settings } from 'lucide-react';
+import { ModalHeader } from './shared/ModalHeader';
 
 export interface SettingsModalProps {
     isOpen: boolean;
@@ -15,32 +16,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">
                 <div
-                className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-sm shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
+                className="bg-white rounded-3xl w-full max-w-sm shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 className="text-xl md:text-2xl font-black text-gray-800">
-                            Configuración
-                        </h2>
-                        <p className="text-sm text-gray-500 mt-1">Ajusta tu experiencia en la malla</p>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
+                <ModalHeader
+                    title={
+                        <div className="flex flex-col">
+                            <span>Configuración</span>
+                            <span className="text-sm font-normal text-gray-500 mt-1 leading-tight">Ajusta tu experiencia en la malla</span>
+                        </div>
+                    }
+                    icon={<Settings />}
+                    onClose={onClose}
+                />
 
                 {/* Content */}
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 p-6 md:p-8 bg-white">
 
                     {/* Setting 1: Scroll to Zoom */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-xl bg-theme- text-theme-">
+                            <div className="p-2 rounded-xl bg-theme-50 text-theme-600">
                                 <MousePointer2 className="w-5 h-5" />
                             </div>
                             <div>
@@ -51,7 +48,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
 
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" className="sr-only peer" checked={configuraciones.zoomConRueda} onChange={(e) => configuraciones.setZoomConRueda(e.target.checked)} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-500"></div>
                         </label>
                     </div>
 

@@ -29,14 +29,14 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     return (
         <aside
-            className={`fixed z-50 flex flex-col bg-white/95 backdrop-blur-xl border border-gray-200/80 shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu
+            className={`fixed z-50 flex flex-col bg-theme-50/40 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu
                 ${ui.isMobile ? mobileClasses : desktopClasses}`}
         >
             {/* Toggle Button */}
             <div className={`${ui.isExpanded ? 'p-4 border-b border-gray-100' : ui.isMobile ? 'p-2' : 'p-4'} flex items-center ${ui.isExpanded || ui.isMobile ? 'justify-between' : 'justify-center'} w-full shrink-0`}>
                 {ui.isExpanded && (
                     <div className="flex items-center gap-2 overflow-hidden">
-                        <div className="p-2 bg-theme- text-theme- rounded-xl">
+                        <div className="p-2 bg-theme-100 text-theme-600 rounded-xl">
                             <LayoutDashboard className="w-5 h-5" />
                         </div>
                         <h1 className="text-lg font-bold text-gray-800 whitespace-nowrap">Mi Malla</h1>
@@ -60,7 +60,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                             <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
                                 {/* Aprobadas Stat */}
                                 <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <BookOpen className={`text-theme- shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
+                                    <BookOpen className={`text-theme-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
                                             <span className="text-sm font-semibold text-slate-700">Aprobadas</span>
@@ -101,8 +101,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 {mallaStats.ucCursando > 0 && (
                                     <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                         <div className="relative shrink-0 flex items-center justify-center w-5 h-5">
-                                            <span className="absolute w-2.5 h-2.5 rounded-full bg-theme- animate-ping opacity-75"></span>
-                                            <span className="relative w-2 h-2 rounded-full bg-theme-"></span>
+                                            <span className="absolute w-2.5 h-2.5 rounded-full bg-theme-500 animate-ping opacity-75"></span>
+                                            <span className="relative w-2 h-2 rounded-full bg-theme-500"></span>
                                         </div>
                                         {ui.isExpanded ? (
                                             <div className="flex-1 flex justify-between items-center">
@@ -134,7 +134,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     icon={<Wrench />}
                                     label={customRouteState.hasDraftRoute ? "Volver al borrador" : "Crear Ruta"}
                                     onClick={(e) => { e.stopPropagation(); actions.accionesCustom.startCustomRoute(); }}
-                                    color="purple"
                                 />
                             )}
 
@@ -144,7 +143,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     icon={<Calculator />}
                                     label="Matrícula"
                                     onClick={(e) => { e.stopPropagation(); ui.modales.setIsMatriculaModalOpen(true); }}
-                                    color="green"
                                 />
                             )}
 
@@ -154,7 +152,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     icon={<Library />}
                                     label="Mis Rutas"
                                     onClick={(e) => { e.stopPropagation(); actions.handlers.handleOpenMisRutas(); }}
-                                    color="indigo"
                                 />
                             )}
 
@@ -164,7 +161,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     icon={<BookCheck />}
                                     label="Pensum Anterior"
                                     onClick={(e) => { e.stopPropagation(); ui.modales.setIsPensumAnteriorModalOpen(true); }}
-                                    color="amber"
                                 />
                             )}
 
@@ -174,7 +170,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     icon={<MessageSquareHeart />}
                                     label="Sugerencias"
                                     onClick={(e) => { e.stopPropagation(); ui.modales.setIsFeedbackModalOpen(true); }}
-                                    color="gray"
                                 />
                             )}
                             <SidebarButton
@@ -196,7 +191,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     e.stopPropagation(); 
                                     setTheme(theme === 'blue' ? 'pink' : 'blue'); 
                                 }}
-                                color={theme === 'blue' ? 'pink' : 'blue'}
                             />
 
                             {/* Settings */}
@@ -205,7 +199,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 icon={<Settings />}
                                 label="Ajustes"
                                 onClick={(e) => { e.stopPropagation(); ui.modales.setIsSettingsOpen(true); }}
-                                color="gray"
                             />
                         </>
                     ) : (
@@ -229,7 +222,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 </div>
 
                                 <div className={`flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <BookOpen className={`text-theme- shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
+                                    <BookOpen className={`text-theme-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                     {ui.isExpanded ? (
                                         <div className="flex-1 flex justify-between items-center">
                                             <span className="text-sm font-semibold text-slate-700">Materias selec.</span>
@@ -274,7 +267,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     if (name) actions.handlers.handleFinishCustomRoute?.(name);
                                 }}
                                 disabled={customRouteState.customSemestersCount === 0 || (customRouteState.customSemestersCount === 1 && customRouteState.customCurrentSemesterCount === 0)}
-                                color="indigo"
                                 variant="light"
                             />
 
@@ -284,7 +276,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     icon={<Calculator />}
                                     label="Matrícula"
                                     onClick={(e) => { e.stopPropagation(); ui.modales.setIsMatriculaModalOpen(true); }}
-                                    color="green"
                                 />
                             )}
 

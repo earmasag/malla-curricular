@@ -57,3 +57,15 @@
   
   --bg-app: var(--theme-50);
 }
+
+:root[data-theme="green"] {
+  /* Tema Verde */
+  --theme-50: #e8f5e9;
+  --theme-100: #c8e6c9;
+  --theme-200: #a5d6a7;
+  --theme-500: #2E7D32;
+  --theme-600: #1b5e20;
+  --theme-700: #14532d;
+  
+  --bg-app: var(--theme-50);
+}

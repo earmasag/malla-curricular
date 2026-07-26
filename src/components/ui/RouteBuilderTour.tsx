@@ -37,6 +37,12 @@ export const RouteBuilderTour: React.FC<RouteBuilderTourProps> = ({ run, steps, 
                     fontSize: '15px',
                     lineHeight: '1.6',
                 },
+                tooltipTitle: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    color: 'var(--theme-700)',
+                    marginBottom: '8px',
+                },
                 buttonPrimary: {
                     backgroundColor: 'var(--theme-500)',
                     borderRadius: '10px',

@@ -2,31 +2,58 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Step, EventData } from 'react-joyride';
 import { STATUS } from 'react-joyride';
 
+import React from 'react';
+
 const TOUR_STEPS: Step[] = [
     {
         target: '#tour-modo-constructor',
-        content: '¡Bienvenido al Modo Constructor! Aquí podrás planificar tu propia ruta académica semestre por semestre.',
+        title: '¡Modo Constructor!',
+        content: (
+            <span>
+                Aquí podrás planificar tu propia ruta académica <strong>semestre por semestre</strong>.
+            </span>
+        ),
         skipBeacon: true,
         placement: 'center',
     },
     {
         target: '#tour-malla-grid',
-        content: 'Haz clic en las materias de la malla que deseas cursar en tu primer semestre de planificación. Solo podrás seleccionar las que tengan sus prelaciones aprobadas.',
+        title: 'Selecciona tus materias',
+        content: (
+            <span>
+                Haz clic en las materias que deseas cursar en tu <strong>primer semestre de planificación</strong>. Solo podrás seleccionar aquellas que tengan sus <strong>prelaciones aprobadas</strong>.
+            </span>
+        ),
         placement: 'right',
     },
     {
         target: '#tour-stats',
-        content: 'Aquí verás cuántas Unidades de Crédito (UCs) y materias has seleccionado para el semestre actual que estás armando.',
+        title: 'Monitorea tu progreso',
+        content: (
+            <span>
+                Aquí verás cuántas <strong>Unidades de Crédito (UCs)</strong> y materias has seleccionado para el semestre que estás armando.
+            </span>
+        ),
         placement: 'right',
     },
     {
         target: '#tour-avanzar',
-        content: 'Una vez hayas seleccionado todas las materias para este semestre, haz clic aquí para avanzar y empezar a planificar el siguiente semestre. (Si te equivocas, aparecerá un botón para retroceder).',
+        title: 'Avanza al siguiente semestre',
+        content: (
+            <span>
+                Una vez hayas seleccionado <strong>todas las materias</strong> para este semestre, haz clic aquí para avanzar y empezar a planificar el siguiente. <em>(Si te equivocas, aparecerá un botón para retroceder)</em>.
+            </span>
+        ),
         placement: 'right',
     },
     {
         target: '#tour-guardar',
-        content: 'Cuando hayas terminado de planificar todos tus semestres, haz clic en "Guardar y Terminar" para nombrar y guardar tu nueva ruta personalizada.',
+        title: '¡Guarda tu ruta!',
+        content: (
+            <span>
+                Cuando hayas terminado de planificar todos tus semestres, haz clic en <strong>"Guardar y Terminar"</strong> para nombrar y guardar tu nueva ruta personalizada.
+            </span>
+        ),
         placement: 'right',
     }
 ];

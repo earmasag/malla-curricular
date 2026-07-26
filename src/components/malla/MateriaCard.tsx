@@ -1,4 +1,5 @@
 import React, { memo, useRef } from 'react';
+import { Check, Pencil } from 'lucide-react';
 import type { MateriaNode } from '../../types/materia';
 import areasColorData from '../../data/areas_color.json';
 
@@ -123,8 +124,12 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
             {(isAprobada || isCursando) && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit] z-30">
                     <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
-                        <div className={`absolute top-5 -right-5 w-28 text-white text-center transform rotate-45 py-0.5 shadow-sm ${isAprobada ? 'bg-emerald-500' : 'bg-blue-500'}`}>
-                            <span className="font-bold text-sm">{isAprobada ? '✓' : '✏️'}</span>
+                        <div className={`absolute top-5 -right-5 w-28 text-white flex justify-center items-center transform rotate-45 py-0.75shadow-sm ${isAprobada ? 'bg-emerald-500' : 'bg-blue-500'}`}>
+                            {isAprobada ? (
+                                <Check className="w-4 h-4" strokeWidth={4} />
+                            ) : (
+                                <Pencil className="w-3.5 h-3.5" strokeWidth={3} />
+                            )}
                         </div>
                     </div>
                 </div>

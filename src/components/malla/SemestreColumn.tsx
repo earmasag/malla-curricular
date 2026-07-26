@@ -71,8 +71,8 @@ export const SemestreColumn = memo(({
                         onClick={() => onToggleSemestre(numeroSemestre)}
                         className={`ml-2 w-7 h-7 flex items-center justify-center rounded-full transition-all border-2 cursor-pointer
                             ${todasAprobadas
-                                ? 'bg-green-500 border-green-500 text-white hover:bg-green-600 hover:border-green-600'
-                                : 'bg-white border-gray-300 text-gray-300 hover:text-green-500 hover:border-green-500'}`}
+                                ? 'bg-theme-500 border-theme-500 text-white hover:bg-theme-600 hover:border-theme-600'
+                                : 'bg-white border-gray-300 text-gray-300 hover:text-theme-500 hover:border-theme-500'}`}
                         title={todasAprobadas ? "Desaprobar Semestre" : "Aprobar Semestre"}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">

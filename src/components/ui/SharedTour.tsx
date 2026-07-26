@@ -1,5 +1,6 @@
 import React from 'react';
-import Joyride from 'react-joyride';
+import JoyrideComponent from 'react-joyride';
+const Joyride = JoyrideComponent as any;
 import type { Step, EventData } from 'react-joyride';
 import { useTheme, AVAILABLE_THEMES } from '../../contexts/ThemeContext';
 

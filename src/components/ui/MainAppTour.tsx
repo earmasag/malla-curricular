@@ -12,7 +12,7 @@ const TOUR_STEPS: Step[] = [
             </span>
         ),
         placement: 'right',
-        disableBeacon: true,
+        skipBeacon: true,
     },
     {
         target: '#tour-main-stats',

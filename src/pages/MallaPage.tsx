@@ -46,9 +46,9 @@ const MallaLayout = ({ planData }: { planData: any }) => {
 
     return (
         <div className="flex relative h-dvh w-dvw bg-(--bg-app) font-sans m-0 overflow-hidden text-gray-800 transition-colors">
-            
-            <NavigationSidebar 
-              totalMaterias={totalMaterias} 
+
+            <NavigationSidebar
+                totalMaterias={totalMaterias}
             />
 
             {modales.isMatriculaModalOpen && (
@@ -135,7 +135,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                             {/* Botones de Control de Zoom (Flotantes Inferior Derecha) */}
                             {!isMobile && <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} />}
 
-                            <TransformComponent 
+                            <TransformComponent
                                 wrapperStyle={{ width: "100%", height: "100%" }}
                                 wrapperClass="will-change-transform transform-gpu"
                             >

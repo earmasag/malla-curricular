@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Step, EventData } from 'react-joyride';
 import { STATUS } from 'react-joyride';
 
-import React from 'react';
+
 
 const TOUR_STEPS: Step[] = [
     {

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
-import { useTheme } from '../../../contexts/ThemeContext';
+import { useTheme, AVAILABLE_THEMES } from '../../../contexts/ThemeContext';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
 import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
 import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
@@ -192,29 +192,38 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                         setShowThemeOptions(!showThemeOptions);
                                     }}
                                 />
-                                {showThemeOptions && createPortal(
-                                    <div 
-                                        style={{ top: themeMenuPos.top, left: themeMenuPos.left, transform: 'translateY(-50%)' }}
-                                        className="fixed z-9999 flex gap-3 p-3 bg-theme-50/70 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/20 rounded-2xl"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        <button 
-                                            onClick={(e) => { e.stopPropagation(); setTheme('blue'); setShowThemeOptions(false); }}
-                                            className={`w-7 h-7 rounded-full bg-[#3b82f6] shadow-md border-2 ${theme === 'blue' ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
-                                            title="Azul"
-                                        />
-                                        <button 
-                                            onClick={(e) => { e.stopPropagation(); setTheme('pink'); setShowThemeOptions(false); }}
-                                            className={`w-7 h-7 rounded-full bg-[#ec4899] shadow-md border-2 ${theme === 'pink' ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
-                                            title="Rosado"
-                                        />
-                                        <button 
-                                            onClick={(e) => { e.stopPropagation(); setTheme('purple'); setShowThemeOptions(false); }}
-                                            className={`w-7 h-7 rounded-full bg-[#7B2CBF] shadow-md border-2 ${theme === 'purple' ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
-                                            title="Morado"
-                                        />
-                                    </div>,
-                                    document.body
+                                {/* Opciones de temas */}
+                                {showThemeOptions && (
+                                    ui.isMobile ? (
+                                        <div className="flex gap-3 px-4 py-2 bg-theme-100/50 rounded-xl mt-1 mx-2 justify-center" onClick={(e) => e.stopPropagation()}>
+                                            {AVAILABLE_THEMES.map(t => (
+                                                <button
+                                                    key={t.id}
+                                                    onClick={(e) => { e.stopPropagation(); setTheme(t.id); setShowThemeOptions(false); }}
+                                                    style={{ backgroundColor: t.hex }}
+                                                    className={`w-7 h-7 shrink-0 rounded-full shadow-md border-2 ${theme === t.id ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
+                                                    title={t.label}
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : createPortal(
+                                        <div 
+                                            style={{ top: themeMenuPos.top, left: themeMenuPos.left, transform: 'translateY(-50%)' }}
+                                            className="fixed z-9999 flex gap-3 p-3 bg-theme-50/70 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/20 rounded-2xl"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            {AVAILABLE_THEMES.map(t => (
+                                                <button
+                                                    key={t.id}
+                                                    onClick={(e) => { e.stopPropagation(); setTheme(t.id); setShowThemeOptions(false); }}
+                                                    style={{ backgroundColor: t.hex }}
+                                                    className={`w-7 h-7 rounded-full shadow-md border-2 ${theme === t.id ? 'border-gray-800 scale-110' : 'border-white/80 hover:scale-110'} transition-all`}
+                                                    title={t.label}
+                                                />
+                                            ))}
+                                        </div>,
+                                        document.body
+                                    )
                                 )}
                             </div>
 

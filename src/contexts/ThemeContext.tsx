@@ -1,6 +1,14 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
-export type Theme = 'blue' | 'pink' | 'purple';
+// Se define la lista de temas disponibles en un solo lugar.
+// Para agregar un tema, solo hay que añadir su CSS en index.css y registrarlo aquí.
+export const AVAILABLE_THEMES = [
+    { id: 'blue', label: 'Azul', hex: '#3b82f6' },
+    { id: 'pink', label: 'Rosado', hex: '#ec4899' },
+    { id: 'purple', label: 'Morado', hex: '#7B2CBF' }
+];
+
+export type Theme = string;
 
 interface ThemeContextType {
     theme: Theme;
@@ -12,7 +20,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const [theme, setThemeState] = useState<Theme>(() => {
         const saved = localStorage.getItem('malla-theme');
-        return (saved as Theme) || 'blue';
+        return saved || 'blue';
     });
 
     const setTheme = (newTheme: Theme) => {

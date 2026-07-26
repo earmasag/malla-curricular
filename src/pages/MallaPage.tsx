@@ -24,6 +24,12 @@ import areasColorData from '../data/areas_color.json';
 import { usePlanEstudio } from "../contexts/PlanContext";
 import { WelcomeModal } from "../components/modals/WelcomeModal";
 import { PlanSwitcherFloat } from "../components/layout/PlanSwitcherFloat";
+import { useTourPanHandler } from "../hooks/ui/useTourPanHandler";
+
+const TourPanHandler = ({ zoomToElement, currentScale }: { zoomToElement: any, currentScale: number }) => {
+    useTourPanHandler(zoomToElement, currentScale);
+    return null;
+};
 
 const MallaLayout = ({ planData }: { planData: any }) => {
     const { grafo, semestresArray, semestresMaterias, totalMaterias, totalUc, totalSemestres } = planData;
@@ -130,8 +136,9 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                     panning={{ velocityDisabled: true }}
                     alignmentAnimation={{ animationTime: 0, animationType: "linear" }}
                 >
-                    {({ zoomIn, zoomOut, resetTransform }) => (
+                    {({ zoomIn, zoomOut, resetTransform, zoomToElement }) => (
                         <React.Fragment>
+                            <TourPanHandler zoomToElement={zoomToElement} currentScale={0.8} />
                             {/* Botones de Control de Zoom (Flotantes Inferior Derecha) */}
                             {!isMobile && <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} />}
 

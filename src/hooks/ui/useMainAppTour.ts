@@ -38,6 +38,10 @@ export const useMainAppTour = (isCustomRouteMode: boolean) => {
         if (index !== undefined) {
             setStepIndex(index);
         }
+
+        if (index === 0 && data.type === 'step:before') {
+            window.dispatchEvent(new CustomEvent('tour:panTo', { detail: '.materia-card' }));
+        }
         
         if (finishedStatuses.includes(status)) {
             setRun(false);

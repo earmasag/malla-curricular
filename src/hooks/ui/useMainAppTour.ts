@@ -5,6 +5,7 @@ import { STATUS } from 'react-joyride';
 export const useMainAppTour = (isCustomRouteMode: boolean) => {
     const [run, setRun] = useState(false);
     const [hasMounted, setHasMounted] = useState(false);
+    const [stepIndex, setStepIndex] = useState(0);
 
     useEffect(() => {
         setHasMounted(true);
@@ -31,8 +32,12 @@ export const useMainAppTour = (isCustomRouteMode: boolean) => {
     }, []);
 
     const handleJoyrideCallback = useCallback((data: EventData) => {
-        const { status } = data;
+        const { status, index } = data;
         const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+        
+        if (index !== undefined) {
+            setStepIndex(index);
+        }
         
         if (finishedStatuses.includes(status)) {
             setRun(false);
@@ -42,6 +47,7 @@ export const useMainAppTour = (isCustomRouteMode: boolean) => {
 
     return {
         run,
+        stepIndex,
         startTourManually,
         handleJoyrideCallback
     };

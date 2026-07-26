@@ -28,12 +28,16 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
     const { themeMenu } = useSidebarInteractions(run, ui.setIsExpanded);
     const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
 
-    // Expandir el sidebar automáticamente en mobile si el tour principal arranca
+    // Expandir el sidebar automáticamente en mobile si el tour principal arranca, excepto en el paso inicial
     React.useEffect(() => {
-        if (mainTour.run && ui.isMobile && !ui.isExpanded) {
-            ui.setIsExpanded(true);
+        if (mainTour.run && ui.isMobile) {
+            if (mainTour.stepIndex > 0 && !ui.isExpanded) {
+                ui.setIsExpanded(true);
+            } else if (mainTour.stepIndex === 0 && ui.isExpanded) {
+                ui.setIsExpanded(false);
+            }
         }
-    }, [mainTour.run, ui.isMobile, ui.isExpanded, ui.setIsExpanded]);
+    }, [mainTour.run, mainTour.stepIndex, ui.isMobile, ui.isExpanded, ui.setIsExpanded]);
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded

@@ -27,13 +27,13 @@ export const RouteBuilderTour: React.FC<RouteBuilderTourProps> = ({ run, steps, 
             }}
             styles={{
                 tooltip: {
-                    borderRadius: '24px', // Match rounded-3xl/2xl of modals
-                    fontFamily: 'inherit',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', // shadow-2xl
-                    padding: '8px', // Outer padding for a roomier feel before the content
+                    borderRadius: '24px',
+                    fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                    padding: '28px', // Significant outer padding to push borders away
                 },
                 tooltipContent: {
-                    padding: '16px 8px 24px 8px', // Increased margins
+                    padding: '12px 0 24px 0',
                     fontSize: '15px',
                     lineHeight: '1.6',
                 },

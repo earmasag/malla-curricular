@@ -11,6 +11,8 @@ import { useTheme, AVAILABLE_THEMES } from '../../../contexts/ThemeContext';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
 import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
 import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
+import { useMainAppTour } from '../../../hooks/ui/useMainAppTour';
+import { MainAppTour } from '../../ui/MainAppTour';
 
 export interface NavigationSidebarProps {
     totalMaterias: number;
@@ -22,8 +24,16 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
     const { theme, setTheme } = useTheme();
     const { run, steps, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
+    const mainTour = useMainAppTour(customRouteState.isCustomRouteMode);
     const { themeMenu } = useSidebarInteractions(run, ui.setIsExpanded);
     const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
+
+    // Expandir el sidebar automáticamente en mobile si el tour principal arranca
+    React.useEffect(() => {
+        if (mainTour.run && ui.isMobile && !ui.isExpanded) {
+            ui.setIsExpanded(true);
+        }
+    }, [mainTour.run, ui.isMobile, ui.isExpanded, ui.setIsExpanded]);
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
@@ -64,7 +74,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                     {/* Regular Mode Stats */}
                     {!customRouteState.isCustomRouteMode ? (
                         <>
-                            <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
+                            <div id="tour-main-stats" className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
                                 {/* Aprobadas Stat */}
                                 <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <BookOpen className={`text-theme-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
@@ -127,6 +137,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                             {/* Actions */}
                             <SidebarButton
+                                id="tour-main-ruta-optima"
                                 isExpanded={ui.isExpanded}
                                 icon={<MapPath />}
                                 label="Ruta Óptima"
@@ -137,6 +148,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                             {actions.accionesCustom.startCustomRoute && (
                                 <SidebarButton
+                                    id="tour-main-crear-ruta"
                                     isExpanded={ui.isExpanded}
                                     icon={<Wrench />}
                                     label={customRouteState.hasDraftRoute ? "Volver al borrador" : "Crear Ruta"}
@@ -146,6 +158,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                             {ui.modales.isMatriculaModalOpen !== undefined && (
                                 <SidebarButton
+                                    id="tour-main-matricula"
                                     isExpanded={ui.isExpanded}
                                     icon={<Calculator />}
                                     label="Matrícula"
@@ -155,6 +168,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                             {actions.handlers.handleOpenMisRutas && (
                                 <SidebarButton
+                                    id="tour-main-mis-rutas"
                                     isExpanded={ui.isExpanded}
                                     icon={<Library />}
                                     label="Mis Rutas"
@@ -181,8 +195,17 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                             
                             <div className="h-px bg-slate-200 my-2 mx-2"></div>
 
+                            <SidebarButton
+                                isExpanded={ui.isExpanded}
+                                icon={<HelpCircle />}
+                                label="Tutorial"
+                                onClick={(e) => { e.stopPropagation(); mainTour.startTourManually(); }}
+                                color="theme"
+                                variant="ghost"
+                            />
+
                             {/* Theme Toggle */}
-                            <div ref={themeButtonRef} className="flex flex-col gap-1 relative">
+                            <div id="tour-main-temas" ref={themeButtonRef} className="flex flex-col gap-1 relative">
                                 <SidebarButton
                                     isExpanded={ui.isExpanded}
                                     icon={<Palette />}
@@ -348,7 +371,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
             {/* Bottom Actions Fixed Area */}
             {(!ui.isMobile || ui.isExpanded) && !customRouteState.isCustomRouteMode && (
-                <div className={`p-4 border-t border-gray-100 bg-gray-50/50 ${ui.isMobile ? 'rounded-b-none pb-8' : 'rounded-b-3xl'} ${!ui.isExpanded ? 'flex justify-center' : ''}`}>
+                <div id="tour-main-borrar-todo" className={`p-4 border-t border-gray-100 bg-gray-50/50 ${ui.isMobile ? 'rounded-b-none pb-8' : 'rounded-b-3xl'} ${!ui.isExpanded ? 'flex justify-center' : ''}`}>
                     <SidebarButton
                         isExpanded={ui.isExpanded}
                         icon={<Trash2 />}
@@ -361,6 +384,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
             )}
             
             <RouteBuilderTour run={run} steps={steps} handleJoyrideCallback={handleJoyrideCallback} />
+            <MainAppTour run={mainTour.run} steps={mainTour.steps} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
         </aside>
     );
 };

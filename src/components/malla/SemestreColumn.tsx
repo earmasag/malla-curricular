@@ -60,7 +60,7 @@ export const SemestreColumn = memo(({
     const todasAprobadas = materiasDelSemestre.length > 0 && materiasDelSemestre.every(m => progreso[m.codigoMateria] === 'aprobada');
 
     return (
-        <div className="flex flex-col gap-3 min-w-50">
+        <div id={numeroSemestre === 1 ? "tour-malla-grid" : undefined} className="flex flex-col gap-3 min-w-50">
             {/* Título de la Columna y Botón de Aprobar Todo */}
             <div className="flex items-center justify-between border-b-2 border-gray-300 pb-2 px-1">
                 <h2 className="text-xl font-bold text-gray-500 uppercase tracking-widest flex-1 text-center">

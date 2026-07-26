@@ -8,6 +8,7 @@ export interface SidebarButtonProps {
     color?: 'theme' | 'red' | 'gray';
     variant?: 'solid' | 'light' | 'ghost';
     disabled?: boolean;
+    id?: string;
 }
 
 const colorStyles = {
@@ -28,7 +29,7 @@ const colorStyles = {
     }
 };
 
-export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, label, onClick, color = 'theme', variant = 'ghost', disabled = false }) => {
+export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, label, onClick, color = 'theme', variant = 'ghost', disabled = false, id }) => {
     const baseClasses = "flex items-center rounded-xl transition-colors duration-200 relative group overflow-hidden shrink-0 border";
     const sizeClasses = isExpanded ? "p-3 px-4 w-full gap-3" : "justify-center p-3 w-14 h-14";
     const disabledClasses = disabled ? "opacity-50 cursor-not-allowed grayscale" : "cursor-pointer";
@@ -53,6 +54,7 @@ export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, 
 
     return (
         <button
+            id={id}
             onClick={(e) => {
                 if (!disabled) onClick(e);
             }}

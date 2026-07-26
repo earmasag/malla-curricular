@@ -3,11 +3,13 @@ import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info,  GraduationCap, Settings, Palette
+    Menu, LayoutDashboard, Info,  GraduationCap, Settings, Palette, HelpCircle
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
 import { useTheme } from '../../../contexts/ThemeContext';
+import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
+import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
 
 export interface NavigationSidebarProps {
     totalMaterias: number;
@@ -18,6 +20,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 }) => {
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
     const { theme, setTheme } = useTheme();
+    const { run, steps, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
     const [showThemeOptions, setShowThemeOptions] = useState(false);
     const themeButtonRef = useRef<HTMLDivElement>(null);
     const [themeMenuPos, setThemeMenuPos] = useState({ top: 0, left: 0 });
@@ -247,8 +250,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                     ) : (
                         // Custom Mode Stats & Actions
                         <>
-                            <div className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
-                                <div className={`flex justify-center items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 aspect-square flex-col gap-1 p-2' : ''}`}>
+                            <div id="tour-stats" className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
+                                <div id="tour-modo-constructor" className={`flex justify-center items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 aspect-square flex-col gap-1 p-2' : ''}`}>
                                     <Wrench className={`text-purple-600 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'} animate-pulse`} />
                                     {ui.isExpanded && <span className="font-bold text-sm text-slate-800">Modo Constructor</span>}
                                 </div>
@@ -280,6 +283,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                             <div className="h-px bg-slate-200 my-2 mx-2"></div>
 
                             <SidebarButton
+                                id="tour-avanzar"
                                 isExpanded={ui.isExpanded}
                                 icon={<ArrowRight />}
                                 label="Avanzar Semestre"
@@ -301,6 +305,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                             )}
 
                             <SidebarButton
+                                id="tour-guardar"
                                 isExpanded={ui.isExpanded}
                                 icon={<Flag />}
                                 label="Guardar y Terminar"
@@ -311,6 +316,15 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 }}
                                 disabled={customRouteState.customSemestersCount === 0 || (customRouteState.customSemestersCount === 1 && customRouteState.customCurrentSemesterCount === 0)}
                                 variant="light"
+                            />
+                            
+                            <SidebarButton
+                                isExpanded={ui.isExpanded}
+                                icon={<HelpCircle />}
+                                label="Tutorial"
+                                onClick={(e) => { e.stopPropagation(); startTourManually(); }}
+                                color="theme"
+                                variant="ghost"
                             />
 
                             {ui.modales.isMatriculaModalOpen !== undefined && (
@@ -357,6 +371,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                     />
                 </div>
             )}
+            
+            <RouteBuilderTour run={run} steps={steps} handleJoyrideCallback={handleJoyrideCallback} />
         </aside>
     );
 };

@@ -31,12 +31,12 @@ export const LeyendaModal: React.FC<LeyendaModalProps> = ({
             >
                 <ModalHeader 
                     title={
-                        <div className="font-extrabold text-[12px] sm:text-lg tracking-wider uppercase flex-1 text-[#1e293b] flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center w-full">
+                        <div className="font-extrabold text-[12px] sm:text-lg tracking-wider uppercase flex-1 text-black flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center w-full">
                             <span>{tituloCarrera}</span> 
                             <span className="hidden sm:inline text-gray-300">|</span> 
                             <span className="text-theme-500">{totalSemestres} SEMESTRES</span> 
                             <span className="text-gray-300">|</span> 
-                            <span className="text-amber-600">{totalUc} UC</span>
+                            <span className="text-theme-500">{totalUc} UC</span>
                         </div>
                     }
                     onClose={onClose}

@@ -10,7 +10,7 @@ interface ModalHeaderProps {
 
 export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, icon, onClose, rightContent }) => {
     return (
-        <div className="flex items-center justify-between px-5 sm:px-6 py-4 bg-gray-50/50 border-b border-gray-100 shrink-0">
+        <div className="flex items-center justify-between px-5 sm:px-6 py-4 bg-theme-50/50 border-b border-theme-100/50 shrink-0">
             <div className="flex items-center gap-3">
                 {icon && <div className="text-theme-500 [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6 flex items-center justify-center shrink-0">{icon}</div>}
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 flex items-center gap-2 m-0 p-0 leading-none">

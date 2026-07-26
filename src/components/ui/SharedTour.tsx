@@ -1,6 +1,6 @@
 import React from 'react';
-import JoyrideComponent from 'react-joyride';
-const Joyride = JoyrideComponent as any;
+import {Joyride} from 'react-joyride';
+
 import type { Step, EventData } from 'react-joyride';
 import { useTheme, AVAILABLE_THEMES } from '../../contexts/ThemeContext';
 
@@ -20,7 +20,9 @@ export const SharedTour: React.FC<SharedTourProps> = ({ run, steps, handleJoyrid
             onEvent={handleJoyrideCallback}
             continuous
             run={run}
-            scrollToFirstStep
+            scrollToFirstStep={false}
+            disableScrolling={true}
+            showSkipButton={true}
             steps={steps}
             options={{
                 showProgress: true,

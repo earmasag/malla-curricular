@@ -20,22 +20,37 @@ export const RouteBuilderTour: React.FC<RouteBuilderTourProps> = ({ run, steps, 
                 showProgress: true,
                 buttons: ['back', 'primary', 'skip'],
                 zIndex: 10000,
-                primaryColor: '#3b82f6',
-                textColor: '#1f2937',
+                primaryColor: 'var(--theme-500)',
+                textColor: '#334155', // slate-700
                 backgroundColor: '#ffffff',
-                overlayColor: 'rgba(0, 0, 0, 0.5)'
+                overlayColor: 'rgba(0, 0, 0, 0.4)'
             }}
             styles={{
+                tooltip: {
+                    borderRadius: '24px', // Match rounded-3xl/2xl of modals
+                    fontFamily: 'inherit',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', // shadow-2xl
+                    padding: '8px', // Outer padding for a roomier feel before the content
+                },
+                tooltipContent: {
+                    padding: '16px 8px 24px 8px', // Increased margins
+                    fontSize: '15px',
+                    lineHeight: '1.6',
+                },
                 buttonPrimary: {
-                    backgroundColor: '#3b82f6',
-                    borderRadius: '8px',
+                    backgroundColor: 'var(--theme-500)',
+                    borderRadius: '10px',
+                    fontWeight: 600,
+                    padding: '8px 16px',
                 },
                 buttonBack: {
-                    color: '#6b7280', // gray-500
+                    color: '#64748b', // slate-500
                     marginRight: '8px',
+                    fontWeight: 500,
                 },
                 buttonSkip: {
-                    color: '#6b7280',
+                    color: '#94a3b8', // slate-400
+                    fontWeight: 500,
                 },
                 tooltipContainer: {
                     textAlign: 'left'

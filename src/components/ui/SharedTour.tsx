@@ -32,7 +32,18 @@ export const SharedTour: React.FC<SharedTourProps> = ({ run, steps, handleJoyrid
                 overlayColor: 'rgba(0, 0, 0, 0.4)'
             }}
             styles={{
+                overlay: {
+                    pointerEvents: 'none'
+                },
+                spotlight: {
+                    pointerEvents: 'none'
+                },
+                tooltipContainer: {
+                    pointerEvents: 'auto',
+                    textAlign: 'left'
+                },
                 tooltip: {
+                    pointerEvents: 'auto',
                     borderRadius: '24px',
                     fontFamily: 'var(--font-sans)',
                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
@@ -63,10 +74,7 @@ export const SharedTour: React.FC<SharedTourProps> = ({ run, steps, handleJoyrid
                 buttonSkip: {
                     color: '#94a3b8', // slate-400
                     fontWeight: 500,
-                },
-                tooltipContainer: {
-                    textAlign: 'left'
-                },
+                }
             }}
             locale={{
                 back: 'Atrás',

@@ -11,7 +11,7 @@ const TOUR_STEPS: Step[] = [
                 Haz clic en una materia para marcarla como <strong>Aprobada</strong>. Si haces clic de nuevo pasará a <strong>Cursando</strong>, y con un tercer clic volverá a la normalidad. ¡También puedes usar clic derecho para marcar que la estás cursando ahora mismo!
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
         skipBeacon: true,
     },
     {
@@ -22,7 +22,7 @@ const TOUR_STEPS: Step[] = [
                 Aquí podrás ver de un vistazo cuántas materias y Unidades de Crédito has aprobado, y en qué semestre te encuentras.
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
     },
     {
         target: '#tour-main-ruta-optima',
@@ -32,7 +32,7 @@ const TOUR_STEPS: Step[] = [
                 Este botón te sugiere automáticamente las mejores materias que deberías inscribir en tu próximo semestre para no atrasarte.
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
     },
     {
         target: '#tour-main-crear-ruta',
@@ -42,7 +42,7 @@ const TOUR_STEPS: Step[] = [
                 Entra al Modo Constructor para planificar de forma interactiva tu futuro académico semestre por semestre.
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
     },
     {
         target: '#tour-main-matricula',
@@ -52,7 +52,7 @@ const TOUR_STEPS: Step[] = [
                 Calcula de forma rápida el costo estimado de tu próximo semestre basándote en las UCs que planeas cursar.
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
     },
     {
         target: '#tour-main-mis-rutas',
@@ -62,7 +62,7 @@ const TOUR_STEPS: Step[] = [
                 Aquí podrás gestionar y cargar todas las rutas personalizadas que hayas guardado previamente.
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
     },
     {
         target: '#tour-main-temas',
@@ -72,7 +72,7 @@ const TOUR_STEPS: Step[] = [
                 Elige entre los distintos colores de temas disponibles para que la malla luzca exactamente a tu gusto.
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
     },
     {
         target: '#tour-main-borrar-todo',
@@ -82,7 +82,7 @@ const TOUR_STEPS: Step[] = [
                 Si alguna vez deseas empezar de cero, usa este botón para borrar tu progreso actual.
             </span>
         ),
-        placement: 'right',
+        placement: 'auto',
     }
 ];
 

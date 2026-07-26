@@ -28,12 +28,12 @@ export const RouteBuilderTour: React.FC<RouteBuilderTourProps> = ({ run, steps, 
             styles={{
                 tooltip: {
                     borderRadius: '24px',
-                    fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                    fontFamily: 'var(--font-sans)',
                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                     padding: '28px', // Significant outer padding to push borders away
                 },
                 tooltipContent: {
-                    padding: '12px 0 24px 0',
+                    padding: '12px 0 12px 0',
                     fontSize: '15px',
                     lineHeight: '1.6',
                 },

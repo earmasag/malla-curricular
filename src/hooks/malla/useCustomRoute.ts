@@ -121,8 +121,14 @@ export const useCustomRoute = (grafo: MallaCurricularGraph, progresoBase: Progre
     // Efecto secundario: Cada vez que cambiamos los customSemesters en modo constructor, la persistimos.
     useEffect(() => {
         if (isCustomRouteMode && customSemesters.length > 0) {
-            repository.saveDraftRoute(customSemesters);
-            setHasDraftRoute(true);
+            const hasValidRoute = customSemesters.some((s: string[]) => s.length > 0);
+            if (hasValidRoute) {
+                repository.saveDraftRoute(customSemesters);
+                setHasDraftRoute(true);
+            } else {
+                repository.clearDraftRoute();
+                setHasDraftRoute(false);
+            }
         }
     }, [customSemesters, isCustomRouteMode, repository]);
 

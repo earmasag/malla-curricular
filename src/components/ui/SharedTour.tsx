@@ -20,12 +20,10 @@ export const SharedTour: React.FC<SharedTourProps> = ({ run, steps, handleJoyrid
             onEvent={handleJoyrideCallback}
             continuous
             run={run}
-            scrollToFirstStep={false}
-            disableScrolling={true}
-            showSkipButton={true}
             steps={steps}
             options={{
                 showProgress: true,
+                skipScroll: true,
                 buttons: ['back', 'primary', 'skip'],
                 zIndex: 10000,
                 primaryColor: activeThemeHex,

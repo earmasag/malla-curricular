@@ -10,6 +10,7 @@ import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
 import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
+import { useSidebarInteractions } from './useSidebarInteractions';
 
 export interface NavigationSidebarProps {
     totalMaterias: number;
@@ -21,30 +22,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
     const { theme, setTheme } = useTheme();
     const { run, steps, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
-    const [showThemeOptions, setShowThemeOptions] = useState(false);
-    const themeButtonRef = useRef<HTMLDivElement>(null);
-    const [themeMenuPos, setThemeMenuPos] = useState({ top: 0, left: 0 });
-
-    useEffect(() => {
-        if (showThemeOptions && themeButtonRef.current) {
-            const rect = themeButtonRef.current.getBoundingClientRect();
-            setThemeMenuPos({ top: rect.top + rect.height / 2, left: rect.right + 16 });
-        }
-    }, [showThemeOptions]);
-
-    useEffect(() => {
-        const handleHide = () => setShowThemeOptions(false);
-        if (showThemeOptions) {
-            window.addEventListener('resize', handleHide);
-            document.addEventListener('scroll', handleHide, true);
-            document.addEventListener('click', handleHide);
-        }
-        return () => {
-            window.removeEventListener('resize', handleHide);
-            document.removeEventListener('scroll', handleHide, true);
-            document.removeEventListener('click', handleHide);
-        };
-    }, [showThemeOptions]);
+    const { themeMenu } = useSidebarInteractions(run, ui.setIsExpanded);
+    const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded

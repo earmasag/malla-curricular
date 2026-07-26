@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
@@ -10,7 +10,7 @@ import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
 import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
-import { useSidebarInteractions } from './useSidebarInteractions';
+import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
 
 export interface NavigationSidebarProps {
     totalMaterias: number;

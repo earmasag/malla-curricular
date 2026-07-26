@@ -1,7 +1,7 @@
 import React from 'react';
-import Joyride, { type Step, type EventData } from 'react-joyride';
-import { useTheme } from '../../../contexts/ThemeContext';
-import { AVAILABLE_THEMES } from '../../../contexts/ThemeContext';
+import Joyride from 'react-joyride';
+import type { Step, EventData } from 'react-joyride';
+import { useTheme, AVAILABLE_THEMES } from '../../contexts/ThemeContext';
 
 interface MainAppTourProps {
     run: boolean;

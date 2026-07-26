@@ -23,7 +23,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 }) => {
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
     const { theme, setTheme } = useTheme();
-    const { run, steps, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
+    const { run, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
     const mainTour = useMainAppTour(customRouteState.isCustomRouteMode);
     const { themeMenu } = useSidebarInteractions(run, ui.setIsExpanded);
     const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
@@ -383,8 +383,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                 </div>
             )}
             
-            <RouteBuilderTour run={run} steps={steps} handleJoyrideCallback={handleJoyrideCallback} />
-            <MainAppTour run={mainTour.run} steps={mainTour.steps} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
+            <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
+            <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
         </aside>
     );
 };

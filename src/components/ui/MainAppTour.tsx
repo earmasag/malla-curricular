@@ -15,6 +15,16 @@ const TOUR_STEPS: Step[] = [
         skipBeacon: true,
     },
     {
+        target: '#tour-main-plan-switcher',
+        title: 'Múltiples Planes de Estudio',
+        content: (
+            <span>
+                Puedes cambiar entre el <strong>Plan 2024</strong> y el <strong>Plan 2027</strong>. Además, si estás en el Plan 2024, verás un botón para <strong>calcular y migrar automáticamente</strong> tu progreso al nuevo plan.
+            </span>
+        ),
+        placement: 'bottom',
+    },
+    {
         target: '#tour-main-stats',
         title: 'Tu progreso académico',
         content: (

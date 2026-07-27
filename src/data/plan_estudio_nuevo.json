@@ -511,7 +511,7 @@
     "semestre": 4,
     "areaFormacion": "Ingeniería de Software",
     "ucRequeridas": 0,
-    "correquisito": []
+    "correquisito": ["INFO-02003"]
   },
   {
     "departamento": "UCAB",

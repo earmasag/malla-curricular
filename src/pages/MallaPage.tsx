@@ -32,7 +32,7 @@ const TourPanHandler = ({ zoomToElement, currentScale }: { zoomToElement: any, c
 };
 
 const MallaLayout = ({ planData }: { planData: any }) => {
-    const { grafo, semestresArray, semestresMaterias, totalMaterias, totalUc, totalSemestres } = planData;
+    const { grafo, semestresArray, semestresMaterias, semestresAcumUC, totalMaterias, totalUc, totalSemestres } = planData;
     const contentRef = useRef<HTMLDivElement>(null);
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
@@ -160,6 +160,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                                                     key={`semestre-${numeroSemestre}`}
                                                     numeroSemestre={numeroSemestre}
                                                     materiasDelSemestre={semestresMaterias[index]}
+                                                    acumUC={semestresAcumUC[index]}
                                                 />
                                             );
                                         })}

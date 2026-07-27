@@ -13,6 +13,7 @@ export interface PlanData {
     grafo: MallaCurricularGraph;
     semestresArray: number[];
     semestresMaterias: any[][];
+    semestresAcumUC: number[];
     totalMaterias: number;
     totalUc: number;
     totalSemestres: number;
@@ -64,10 +65,18 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
                 .sort((a: any, b: any) => b.areaFormacion.localeCompare(a.areaFormacion));
         });
 
+        let runningAcum = 0;
+        const semestresAcumUC = semestresMaterias.map(materias => {
+            const sum = materias.reduce((acc: number, m: any) => acc + (m.unidadesCredito || 0), 0);
+            runningAcum += sum;
+            return runningAcum;
+        });
+
         return {
             grafo,
             semestresArray,
             semestresMaterias,
+            semestresAcumUC,
             totalMaterias,
             totalUc,
             totalSemestres

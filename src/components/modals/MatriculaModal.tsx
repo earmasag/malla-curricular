@@ -258,6 +258,15 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                     </div>
                                 </div>
                             )}
+
+                            <div className="mt-2 text-xs text-amber-700 bg-amber-50/80 p-3 sm:p-4 rounded-xl border border-amber-200/60 flex gap-3 items-start">
+                                <Info className="w-5 h-5 shrink-0 text-amber-500 mt-0.5" />
+                                <p>
+                                    <strong>Nota importante:</strong> Este es un cálculo referencial y estimado para facilitar la planificación. 
+                                    Los montos y condiciones definitivas deben ser verificados directamente con la 
+                                    administración de la universidad; no debe confiarse a cabalidad en esta herramienta como presupuesto oficial.
+                                </p>
+                            </div>
                         </>
                     )}
                 </div>

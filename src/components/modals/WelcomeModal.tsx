@@ -1,19 +1,23 @@
 import { usePlanEstudio } from '../../contexts/PlanContext';
 import type { PlanId } from '../../contexts/PlanContext';
+import { useCarrera } from '../../contexts/CarreraContext';
+import { CARRERAS_DISPONIBLES } from '../../data/carreras';
 import { BookOpen } from 'lucide-react';
 
 export const WelcomeModal = () => {
     const { setActivePlanId } = usePlanEstudio();
+    const { activeCarreraId } = useCarrera();
 
     const handleSelectPlan = (plan: PlanId) => {
         setActivePlanId(plan);
     };
 
+    const carreraActiva = CARRERAS_DISPONIBLES.find(c => c.id === activeCarreraId);
+
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-300">
             <div className="bg-white rounded-3xl p-8 md:p-10 w-full max-w-lg shadow-2xl relative animate-in zoom-in-95 duration-300">
-                
-                <div className="flex flex-col items-center text-center mb-8">
+                <div className="flex flex-col items-center text-center mb-8 mt-4">
                     <div className="bg-theme-50 text-theme-600 p-4 rounded-full mb-4">
                         <BookOpen className="w-10 h-10" />
                     </div>
@@ -21,7 +25,7 @@ export const WelcomeModal = () => {
                         ¡Bienvenido a tu Malla Curricular!
                     </h2>
                     <p className="text-gray-500 mt-3 text-lg leading-relaxed">
-                        Para comenzar, selecciona el plan de estudio bajo el cual estás cursando la carrera de Ingeniería Informática.
+                        Selecciona el plan de estudio bajo el cual estás cursando la carrera de <strong className="font-semibold text-gray-700">{carreraActiva?.nombre || 'Ingeniería en Informática'}</strong>.
                     </p>
                 </div>
 

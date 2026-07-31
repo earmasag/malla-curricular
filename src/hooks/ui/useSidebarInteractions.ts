@@ -88,9 +88,9 @@ export const useSidebarInteractions = ({
     // Auto-expand on mobile during main tour
     useEffect(() => {
         if (mainTourRun && isMobile) {
-            if (mainTourStepIndex > 0 && !isExpanded) {
+            if (mainTourStepIndex > 1 && !isExpanded) {
                 setIsExpanded(true);
-            } else if (mainTourStepIndex === 0 && isExpanded) {
+            } else if (mainTourStepIndex <= 1 && isExpanded) {
                 setIsExpanded(false);
             }
         }

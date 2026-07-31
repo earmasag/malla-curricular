@@ -180,6 +180,26 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 />
                             )}
 
+                            {/* 
+                            <SidebarButton
+                                isExpanded={ui.isExpanded}
+                                icon={<GraduationCap />}
+                                label="Cambiar Carrera"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    // Resetting plan ID unmounts MallaPage and mounts WelcomeModal
+                                    // which resets the state. We don't need to unset carrera ID 
+                                    // because the WelcomeModal has a back button to change career if wanted.
+                                    // But actually we could do it through a custom event or context.
+                                    // Let's use localStorage and reload for a completely fresh start since 
+                                    // contexts are spread out.
+                                    localStorage.removeItem('malla-active-plan');
+                                    localStorage.removeItem('malla-active-carrera');
+                                    window.location.reload();
+                                }}
+                            />
+                            */}
+
                             <SidebarButton
                                 id="tour-main-sugerencias"
                                 isExpanded={ui.isExpanded}

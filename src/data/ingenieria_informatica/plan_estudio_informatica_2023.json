@@ -1,5 +1,75 @@
-[
-    {
+{
+  "INFORMATICA": {
+    "semestres": {
+      "1": {
+        "uc": 25,
+        "ucAcumulada": 25
+      },
+      "2": {
+        "uc": 31,
+        "ucAcumulada": 56
+      },
+      "3": {
+        "uc": 33,
+        "ucAcumulada": 89
+      },
+      "4": {
+        "uc": 31,
+        "ucAcumulada": 120
+      },
+      "5": {
+        "uc": 31,
+        "ucAcumulada": 151
+      },
+      "6": {
+        "uc": 31,
+        "ucAcumulada": 182
+      },
+      "7": {
+        "uc": 34,
+        "ucAcumulada": 216
+      },
+      "8": {
+        "uc": 49,
+        "ucAcumulada": 265
+      }
+    },
+    "areas_color": [
+      {
+        "areaFormacion": "Lógica y Programación",
+        "colorCodigo": "#1E88E5"
+      },
+      {
+        "areaFormacion": "Ingeniería de Software",
+        "colorCodigo": "#4CAF50"
+      },
+      {
+        "areaFormacion": "Telemática",
+        "colorCodigo": "#FF9800"
+      },
+      {
+        "areaFormacion": "Fundamentos de Ingeniería",
+        "colorCodigo": "#78909C"
+      },
+      {
+        "areaFormacion": "Formación Gerencial",
+        "colorCodigo": "#AB47BC"
+      },
+      {
+        "areaFormacion": "Formación Integral",
+        "colorCodigo": "#FBC02D"
+      },
+      {
+        "areaFormacion": "Electivas",
+        "colorCodigo": "#00A896"
+      },
+      {
+        "areaFormacion": "Prácticas Profesionales",
+        "colorCodigo": "#E91E63"
+      }
+    ],
+    "materias": [
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02002",
         "nombre": "Álgebra y Trigonometría",
@@ -16,9 +86,10 @@
         "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02009",
         "nombre": "Lógica",
@@ -35,9 +106,10 @@
         "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02008",
         "nombre": "Fundamentos de Programación",
@@ -54,9 +126,10 @@
         "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "ADCO",
         "codigoMateria": "ADCO-00350",
         "nombre": "Principios de Marketing",
@@ -73,9 +146,10 @@
         "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Formación Gerencial",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "UCAB",
         "codigoMateria": "UCAB-00009",
         "nombre": "Competencia Textual en Español",
@@ -92,9 +166,10 @@
         "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "UCAB",
         "codigoMateria": "UCAB-00001",
         "nombre": "Identidad, Liderazgo y Compromiso I",
@@ -111,9 +186,10 @@
         "prelacion": [],
         "semestre": 1,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02003",
         "nombre": "Cálculo Diferencial",
@@ -128,13 +204,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02002"
+          "FING-02002"
         ],
         "semestre": 2,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02001",
         "nombre": "Álgebra Lineal",
@@ -149,13 +226,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02002"
+          "FING-02002"
         ],
         "semestre": 2,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02000",
         "nombre": "Matemáticas Discretas",
@@ -170,13 +248,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02009"
+          "FING-02009"
         ],
         "semestre": 2,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02001",
         "nombre": "Algoritmos y Programación",
@@ -191,13 +270,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "FING-02008"
+          "FING-02008"
         ],
         "semestre": 2,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02002",
         "nombre": "Algoritmos y Estructuras de Datos",
@@ -216,10 +296,10 @@
         "areaFormacion": "Lógica y Programación",
         "ucRequeridas": 0,
         "correquisito": [
-            "INFO-02001"
+          "INFO-02001"
         ]
-    },
-    {
+      },
+      {
         "departamento": "UCAB",
         "codigoMateria": "UCAB-00002",
         "nombre": "Identidad, Liderazgo y Compromiso II",
@@ -234,13 +314,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-1",
         "prelacion": [
-            "UCAB-00001"
+          "UCAB-00001"
         ],
         "semestre": 2,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02004",
         "nombre": "Cálculo Integral",
@@ -255,13 +336,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02003"
+          "FING-02003"
         ],
         "semestre": 3,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02015",
         "nombre": "Física General",
@@ -276,13 +358,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02003"
+          "FING-02003"
         ],
         "semestre": 3,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02003",
         "nombre": "Programación Orientada a Objetos",
@@ -297,14 +380,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "INFO-02002",
-            "INFO-02001"
+          "INFO-02002"
         ],
         "semestre": 3,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02004",
         "nombre": "Sistemas de Información",
@@ -321,9 +404,10 @@
         "prelacion": [],
         "semestre": 3,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 56
-    },
-    {
+        "ucRequeridas": 56,
+        "correquisito": []
+      },
+      {
         "departamento": "FACE",
         "codigoMateria": "FACE-00024",
         "nombre": "Contabilidad Financiera",
@@ -340,9 +424,10 @@
         "prelacion": [],
         "semestre": 3,
         "areaFormacion": "Formación Gerencial",
-        "ucRequeridas": 56
-    },
-    {
+        "ucRequeridas": 56,
+        "correquisito": []
+      },
+      {
         "departamento": "UCAB",
         "codigoMateria": "UCAB-00008",
         "nombre": "Innovación y Emprendimiento",
@@ -359,9 +444,10 @@
         "prelacion": [],
         "semestre": 3,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 56
-    },
-    {
+        "ucRequeridas": 56,
+        "correquisito": []
+      },
+      {
         "departamento": "UCAB",
         "codigoMateria": "UCAB-00003",
         "nombre": "Ecología, Ambiente y Sustentabilidad",
@@ -378,9 +464,10 @@
         "prelacion": [],
         "semestre": 3,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 44
-    },
-    {
+        "ucRequeridas": 44,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02005",
         "nombre": "Cálculo Vectorial",
@@ -395,13 +482,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02004"
+          "FING-02004"
         ],
         "semestre": 4,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02006",
         "nombre": "Ecuaciones Diferenciales Ordinarias",
@@ -416,13 +504,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02004"
+          "FING-02004"
         ],
         "semestre": 4,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02006",
         "nombre": "Programación Orientada a la Web",
@@ -437,13 +526,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "INFO-02003"
+          "INFO-02003"
         ],
         "semestre": 4,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02007",
         "nombre": "Ingeniería de Software",
@@ -458,13 +548,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02004"
+          "INFO-02004"
         ],
         "semestre": 4,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02008",
         "nombre": "Interacción Humano-Computador",
@@ -483,10 +574,10 @@
         "areaFormacion": "Ingeniería de Software",
         "ucRequeridas": 0,
         "correquisito": [
-            "INFO-02007"
+          "INFO-02007"
         ]
-    },
-    {
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02005",
         "nombre": "Organización del Computador",
@@ -501,13 +592,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02000"
+          "INFO-02000"
         ],
         "semestre": 4,
         "areaFormacion": "Telemática",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02016",
         "nombre": "Ingeniería Económica",
@@ -522,13 +614,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FACE-00024"
+          "FACE-00024"
         ],
         "semestre": 4,
         "areaFormacion": "Formación Gerencial",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02007",
         "nombre": "Electricidad y Magnetismo",
@@ -543,13 +636,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02015"
+          "FING-02015"
         ],
         "semestre": 5,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02013",
         "nombre": "Laboratorio de Física",
@@ -568,10 +662,10 @@
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
         "correquisito": [
-            "FING-02007"
+          "FING-02007"
         ]
-    },
-    {
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02011",
         "nombre": "Tópicos Especiales de Programación",
@@ -586,13 +680,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "INFO-02003"
+          "INFO-02003"
         ],
         "semestre": 5,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02013",
         "nombre": "Gestión de Proyectos de Software",
@@ -607,14 +702,15 @@
         "modalidad": "VIT",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02016",
-            "INFO-02007"
+          "FING-02016",
+          "INFO-02007"
         ],
         "semestre": 5,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02012",
         "nombre": "Sistemas de Bases de Datos",
@@ -631,9 +727,10 @@
         "prelacion": [],
         "semestre": 5,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 107
-    },
-    {
+        "ucRequeridas": 107,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02010",
         "nombre": "Sistemas Operativos",
@@ -648,13 +745,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02005"
+          "INFO-02005"
         ],
         "semestre": 5,
         "areaFormacion": "Telemática",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02011",
         "nombre": "Probabilidad y Estadística",
@@ -669,13 +767,34 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02004"
+          "FING-02004"
         ],
         "semestre": 5,
-        "areaFormacion": "Formación Gerencial",
-        "ucRequeridas": 0
-    },
-    {
+        "areaFormacion": "Fundamentos de Ingeniería",
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
+        "departamento": "CURSO",
+        "codigoMateria": "CURSO-SC",
+        "nombre": "Curso Servicio Comunitario",
+        "horasTeoricas": 0,
+        "horasPracticas": 0,
+        "horasLaboratorio": 0,
+        "horasPresenciales": 0,
+        "horasAutonomas": 0,
+        "horasTotales": 0,
+        "unidadesCredito": 0,
+        "tipo": "C",
+        "modalidad": "PRE",
+        "taxonomia": "-",
+        "prelacion": [],
+        "semestre": 6,
+        "areaFormacion": "Formación Integral",
+        "ucRequeridas": 120,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02010",
         "nombre": "Métodos Numéricos",
@@ -690,13 +809,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "FING-02005"
+          "FING-02005"
         ],
         "semestre": 6,
         "areaFormacion": "Fundamentos de Ingeniería",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02017",
         "nombre": "Tópicos Especiales para la Gestión de Datos",
@@ -711,13 +831,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02012"
+          "INFO-02012"
         ],
         "semestre": 6,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02018",
         "nombre": "Ingeniería de Requisitos",
@@ -732,14 +853,15 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02012",
-            "INFO-02013"
+          "INFO-02012",
+          "INFO-02013"
         ],
         "semestre": 6,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02019",
         "nombre": "Aseguramiento de la Calidad del Software",
@@ -754,13 +876,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02013"
+          "INFO-02013"
         ],
         "semestre": 6,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02015",
         "nombre": "Arquitectura del Computador Aplicada",
@@ -775,13 +898,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "FING-02007"
+          "FING-02007"
         ],
         "semestre": 6,
         "areaFormacion": "Telemática",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02016",
         "nombre": "Redes de Comunicación de Datos",
@@ -796,13 +920,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "INFO-02010"
+          "INFO-02010"
         ],
         "semestre": 6,
         "areaFormacion": "Telemática",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02014",
         "nombre": "Inglés I",
@@ -819,9 +944,52 @@
         "prelacion": [],
         "semestre": 6,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 25
-    },
-    {
+        "ucRequeridas": 25,
+        "correquisito": []
+      },
+      {
+        "departamento": "INFO",
+        "codigoMateria": "INFO-IILCT",
+        "nombre": "Curso de Trabajo de Grado",
+        "horasTeoricas": 0,
+        "horasPracticas": 0,
+        "horasLaboratorio": 0,
+        "horasPresenciales": 0,
+        "horasAutonomas": 0,
+        "horasTotales": 0,
+        "unidadesCredito": 0,
+        "tipo": "C",
+        "modalidad": "PRE",
+        "taxonomia": "-",
+        "prelacion": [],
+        "semestre": 6,
+        "areaFormacion": "Prácticas Profesionales",
+        "ucRequeridas": 151,
+        "correquisito": []
+      },
+      {
+        "departamento": "PROY",
+        "codigoMateria": "PROY-SC",
+        "nombre": "Servicio Comunitario",
+        "horasTeoricas": 0,
+        "horasPracticas": 0,
+        "horasLaboratorio": 0,
+        "horasPresenciales": 0,
+        "horasAutonomas": 0,
+        "horasTotales": 0,
+        "unidadesCredito": 0,
+        "tipo": "C",
+        "modalidad": "PRE",
+        "taxonomia": "-",
+        "prelacion": [
+          "CURSO-SC"
+        ],
+        "semestre": 7,
+        "areaFormacion": "Formación Integral",
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02020",
         "nombre": "Inteligencia Artificial: Aprendizaje Automático",
@@ -838,9 +1006,10 @@
         "prelacion": [],
         "semestre": 7,
         "areaFormacion": "Lógica y Programación",
-        "ucRequeridas": 167
-    },
-    {
+        "ucRequeridas": 167,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02024",
         "nombre": "Inteligencia de Negocios",
@@ -857,9 +1026,10 @@
         "prelacion": [],
         "semestre": 7,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 167
-    },
-    {
+        "ucRequeridas": 167,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02025",
         "nombre": "Desarrollo de Software",
@@ -874,14 +1044,15 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02018",
-            "INFO-02019"
+          "INFO-02018",
+          "INFO-02019"
         ],
         "semestre": 7,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02023",
         "nombre": "Ciberseguridad",
@@ -896,13 +1067,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "INFO-02016"
+          "INFO-02016"
         ],
         "semestre": 7,
         "areaFormacion": "Telemática",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02022",
         "nombre": "Investigación de Operaciones",
@@ -914,17 +1086,60 @@
         "horasTotales": 10,
         "unidadesCredito": 5,
         "tipo": "C*",
-        "modalidad": "PRE",
+        "modalidad": "PRE-1",
         "taxonomia": "TA-4",
         "prelacion": [
-            "FING-02011",
-            "FING-02010"
+          "FING-02011",
+          "FING-02010"
         ],
         "semestre": 7,
-        "areaFormacion": "Formación Gerencial",
-        "ucRequeridas": 0
-    },
-    {
+        "areaFormacion": "Fundamentos de Ingeniería",
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
+        "departamento": "INFO",
+        "codigoMateria": "INFO-02021",
+        "nombre": "Inglés II",
+        "horasTeoricas": 1,
+        "horasPracticas": 0,
+        "horasLaboratorio": 2,
+        "horasPresenciales": 3,
+        "horasAutonomas": 4,
+        "horasTotales": 7,
+        "unidadesCredito": 4,
+        "tipo": "CR",
+        "modalidad": "PRE",
+        "taxonomia": "TA-6",
+        "prelacion": [
+          "INFO-02014"
+        ],
+        "semestre": 7,
+        "areaFormacion": "Formación Integral",
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
+        "departamento": "FING",
+        "codigoMateria": "FING-RANGO",
+        "nombre": "Electiva (Informática) I",
+        "horasTeoricas": 2,
+        "horasPracticas": 1,
+        "horasLaboratorio": 0,
+        "horasPresenciales": 3,
+        "horasAutonomas": 5,
+        "horasTotales": 8,
+        "unidadesCredito": 4,
+        "tipo": "C",
+        "modalidad": "PRE",
+        "taxonomia": "TA-4",
+        "prelacion": [],
+        "semestre": 7,
+        "areaFormacion": "Electivas",
+        "ucRequeridas": 180,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-00192",
         "nombre": "Pasantía",
@@ -935,17 +1150,18 @@
         "horasAutonomas": 16,
         "horasTotales": 16,
         "unidadesCredito": 4,
-        "tipo": "VIT",
-        "modalidad": "PRE-VIT",
+        "tipo": "C",
+        "modalidad": "VIT",
         "taxonomia": "TA-7",
         "prelacion": [
-            "INFO-02025"
+          "INFO-02025"
         ],
         "semestre": 7,
-        "areaFormacion": "Electivas",
-        "ucRequeridas": 0
-    },
-    {
+        "areaFormacion": "Prácticas Profesionales",
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02029",
         "nombre": "Arquitecturas Empresariales",
@@ -962,9 +1178,10 @@
         "prelacion": [],
         "semestre": 8,
         "areaFormacion": "Ingeniería de Software",
-        "ucRequeridas": 197
-    },
-    {
+        "ucRequeridas": 197,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02028",
         "nombre": "Computación en la Nube",
@@ -979,13 +1196,14 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [
-            "INFO-02023"
+          "INFO-02023"
         ],
         "semestre": 8,
         "areaFormacion": "Telemática",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02027",
         "nombre": "Evaluación de Sistemas Informáticos",
@@ -1000,13 +1218,14 @@
         "modalidad": "VIT",
         "taxonomia": "TA-4",
         "prelacion": [
-            "INFO-02022"
+          "INFO-02022"
         ],
         "semestre": 8,
         "areaFormacion": "Formación Gerencial",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
         "departamento": "FING",
         "codigoMateria": "FING-02014",
         "nombre": "Ética Profesional",
@@ -1015,7 +1234,7 @@
         "horasLaboratorio": 0,
         "horasPresenciales": 2,
         "horasAutonomas": 3,
-        "horasTotales": 7,
+        "horasTotales": 5,
         "unidadesCredito": 3,
         "tipo": "CR",
         "modalidad": "VIT",
@@ -1023,30 +1242,10 @@
         "prelacion": [],
         "semestre": 8,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 180
-    },
-    {
-        "departamento": "INFO",
-        "codigoMateria": "INFO-02021",
-        "nombre": "Inglés II",
-        "horasTeoricas": 1,
-        "horasPracticas": 0,
-        "horasLaboratorio": 2,
-        "horasPresenciales": 3,
-        "horasAutonomas": 4,
-        "horasTotales": 7,
-        "unidadesCredito": 4,
-        "tipo": "CR",
-        "modalidad": "VIT",
-        "taxonomia": "TA-6",
-        "prelacion": [
-            "INFO-02014"
-        ],
-        "semestre": 7,
-        "areaFormacion": "Formación Integral",
-        "ucRequeridas": 0
-    },
-    {
+        "ucRequeridas": 180,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-02026",
         "nombre": "Inglés Técnico",
@@ -1061,134 +1260,57 @@
         "modalidad": "VIT",
         "taxonomia": "TA-6",
         "prelacion": [
-            "INFO-02021"
+          "INFO-02021"
         ],
         "semestre": 8,
         "areaFormacion": "Formación Integral",
-        "ucRequeridas": 0
-    },
-    {
-        "departamento": "VARIABLE",
-        "codigoMateria": "VARIABLE",
-        "nombre": "Electiva Informatica I",
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
+        "departamento": "FING",
+        "codigoMateria": "FING-RANGO",
+        "nombre": "Electiva (Informática) II",
         "horasTeoricas": 2,
         "horasPracticas": 1,
         "horasLaboratorio": 0,
-        "horasPresenciales": 0,
+        "horasPresenciales": 3,
         "horasAutonomas": 5,
         "horasTotales": 8,
         "unidadesCredito": 4,
-        "tipo": "C",
-        "modalidad": "VIT",
-        "taxonomia": "TA-*",
-        "prelacion": [],
-        "semestre": 7,
-        "areaFormacion": "Formación Integral",
-        "ucRequeridas": 180
-    },
-    {
-        "departamento": "VARIABLE",
-        "codigoMateria": "VARIABLE-1",
-        "nombre": "Electiva Informatica II",
-        "horasTeoricas": 2,
-        "horasPracticas": 1,
-        "horasLaboratorio": 0,
-        "horasPresenciales": 0,
-        "horasAutonomas": 5,
-        "horasTotales": 8,
-        "unidadesCredito": 4,
-        "tipo": "C",
-        "modalidad": "VIT",
-        "taxonomia": "TA-*",
-        "prelacion": [],
-        "semestre": 8,
-        "areaFormacion": "Formación Integral",
-        "ucRequeridas": 180
-    },
-    {
-        "departamento": "VARIABLE",
-        "codigoMateria": "VARIABLE-2",
-        "nombre": "Electiva Complementaria",
-        "horasTeoricas": 2,
-        "horasPracticas": 1,
-        "horasLaboratorio": 0,
-        "horasPresenciales": 0,
-        "horasAutonomas": 5,
-        "horasTotales": 8,
-        "unidadesCredito": 4,
-        "tipo": "C",
-        "modalidad": "VIT",
-        "taxonomia": "TA-*",
-        "prelacion": [],
-        "semestre": 8,
-        "areaFormacion": "Formación Integral",
-        "ucRequeridas": 163
-    },
-    {
-        "departamento": "CUSC",
-        "codigoMateria": "CUSC",
-        "nombre": "CURSO DE SERVICIO COMUNITARIO",
-        "horasTeoricas": 0,
-        "horasPracticas": 0,
-        "horasLaboratorio": 0,
-        "horasPresenciales": 0,
-        "horasAutonomas": 0,
-        "horasTotales": 0,
-        "unidadesCredito": 0,
         "tipo": "C",
         "modalidad": "PRE",
-        "taxonomia": "-",
+        "taxonomia": "TA-4",
         "prelacion": [],
-        "semestre": 5,
-        "areaFormacion": "Extensión Social",
-        "ucRequeridas": 120
-    },
-    {
-        "departamento": "IISC",
-        "codigoMateria": "IISC",
-        "nombre": "SERVICIO COMUNITARIO",
-        "horasTeoricas": 0,
-        "horasPracticas": 0,
+        "semestre": 8,
+        "areaFormacion": "Electivas",
+        "ucRequeridas": 180,
+        "correquisito": []
+      },
+      {
+        "departamento": "FING",
+        "codigoMateria": "FING-RANGO",
+        "nombre": "Electiva (Complementaria)",
+        "horasTeoricas": 2,
+        "horasPracticas": 1,
         "horasLaboratorio": 0,
-        "horasPresenciales": 0,
-        "horasAutonomas": 0,
-        "horasTotales": 0,
-        "unidadesCredito": 0,
+        "horasPresenciales": 3,
+        "horasAutonomas": 5,
+        "horasTotales": 8,
+        "unidadesCredito": 4,
         "tipo": "C",
         "modalidad": "PRE",
-        "taxonomia": "-",
-        "prelacion": [
-            "CUSC"
-        ],
-        "semestre": 6,
-        "areaFormacion": "Extensión Social",
-        "ucRequeridas": 0
-    },
-    {
-        "departamento": "INFO",
-        "codigoMateria": "INFO-IILCT",
-        "nombre": "CURSO DE TRABAJO DE GRADO",
-        "horasTeoricas": 0,
-        "horasPracticas": 0,
-        "horasLaboratorio": 0,
-        "horasPresenciales": 0,
-        "horasAutonomas": 0,
-        "horasTotales": 0,
-        "unidadesCredito": 0,
-        "tipo": "C",
-        "modalidad": "V",
-        "taxonomia": "-",
-        "prelacion": [
-            "INFO-02025"
-        ],
+        "taxonomia": "TA-4",
+        "prelacion": [],
         "semestre": 8,
-        "areaFormacion": "Prácticas Profesionales y TSG",
-        "ucRequeridas": 0
-    },
-    {
+        "areaFormacion": "Electivas",
+        "ucRequeridas": 163,
+        "correquisito": []
+      },
+      {
         "departamento": "INFO",
         "codigoMateria": "INFO-IILTG",
-        "nombre": "TRABAJO DE GRADO",
+        "nombre": "Trabajo de Grado (TG)",
         "horasTeoricas": 0,
         "horasPracticas": 0,
         "horasLaboratorio": 0,
@@ -1197,13 +1319,17 @@
         "horasTotales": 40,
         "unidadesCredito": 21,
         "tipo": "C",
-        "modalidad": "P/V",
+        "modalidad": "PRE",
         "taxonomia": "TA-7",
         "prelacion": [
-            "INFO-IILCT"
+          "INFO-IILCT",
+          "INFO-02025"
         ],
         "semestre": 8,
-        "areaFormacion": "Prácticas Profesionales y TSG",
-        "ucRequeridas": 0
-    }
-]
+        "areaFormacion": "Prácticas Profesionales",
+        "ucRequeridas": 0,
+        "correquisito": []
+      }
+    ]
+  }
+}

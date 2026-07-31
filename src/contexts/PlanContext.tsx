@@ -34,8 +34,8 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         if (saved === "202415" || saved === "202715") {
             setActivePlanId(saved);
         } else {
-            // Default a 202715 si no hay nada guardado
-            setActivePlanId("202715");
+            // Null si no hay nada guardado para forzar modal
+            setActivePlanId(null);
         }
     }, []);
 

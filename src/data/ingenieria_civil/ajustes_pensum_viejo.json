@@ -1,0 +1,5 @@
+[
+  { "key": "FING-02002", "oldCodes": ["FING-02002"], "nombre": "Álgebra y Trigonometría", "uc": 5, "tipo": "derogada" },
+  { "key": "FING-02009", "oldCodes": ["FING-02009"], "nombre": "Lógica", "uc": 4, "tipo": "derogada" },
+  { "key": "CIVI-ICLTG-AJUSTE", "oldCodes": ["CIVI-ICLTG"], "nombre": "Trabajo de Grado (Ajuste Pensum Viejo)", "uc": 9, "tipo": "ajuste" }
+]

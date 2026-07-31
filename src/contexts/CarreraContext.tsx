@@ -40,7 +40,7 @@ export const CarreraProvider = ({ children }: { children: ReactNode }) => {
     if (saved && CARRERAS_DISPONIBLES.find(c => c.id === saved)) {
       setActiveCarreraId(saved);
     } else {
-      setActiveCarreraId(CARRERAS_DISPONIBLES[0].id);
+      setActiveCarreraId("ingenieria_informatica");
     }
   }, []);
 

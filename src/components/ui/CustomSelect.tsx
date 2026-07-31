@@ -27,11 +27,11 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ value, onChange, opt
         <div ref={wrapperRef} className="relative w-full text-sm">
             <button
                 type="button"
-                className="flex items-center justify-between w-full p-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-50 focus:border-green-400 hover:border-green-300 shadow-sm transition-all text-left"
+                className="flex items-center justify-between w-full p-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl focus:outline-none focus:ring-4 focus:ring-theme-50 focus:border-theme-400 hover:border-theme-300 shadow-sm transition-all text-left"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <span className="truncate pr-4">{selectedLabel}</span>
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180 text-green-500' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180 text-theme-500' : ''}`} />
             </button>
 
             <div
@@ -43,8 +43,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ value, onChange, opt
                         <li key={option.value}>
                             <button
                                 type="button"
-                                className={`w-full text-left px-4 py-2.5 hover:bg-green-50 hover:text-green-700 transition-colors
-                                ${option.value === value ? 'bg-green-100/50 text-green-800 font-semibold' : 'text-gray-700'}`}
+                                className={`w-full text-left px-4 py-2.5 hover:bg-theme-50 hover:text-theme-700 transition-colors
+                                ${option.value === value ? 'bg-theme-100/50 text-theme-800 font-semibold' : 'text-gray-700'}`}
                                 onClick={() => {
                                     onChange(option.value);
                                     setIsOpen(false);

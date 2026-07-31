@@ -1,163 +1,204 @@
 import type { MateriaNode } from '../types/materia';
-
-export interface StudentProfile {
-    esSedeGuayana: boolean;
-    carrera: string;
-    esAlumnoNuevo: boolean;
-    aplicaRetraso: boolean;
-    esIntensivo: boolean;
-}
-
-export interface MatriculaBreakdown {
-    mensualidad: number;
-    costoMaterias: number;
-    recargosTaxonomia: number;
-    descuentoSede: number;
-    descuentoCarrera: number;
-    recargoIntensivo: number;
-    derechoInscripcion: number;
-    derechoConfirmacion: number;
-    totalFinal: number;
-    pagosMensuales: number[];
-}
+import type { StudentProfile, MatriculaBreakdown, CooperacionResult, PagoMensual, Sede, TipoCooperacion, MateriaRecargo } from '../types/matricula';
 
 // Extendemos MateriaNode para documentar las propiedades que requiere el cálculo
 export interface MateriaMatricula extends MateriaNode {
-    esTSU?: boolean;
-    esElectivaEspecialHumanidades?: boolean;
+    // Para simplificar, este tipo se usa para materias seleccionadas para simulación de matrícula
 }
 
 export class MatriculaService {
-    constructor(private matriculaData: any) {}
+    constructor(private config: any) {}
 
-
-    public calcularDesglose(materias: MateriaMatricula[], perfil: StudentProfile): MatriculaBreakdown {
-        const cantSemestres = 5;
-        let costoMateriasMensual = 0;
-        let recargosTaxonomiaMensual = 0;
-        let descuentoSedeMensual = 0;
-        let descuentoCarrera = 0;
-        let recargoIntensivo = 0;
-        let derechoInscripcion = 0;
-        let derechoConfirmacion = 0;
-        let totalFinal = 0;
-        let pagosMensuales: number[] = [];
-        let mensualidad = 0;
-
-        costoMateriasMensual = this.calcularMensualidad(materias);
-        recargosTaxonomiaMensual = this.calcularTaxMensual(materias);
-
-        if (perfil.esSedeGuayana) {
-            descuentoSedeMensual = this.calcularDescuentoSede(costoMateriasMensual + recargosTaxonomiaMensual);
+    // UC-02: Calcular UC con Recargo por Taxonomía
+    private calcularUCConRecargo(uc: number, tax: string): number {
+        // Detectar modalidad virtual/semipresencial
+        if (tax.includes('(V)') || tax.includes('(SP)')) {
+            return uc; // Sin recargo adicional
         }
 
-        derechoInscripcion = this.calcularInscripcion(perfil.esAlumnoNuevo).inscripcion;
-        derechoConfirmacion = this.calcularInscripcion(perfil.esAlumnoNuevo).confirmacion;
-
-        mensualidad = costoMateriasMensual + recargosTaxonomiaMensual - descuentoSedeMensual;
-        pagosMensuales = this.calcularPagosMensuales(mensualidad, perfil);
-        totalFinal = mensualidad * cantSemestres + derechoInscripcion + derechoConfirmacion;
-
-        const costoMaterias = costoMateriasMensual * cantSemestres;
-        const recargosTaxonomia = recargosTaxonomiaMensual * cantSemestres;
-        const descuentoSede = descuentoSedeMensual * cantSemestres;
-
-
-        return {
-            mensualidad,
-            costoMaterias,
-            recargosTaxonomia,
-            descuentoSede,
-            descuentoCarrera,
-            recargoIntensivo,
-            derechoInscripcion,
-            derechoConfirmacion,
-            totalFinal,
-            pagosMensuales
-        };
-    }
-
-    private calcularMensualidad(materias: MateriaMatricula[]): number {
-        const costoUC = this.matriculaData.costo_uc_base;
-        const mensualidad = costoUC * materias.reduce((sum, m) => sum + m.unidadesCredito, 0);
-        return mensualidad;
-    }
-
-    private calcularTaxMensual(materias: MateriaMatricula[]): number {
-        const costoUC = this.matriculaData.costo_uc_base;
-        const materiasTax = materias;
-        let recargoTax = 0;
-
-        materiasTax.forEach((materia) => {
-            recargoTax += this.calcularCostoTaxonomiaMateria(materia, costoUC);
-        })
-
-        return recargoTax;
-
-    }
-
-    private calcularPagosMensuales(mensualidad: number, perfil: StudentProfile): number[] {
-
-        const derecho_inscripcion = this.calcularInscripcion(perfil.esAlumnoNuevo).inscripcion;
-        const derecho_confirmacion = this.calcularInscripcion(perfil.esAlumnoNuevo).confirmacion;
-
-        if (perfil.aplicaRetraso === true) {
-            let monto = mensualidad;
-            let montoInscripción = mensualidad + derecho_inscripcion + this.calcularAtraso(mensualidad + derecho_inscripcion);
-            let montoConfirmacion = mensualidad + derecho_confirmacion + this.calcularAtraso(mensualidad + derecho_confirmacion);
-            monto += this.calcularAtraso(monto)
-            return [
-                montoInscripción,
-                monto,
-                monto,
-                montoConfirmacion,
-                monto
-            ]
-        }
-
-        return [mensualidad + derecho_inscripcion, mensualidad, mensualidad, mensualidad + derecho_confirmacion, mensualidad];
-    }
-
-    private calcularCostoTaxonomiaMateria(materia: MateriaMatricula, costoBase: number): number {
         let porcentajeTaxonomia = 0;
-
-        // Si la materia es electiva de humanidades especial, se cobra directamente como TA9 (+15%)
-        if (materia.esElectivaEspecialHumanidades) {
-            porcentajeTaxonomia = this.matriculaData.recargos_taxonomia.electivas_especiales_humanidades;
-        } else if (materia.taxonomia) {
-            const key = materia.taxonomia;
-            if (this.matriculaData.recargos_taxonomia[key] !== undefined) {
-                porcentajeTaxonomia = this.matriculaData.recargos_taxonomia[key];
-            }
+        if (tax && this.config.recargos_taxonomia[tax] !== undefined) {
+            porcentajeTaxonomia = this.config.recargos_taxonomia[tax];
         }
 
-        return costoBase * porcentajeTaxonomia * materia.unidadesCredito;
+        return uc * (1 + porcentajeTaxonomia);
     }
 
-    private calcularDescuentoSede(costoMaterias: number): number {
-        return costoMaterias * this.matriculaData.descuentos.sede_guayana;
+    // UC-03: Acumular UC por Selección de Materias
+    private acumularUC(materias: MateriaMatricula[]): { ucbase: number, uctotal: number, materiasConRecargo: MateriaRecargo[] } {
+        let ucbase = 0;
+        let uctotal = 0;
+        const materiasConRecargo: MateriaRecargo[] = [];
+
+        materias.forEach(materia => {
+            const base = materia.unidadesCredito;
+            const conRecargo = this.calcularUCConRecargo(base, materia.taxonomia);
+            
+            ucbase += base;
+            uctotal += conRecargo;
+
+            const recargo = conRecargo - base;
+            if (recargo > 0) {
+                materiasConRecargo.push({
+                    nombre: materia.nombre,
+                    ucRecargo: recargo,
+                    taxonomia: materia.taxonomia
+                });
+            }
+        });
+
+        return { ucbase, uctotal, materiasConRecargo };
     }
 
-    private calcularAtraso(mensualidad: number): number {
-        return mensualidad * this.matriculaData.recargos_adicionales.retraso_pago;
+    // UC-04: Aplicar Descuento por Carrera y Sede
+    private calcularVrealUC(valorUC: number, carrera: string, sede: Sede): { vrealUC: number, descCarrera: number, descSede: number } {
+        let vrealUC = valorUC;
+        let descCarrera = 0;
+        let descSede = 0;
+
+        // Descuento por carrera (aplicar primero)
+        if (this.config.descuentos_carrera[carrera]) {
+            descCarrera = this.config.descuentos_carrera[carrera].porcentaje;
+            vrealUC = vrealUC * (1 - descCarrera);
+        }
+
+        // Descuento por sede (aplicar sobre vrealUC del paso anterior)
+        if (this.config.descuentos_sede && this.config.descuentos_sede[sede] !== undefined) {
+            descSede = this.config.descuentos_sede[sede];
+            vrealUC = vrealUC * (1 - descSede);
+        }
+
+        return { vrealUC, descCarrera, descSede };
     }
 
-    private calcularInscripcion(esAlumnoNuevo: boolean): { inscripcion: number, confirmacion: number, total: number } {
-        const ucInscripcion = esAlumnoNuevo ?
-            this.matriculaData.derecho_inscripcion_uc.alumno_nuevo_inscripcion :
-            this.matriculaData.derecho_inscripcion_uc.alumno_regular_inscripcion;
+    // UC-05: Calcular UC a Pagar según Cooperación Económica
+    private calcularUCPagar(ucbase: number, uctotal: number, coop: TipoCooperacion, coberturaPct: number): Omit<CooperacionResult, 'materiasConRecargo'> {
+        const cobertura = 1 - (coberturaPct / 100);
+        const ucre = uctotal - ucbase;
+        let ucpagar = 0;
+        let ucfuera = 0;
+        let excesoLimite = 0;
+        let limiteBeca = 0;
 
-        const ucConfirmacion = esAlumnoNuevo ?
-            this.matriculaData.derecho_inscripcion_uc.alumno_nuevo_confirmacion :
-            this.matriculaData.derecho_inscripcion_uc.alumno_regular_confirmacion;
+        const limites = this.config.cooperacion?.limites || { beca: 30, prop: 27, fab: 30 };
 
-        const inscripcion = ucInscripcion * this.matriculaData.costo_uc_base;
-        const confirmacion = ucConfirmacion * this.matriculaData.costo_uc_base;
+        if (coop === "beca" || coop === "prop" || coop === "fab") {
+            const limit = coop === "prop" ? limites.prop : (coop === "beca" ? limites.beca : limites.fab);
+            limiteBeca = limit;
+            
+            if (ucbase <= limit) {
+                ucpagar = (ucbase * cobertura) + ucre;
+                ucfuera = ucre;
+            } else {
+                ucpagar = (ucbase - limit) + ucre + (limit * cobertura);
+                ucfuera = (ucbase - limit) + ucre;
+                excesoLimite = ucbase - limit;
+            }
+        } else if (coop === "baup") {
+            ucpagar = uctotal * cobertura;
+            ucfuera = 0;
+        } else { // "ninguna"
+            ucpagar = uctotal;
+            ucfuera = 0;
+        }
+
+        return { ucpagar, ucfuera, excesoLimite, limiteBeca };
+    }
+
+    // UC-06: Calcular Monto Base Mensual
+    private calcularMontoBase(ucpagar: number, vrealUC: number): number {
+        // Redondear a 2 decimales para precisión de moneda
+        return Math.round((ucpagar * vrealUC) * 100) / 100;
+    }
+
+    // UC-07: Generar Plan de Pagos (Mensual)
+    private calcularPagosMensuales(totalbs: number, perfil: StudentProfile, valorUC: number, tasaBCV: number): PagoMensual[] {
+        const derechoInscripcion = perfil.esAlumnoNuevo ?
+            this.config.derecho_inscripcion_uc.alumno_nuevo_inscripcion :
+            this.config.derecho_inscripcion_uc.alumno_regular_inscripcion;
+
+        const derechoConfirmacion = perfil.esAlumnoNuevo ?
+            this.config.derecho_inscripcion_uc.alumno_nuevo_confirmacion :
+            this.config.derecho_inscripcion_uc.alumno_regular_confirmacion;
+
+        const costoInscripcion = derechoInscripcion * valorUC;
+        const costoConfirmacion = derechoConfirmacion * valorUC;
+
+        const pagos: PagoMensual[] = [];
+        
+        let mensualidadConRetraso = totalbs;
+        if (perfil.aplicaRetraso) {
+             mensualidadConRetraso += totalbs * (this.config.recargos_adicionales?.retraso_pago || 0.10);
+        }
+
+        for (let i = 1; i <= 5; i++) {
+            let montoUSD = mensualidadConRetraso;
+            let descripcion = `Mes ${i}`;
+
+            if (i === 1) {
+                let recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoInscripcion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
+                montoUSD = totalbs + costoInscripcion + recargoRetraso;
+                descripcion = "Incluye Inscripción";
+            } else if (i === 4) {
+                 let recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoConfirmacion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
+                montoUSD = totalbs + costoConfirmacion + recargoRetraso;
+                descripcion = "Incluye Confirmación";
+            }
+
+            pagos.push({
+                numero: i,
+                descripcion,
+                montoUSD,
+                montoBs: montoUSD * tasaBCV
+            });
+        }
+
+        return pagos;
+    }
+
+    // Método orquestador
+    public calcularDesglose(materias: MateriaMatricula[], perfil: StudentProfile): MatriculaBreakdown {
+        const tasaBCV = this.config.tasa_bcv_mock || 75.00;
+        const valorUC = this.config.costo_uc_base;
+
+        // 1. Acumular UC
+        const { ucbase, uctotal, materiasConRecargo } = this.acumularUC(materias);
+        const ucre = uctotal - ucbase;
+
+        // 2. Calcular VrealUC
+        const { vrealUC, descCarrera, descSede } = this.calcularVrealUC(valorUC, perfil.carrera, perfil.sede);
+
+        // 3. Cooperación Económica
+        const coopResult = this.calcularUCPagar(ucbase, uctotal, perfil.cooperacion, perfil.coberturaPct);
+        const cooperacion: CooperacionResult = {
+            ...coopResult,
+            materiasConRecargo
+        };
+
+        // 4. Monto Base
+        const mensualidadUSD = this.calcularMontoBase(cooperacion.ucpagar, vrealUC);
+        
+        // 5. Pagos Mensuales
+        const pagosMensuales = this.calcularPagosMensuales(mensualidadUSD, perfil, valorUC, tasaBCV);
+
+        // 6. Total Semestre
+        const totalSemestreUSD = pagosMensuales.reduce((sum, pago) => sum + pago.montoUSD, 0);
 
         return {
-            inscripcion,
-            confirmacion,
-            total: inscripcion + confirmacion
+            ucbase,
+            uctotal,
+            ucre,
+            valorUC,
+            vrealUC,
+            descuentoCarreraPct: descCarrera,
+            descuentoSedePct: descSede,
+            cooperacion,
+            mensualidadUSD,
+            totalSemestreUSD,
+            pagosMensuales,
+            tasaBCV,
+            mensualidadBs: mensualidadUSD * tasaBCV,
+            totalSemestreBs: totalSemestreUSD * tasaBCV
         };
     }
 }

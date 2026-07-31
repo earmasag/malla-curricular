@@ -20,8 +20,10 @@
         "alumno_regular_inscripcion": 6,
         "alumno_regular_confirmacion": 2.5
     },
-    "descuentos": {
-        "sede_guayana": 0.10
+    "descuentos_sede": {
+        "ccs": 0.00,
+        "g": 0.10,
+        "tq": 0.20
     },
     "descuentos_carrera": {
         "educacion": {
@@ -44,5 +46,13 @@
     "recargos_adicionales": {
         "retraso_pago": 0.10,
         "cursos_intensivos": 0.20
-    }
+    },
+    "cooperacion": {
+        "limites": {
+            "beca": 30,
+            "prop": 27,
+            "fab": 30
+        }
+    },
+    "tasa_bcv_mock": 75.00
 }

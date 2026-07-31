@@ -22,7 +22,7 @@ export const loadCarreraData = async (carreraId: string) => {
       import('./ingenieria_informatica/areas_color.json').then(m => m.default),
       import('./ingenieria_informatica/semestres.json').then(m => m.default),
       import('./ingenieria_informatica/ajustes_pensum_viejo.json').then(m => m.default),
-      import('./ingenieria_informatica/matricula.json').then(m => m.default)
+      import('./matricula.json').then(m => m.default)
     ]);
 
     return {

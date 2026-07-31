@@ -1,17 +1,19 @@
 import React from 'react';
 import type { MallaCurricularGraph } from '../../../core/MallaCurricularGraph';
 import MateriaCard from '../../malla/MateriaCard';
-import { MatriculaService, type StudentProfile, type MateriaMatricula } from '../../../services/MatriculaService';
+import { MatriculaService, type MateriaMatricula } from '../../../services/MatriculaService';
+import type { StudentProfile } from '../../../types/matricula';
 import { Info } from 'lucide-react';
 import { useCarrera } from '../../../contexts/CarreraContext';
 
 // Default profile for estimations. Users can change this in a real app via settings.
 const defaultProfile: StudentProfile = {
-    esSedeGuayana: true,
+    sede: "g",
     carrera: "sinDescuento",
     esAlumnoNuevo: false,
-    aplicaRetraso: false,
-    esIntensivo: false
+    cooperacion: "ninguna",
+    coberturaPct: 0,
+    aplicaRetraso: false
 };
 
 interface BloqueEstudioCardProps {
@@ -42,8 +44,6 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
             materiasMatricula.push({
                 ...nodo,
                 estado: "disponible",
-                esTSU: false, // Defaulting logic. Can be mapped if graphto supports it.
-                esElectivaEspecialHumanidades: false,
             });
         }
     });
@@ -66,7 +66,7 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
                         {/* Cost Estimation Badge */}
                         <div className="group relative flex items-center shrink-0">
                             <span className="bg-theme-50 text-theme-700 text-xs font-bold px-2 py-1 rounded border border-theme-200 flex items-center gap-1 cursor-help">
-                                Est. ${desgloseInscripcion.totalFinal.toFixed(2)}
+                                Est. ${desgloseInscripcion.totalSemestreUSD.toFixed(2)}
                                 <Info className="w-3 h-3" />
                             </span>
 
@@ -74,15 +74,15 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
                             <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 shadow-xl pointer-events-none">
                                 <p className="font-bold border-b border-gray-700 pb-1 mb-2 text-theme-400">Desglose Estimado:</p>
                                 <ul className="space-y-1">
-                                    <li className="flex justify-between"><span>Materias:</span> <span>${desgloseInscripcion.costoMaterias.toFixed(2)}</span></li>
-                                    <li className="flex justify-between"><span>Inscripción:</span> <span>${desgloseInscripcion.derechoInscripcion.toFixed(2)}</span></li>
+                                    <li className="flex justify-between"><span>Valor UC:</span> <span>${desgloseInscripcion.vrealUC.toFixed(2)}</span></li>
+                                    <li className="flex justify-between"><span>UC a Pagar:</span> <span>{desgloseInscripcion.cooperacion.ucpagar.toFixed(2)} UC</span></li>
                                 </ul>
                                 <p className="font-bold border-b border-gray-700 pb-1 mt-2 mb-2 text-theme-500">Plan de Pagos:</p>
                                 <ul className="space-y-1 text-gray-300">
                                     {desgloseInscripcion.pagosMensuales.map((pago, i) => (
                                         <li key={i} className="flex justify-between">
                                             <span>Cuota {i + 1}:</span>
-                                            <span className={i === 0 || i === 3 ? "text-theme-500 font-semibold" : ""}>${pago.toFixed(2)}</span>
+                                            <span className={i === 0 || i === 3 ? "text-theme-500 font-semibold" : ""}>${pago.montoUSD.toFixed(2)}</span>
                                         </li>
                                     ))}
                                 </ul>

@@ -103,7 +103,7 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
 
                         return (
                             <div key={codigo} className="flex items-center justify-center sm:justify-start overflow-visible h-20">
-                                <div className="transform scale-[0.75] origin-center sm:origin-left transition-transform">
+                                <div className="transform scale-[0.75] origin-center sm:origin-left transition-transform transform-gpu">
                                     <MateriaCard materia={materiaVisual} />
                                 </div>
                             </div>

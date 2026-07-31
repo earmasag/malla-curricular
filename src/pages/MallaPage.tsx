@@ -133,14 +133,14 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                     doubleClick={{ disabled: true }}
                     limitToBounds={true}
                     disablePadding={true}
-                    panning={{ velocityDisabled: true }}
+                    panning={{ velocityDisabled: !isMobile }}
                     alignmentAnimation={{ animationTime: 0, animationType: "linear" }}
                 >
                     {({ zoomIn, zoomOut, resetTransform, zoomToElement }) => (
                         <React.Fragment>
                             <TourPanHandler zoomToElement={zoomToElement} currentScale={0.8} />
                             {/* Botones de Control de Zoom (Flotantes Inferior Derecha) */}
-                            {!isMobile && <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} />}
+                            <ZoomControls zoomIn={zoomIn} zoomOut={zoomOut} resetTransform={resetTransform} isCompact={isMobile} />
 
                             <TransformComponent
                                 wrapperStyle={{ width: "100%", height: "100%" }}
@@ -153,7 +153,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                                         hoveredMateria={hoveredMateria}
                                         containerRef={contentRef}
                                     />
-                                    <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-20 pb-32 min-w-max min-h-max">
+                                    <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-36 pb-32 min-w-max min-h-max">
                                         {semestresArray.map((numeroSemestre: number, index: number) => {
                                             return (
                                                 <SemestreColumn

@@ -35,7 +35,7 @@ export const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
     return (
         <div className={`
             flex items-start gap-2 md:gap-3 p-3 md:p-4 bg-white/95 backdrop-blur-md shadow-lg border-y border-r border-l-4 rounded-lg 
-            w-auto max-w-full md:w-80 pointer-events-auto transition-all animate-in slide-in-from-bottom-5 fade-in duration-300
+            w-auto max-w-[calc(100vw-2rem)] md:max-w-xs pointer-events-auto transition-all animate-in slide-in-from-bottom-5 fade-in duration-300 transform-gpu
             ${BORDERS[toast.type]} border-y-gray-200 border-r-gray-200
         `}>
             <div className="shrink-0 mt-0.5">
@@ -68,7 +68,7 @@ export const ToastContainer: React.FC = () => {
     const { toasts, removeToast } = useToast();
 
     return (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 z-9999 flex flex-col items-center md:items-end gap-2 pointer-events-none max-h-screen overflow-hidden">
+        <div className="fixed bottom-4 left-4 right-4 xs:left-auto xs:right-4 max-w-[calc(100vw-2rem)] md:max-w-xs z-9999 flex flex-col items-end gap-2 pointer-events-none max-h-screen overflow-hidden">
             {toasts.map(toast => (
                 <ToastItem
                     key={toast.id}

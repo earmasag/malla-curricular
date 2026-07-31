@@ -42,7 +42,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
         ? 'left-3 top-3 w-[calc(100vw-1.5rem)] h-[calc(100dvh-1.5rem)] rounded-3xl origin-top-left' // Ancla superior izquierda, expande w/h
-        : 'left-3 top-3 w-12 h-12 rounded-2xl justify-center items-center shadow-md origin-top-left'; // Botón flotante cuadrado redondeado
+        : 'left-3 top-3 w-9 h-9 rounded-xl justify-center items-center shadow-md origin-top-left'; // Botón flotante cuadrado redondeado
 
     const desktopClasses = ui.isExpanded
         ? 'left-4 top-4 bottom-4 w-72 rounded-3xl'
@@ -65,9 +65,9 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                 )}
                 <button
                     onClick={() => ui.setIsExpanded(!ui.isExpanded)}
-                    className={`rounded-xl cursor-pointer hover:bg-gray-100 text-gray-700 transition-colors flex items-center justify-center ${!ui.isExpanded && ui.isMobile ? 'w-12 h-12' : 'p-2.5'}`}
+                    className={`rounded-xl cursor-pointer hover:bg-gray-100 text-gray-700 transition-colors flex items-center justify-center ${!ui.isExpanded && ui.isMobile ? 'w-9 h-9' : 'p-2.5'}`}
                 >
-                    {ui.isExpanded ? <X className="w-6 h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
+                    {ui.isExpanded ? <X className="w-6 h-6" /> : <Menu className="w-4 h-4" />}
                 </button>
             </div>
 

@@ -14,7 +14,7 @@ export const CustomNotification: React.FC = () => {
 
     return (
         <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200 transform-gpu">
                 {/* Header Icon + Title */}
                 <div className={`flex items-center gap-3 px-6 py-4 border-b border-gray-100 ${notification.type === 'confirm' && notification.isDestructive ? 'bg-red-50/50' : 'bg-gray-50/50'}`}>
                     {notification.type === 'confirm' && notification.isDestructive && (
@@ -23,7 +23,7 @@ export const CustomNotification: React.FC = () => {
                         </div>
                     )}
                     {notification.type === 'confirm' && !notification.isDestructive && (
-                        <div className="bg-[var(--color-theme-)] p-2 rounded-full text-[var(--color-theme-)]">
+                        <div className="bg-(--color-theme-) p-2 rounded-full text-(--color-theme-)">
                             <Info className="w-5 h-5" />
                         </div>
                     )}
@@ -62,7 +62,7 @@ export const CustomNotification: React.FC = () => {
                         onClick={handleConfirm}
                         className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors focus:ring-2 focus:outline-none ${notification.isDestructive
                             ? 'bg-red-600 hover:bg-red-700 focus:ring-red-200'
-                            : 'bg-[var(--color-theme-)] hover:bg-[var(--color-theme-)] focus:ring-[var(--color-theme-)]'
+                            : 'bg-(--color-theme-) hover:bg-(--color-theme-) focus:ring-(--color-theme-)'
                             }`}
                     >
                         {notification.confirmText || 'Aceptar'}

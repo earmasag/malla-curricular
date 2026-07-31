@@ -1,4 +1,4 @@
-import React, { memo, useRef } from 'react';
+import React, { memo } from 'react';
 import { Check, Pencil } from 'lucide-react';
 import type { MateriaNode } from '../../types/materia';
 import areasColorData from '../../data/areas_color.json';
@@ -47,40 +47,16 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
     // Colores del borde y acento basados puramente en su estado
     const currentHexColor = colorArea;
 
-    // --- Lógica para Simular el Clic Derecho en Móviles (Long Press) ---
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const isLongPress = useRef(false);
-
+    // --- Interacción Táctil: mostrar prelaciones al tocar (equivalente al hover de desktop) ---
     const handleTouchStart = () => {
-        isLongPress.current = false;
-        if (timerRef.current) clearTimeout(timerRef.current);
-
-        timerRef.current = setTimeout(() => {
-            isLongPress.current = true;
-            if (onRightClick) {
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(50);
-                }
-                onRightClick();
-            }
-            timerRef.current = null;
-        }, 500);
+        if (onMouseEnter) onMouseEnter();
     };
 
     const handleTouchEnd = () => {
-        if (timerRef.current) {
-            clearTimeout(timerRef.current);
-            timerRef.current = null;
-        }
+        if (onMouseLeave) onMouseLeave();
     };
 
-    const handleClick = (e: React.MouseEvent) => {
-        if (isLongPress.current) {
-            e.preventDefault();
-            e.stopPropagation();
-            isLongPress.current = false; // Reset vital para permitir el siguiente clic
-            return;
-        }
+    const handleClick = () => {
         if (onClick) onClick();
     };
 
@@ -99,20 +75,12 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
         <div
             id={codigoMateria}
             onClick={handleClick}
-            onContextMenu={(e) => {
-                // En Desktop: interceptamos el verdadero click derecho
-                e.preventDefault();
-                if (onRightClick) onRightClick();
-            }}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchEnd}
             onMouseEnter={onMouseEnter}
-            onMouseLeave={() => {
-                handleTouchEnd();
-                if (onMouseLeave) onMouseLeave();
-            }}
-            className={`materia-card relative w-48 h-20 rounded-br-[20px] my-1 border-[3px] select-none ${opacityClass} transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-theme-500 z-50' : 'z-10'} ${isCursando ? 'shadow-[0_0_15px_rgba(59,130,246,0.6)] ring-2 ring-blue-400 ring-offset-1' : 'shadow-sm'}`}
+            onMouseLeave={onMouseLeave}
+            className={`materia-card relative w-48 h-20 rounded-br-[20px] my-1 border-[3px] select-none ${opacityClass} transition-all duration-300 transform-gpu ${onClick ? 'cursor-pointer [@media(hover:hover)]:hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-theme-500 z-50' : 'z-10'} ${isCursando ? 'shadow-[0_0_15px_rgba(59,130,246,0.6)] ring-2 ring-blue-400 ring-offset-1' : 'shadow-sm'}`}
             style={{
                 backgroundColor: currentHexColor,
                 borderColor: currentHexColor,

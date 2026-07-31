@@ -24,7 +24,7 @@ export const FiltrosRutaOptimaButton: React.FC<FiltrosRutaOptimaProps> = ({
         >
             <Settings2 className="w-4 h-4" />
             <span>Filtros</span>
-            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 transform-gpu ${isOpen ? 'rotate-180' : ''}`} />
         </button>
     );
 };

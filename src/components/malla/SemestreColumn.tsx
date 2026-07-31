@@ -81,7 +81,7 @@ export const SemestreColumn = memo(({
                         className={`absolute -top-3 -right-3 z-50 w-7 h-7 flex items-center justify-center rounded-full transition-all border-2 cursor-pointer shadow-sm
                             ${todasAprobadas
                                 ? 'bg-theme-500 border-theme-500 text-white hover:bg-theme-600 hover:border-theme-600'
-                                : 'bg-white border-gray-300 text-gray-300 hover:text-theme-500 hover:border-theme-500 opacity-0 group-hover:opacity-100'}`}
+                                : 'bg-white border-gray-300 text-gray-300 hover:text-theme-500 hover:border-theme-500 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100'}`}
                         title={todasAprobadas ? "Desaprobar Semestre" : "Aprobar Semestre"}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">

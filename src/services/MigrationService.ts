@@ -2,7 +2,6 @@ import type { ProgresoMalla } from "../types/materia";
 import type { IMallaEvaluator } from "../rules/IMallaEvaluator";
 import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 import { calcularUCPensumAnterior } from "../utils/mallaUtils";
-import ajustesData from "../data/ajustes_pensum_viejo.json";
 
 // ==========================================
 // MIGRATION RULES (202415 -> 202715)
@@ -43,9 +42,10 @@ export class MigrationService {
      * Migra el progreso del plan 202415 al plan 202715.
      * @param oldProgreso Progreso en el plan viejo
      * @param newGraph Grafo del nuevo plan
+     * @param ajustesData Datos de ajustes para el pensum viejo
      * @returns Nuevo Progreso evaluado
      */
-    public migrateTo2027(oldProgreso: ProgresoMalla, newGraph: MallaCurricularGraph): { newProgreso: ProgresoMalla, pensumAnterior: Record<string, boolean> } {
+    public migrateTo2027(oldProgreso: ProgresoMalla, newGraph: MallaCurricularGraph, ajustesData: any[] = []): { newProgreso: ProgresoMalla, pensumAnterior: Record<string, boolean> } {
         const baseNewProgreso: ProgresoMalla = {};
         const pensumAnterior: Record<string, boolean> = {};
 
@@ -55,10 +55,10 @@ export class MigrationService {
         // --- LÓGICA DE COMPENSACIÓN DE UC ---
         
         // 1 y 3. Marcar materias derogadas y ajustes por materias que cambiaron de UC
-        ajustesData.forEach(ajuste => {
+        ajustesData.forEach((ajuste: any) => {
             // Si la regla requiere varios "oldCodes" (e.g. Algoritmos + Fundamentos = Algoritmos 7 UC)
             // Se deben cumplir todos para aplicar el ajuste
-            if (ajuste.oldCodes.every(code => isApprovedInOld(code))) {
+            if (ajuste.oldCodes.every((code: string) => isApprovedInOld(code))) {
                 pensumAnterior[ajuste.key] = true;
             }
         });
@@ -111,7 +111,7 @@ export class MigrationService {
         // Una vez que tenemos las aprobaciones crudas mapeadas, 
         // pasamos el progreso por el evaluador de reglas para desbloquear
         // las materias disponibles, cursando, etc.
-        const ucAdicionales = calcularUCPensumAnterior(pensumAnterior);
+        const ucAdicionales = calcularUCPensumAnterior(pensumAnterior, ajustesData);
         const evaluatedProgreso = this.evaluator.evaluate(baseNewProgreso, newGraph, ucAdicionales);
 
         return {

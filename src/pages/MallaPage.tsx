@@ -18,10 +18,8 @@ import { LeyendaModal } from "../components/modals/LeyendaModal";
 import { PensumAnteriorModal } from "../components/modals/PensumAnteriorModal";
 
 
-// Datos estáticos
-import areasColorData from '../data/areas_color.json';
-
 import { usePlanEstudio } from "../contexts/PlanContext";
+import { useCarrera } from "../contexts/CarreraContext";
 import { WelcomeModal } from "../components/modals/WelcomeModal";
 import { PlanSwitcherFloat } from "../components/layout/PlanSwitcherFloat";
 import { useTourPanHandler } from "../hooks/ui/useTourPanHandler";
@@ -38,6 +36,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
     const { ui, modales, configuraciones, datos, handlers } = useMallaUI();
     const { hover: { hoveredMateria } } = useMallaHover();
+    const { carreraData } = useCarrera();
 
     // 2. Estado local para renders del componente (Zoom, Mobile, Flechas)
     const isMobile = useIsMobile();
@@ -106,7 +105,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                     tituloCarrera="Ingeniería Informática"
                     totalSemestres={totalSemestres}
                     totalUc={totalUc}
-                    areasFormacion={areasColorData}
+                    areasFormacion={carreraData?.areas_color || []}
                 />
             )}
 

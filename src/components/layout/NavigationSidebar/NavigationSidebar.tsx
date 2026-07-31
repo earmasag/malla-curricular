@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info,  GraduationCap, Settings, Palette, HelpCircle
+    Menu, LayoutDashboard, Info, GraduationCap, Settings, Palette, HelpCircle
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
@@ -196,7 +196,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 onClick={(e) => { e.stopPropagation(); ui.setIsLeyendaOpen(true); }}
                                 color="theme"
                             />
-                            
+
                             <div className="h-px bg-slate-200 my-2 mx-2"></div>
 
                             <SidebarButton
@@ -214,8 +214,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     isExpanded={ui.isExpanded}
                                     icon={<Palette />}
                                     label="Temas"
-                                    onClick={(e) => { 
-                                        e.stopPropagation(); 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
                                         setShowThemeOptions(!showThemeOptions);
                                     }}
                                 />
@@ -234,7 +234,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                             ))}
                                         </div>
                                     ) : createPortal(
-                                        <div 
+                                        <div
                                             style={{ top: themeMenuPos.top, left: themeMenuPos.left, transform: 'translateY(-50%)' }}
                                             className="fixed z-9999 flex gap-3 p-3 bg-theme-50/70 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/20 rounded-2xl"
                                             onClick={(e) => e.stopPropagation()}
@@ -332,7 +332,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 disabled={customRouteState.customSemestersCount === 0 || (customRouteState.customSemestersCount === 1 && customRouteState.customCurrentSemesterCount === 0)}
                                 variant="light"
                             />
-                            
+
                             <SidebarButton
                                 isExpanded={ui.isExpanded}
                                 icon={<HelpCircle />}
@@ -386,7 +386,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                     />
                 </div>
             )}
-            
+
             <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
             <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
         </aside>

@@ -1,7 +1,5 @@
 import type { ProgresoMalla } from "../types/materia";
 import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
-import ajustesData from "../data/ajustes_pensum_viejo.json";
-
 export const calcularUCAcumuladas = (progreso: ProgresoMalla, grafo: MallaCurricularGraph): number => {
     let total = 0;
     Object.entries(progreso).forEach(([codigo, estado]) => {
@@ -48,7 +46,7 @@ export const obtenerCorrequisitosFaltantes = (codigoMateria: string, progresoAct
     });
 };
 
-export const calcularUCPensumAnterior = (pensumAnterior: Record<string, boolean>): number => {
+export const calcularUCPensumAnterior = (pensumAnterior: Record<string, boolean>, ajustesData: any[] = []): number => {
     let total = 0;
     // Ajuste: Si tiene ambos ingles, se le convalidó el nuevo (3 UC). 
     // Para "no anexar esas 3uc" del nuevo pensum, las restamos aquí.

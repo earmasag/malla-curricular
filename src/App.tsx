@@ -8,17 +8,21 @@ import { ToastContainer } from './components/ui/ToastContainer';
 import { PlanProvider } from './contexts/PlanContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 
+import { CarreraProvider } from './contexts/CarreraContext';
+
 function App() {
 
   return (
     <ThemeProvider>
       <ToastProvider>
         <NotificationProvider>
-          <PlanProvider>
-            <MallaPage />
-            <CustomNotification />
-            <ToastContainer />
-          </PlanProvider>
+          <CarreraProvider>
+            <PlanProvider>
+              <MallaPage />
+              <CustomNotification />
+              <ToastContainer />
+            </PlanProvider>
+          </CarreraProvider>
         </NotificationProvider>
       </ToastProvider>
     </ThemeProvider>

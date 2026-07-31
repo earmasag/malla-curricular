@@ -2,10 +2,7 @@ import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import type { ReactNode } from "react";
 import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
 import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
-
-// JSONs de los planes
-import planEstudio2024 from "../data/plan_estudio.json";
-import planEstudio2027 from "../data/plan_estudio_nuevo.json";
+import { useCarrera } from "./CarreraContext";
 
 export type PlanId = "202415" | "202715";
 
@@ -28,6 +25,7 @@ interface PlanContextType {
 const PlanContext = createContext<PlanContextType | undefined>(undefined);
 
 export const PlanProvider = ({ children }: { children: ReactNode }) => {
+    const { carreraData, isLoading } = useCarrera();
     const [activePlanId, setActivePlanId] = useState<PlanId | null>(null);
 
     // Intentamos cargar el plan guardado en localStorage al iniciar
@@ -35,6 +33,9 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         const saved = localStorage.getItem("malla-active-plan") as PlanId;
         if (saved === "202415" || saved === "202715") {
             setActivePlanId(saved);
+        } else {
+            // Default a 202715 si no hay nada guardado
+            setActivePlanId("202715");
         }
     }, []);
 
@@ -45,12 +46,15 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [activePlanId]);
 
-    // Reconstruimos el grafo dinámicamente cuando el activePlanId cambia
+    // Reconstruimos el grafo dinámicamente cuando el activePlanId o carreraData cambia
     const planData = useMemo<PlanData | null>(() => {
-        if (!activePlanId) return null;
+        if (!activePlanId || !carreraData) return null;
 
         const builder = new MallaCurricularBuilder();
-        const json = activePlanId === "202415" ? planEstudio2024 : planEstudio2027;
+        const json = activePlanId === "202415" ? carreraData.plan_estudio : carreraData.plan_estudio_nuevo;
+        
+        if (!json) return null;
+
         const grafo = builder.build(json as any);
 
         const totalSemestres = grafo.getTotalSemestres();
@@ -81,7 +85,11 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
             totalUc,
             totalSemestres
         };
-    }, [activePlanId]);
+    }, [activePlanId, carreraData]);
+
+    if (isLoading) {
+        return <div className="flex h-screen w-full items-center justify-center">Cargando malla...</div>;
+    }
 
     return (
         <PlanContext.Provider value={{ activePlanId, setActivePlanId, planData }}>

@@ -6,11 +6,12 @@ import { MateriaRepository } from '../../repository/MateriaRepository';
 import { MigrationService } from '../../services/MigrationService';
 import { StandardMallaEvaluator } from '../../rules/StandardMallaEvaluator';
 import { MallaCurricularBuilder } from '../../core/MallaCurricularBuilder';
-import planEstudio2027 from '../../data/plan_estudio_nuevo.json';
+import { useCarrera } from '../../contexts/CarreraContext';
 import { RefreshCw } from 'lucide-react';
 
 export const PlanSwitcherFloat: React.FC = () => {
     const { activePlanId, setActivePlanId } = usePlanEstudio();
+    const { carreraData } = useCarrera();
     const [showMigrationModal, setShowMigrationModal] = useState(false);
 
     const handleSwitchPlan = (newPlan: PlanId) => {
@@ -26,9 +27,9 @@ export const PlanSwitcherFloat: React.FC = () => {
         const migrationService = new MigrationService(evaluator);
         
         const builder = new MallaCurricularBuilder();
-        const newGraph = builder.build(planEstudio2027 as any);
+        const newGraph = builder.build(carreraData?.plan_estudio_nuevo as any);
 
-        const { newProgreso, pensumAnterior } = migrationService.migrateTo2027(oldProgress, newGraph);
+        const { newProgreso, pensumAnterior } = migrationService.migrateTo2027(oldProgress, newGraph, carreraData?.ajustes_pensum_viejo || []);
         newRepo.saveStudentProgress(newProgreso);
         newRepo.savePensumAnterior(pensumAnterior); 
         

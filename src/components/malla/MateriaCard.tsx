@@ -1,14 +1,7 @@
 import { memo } from 'react';
 import { Check, Pencil } from 'lucide-react';
 import type { MateriaNode } from '../../types/materia';
-import areasColorData from '../../data/areas_color.json';
-
-// Lo cargamos en memoria FUERA del componente. Así esta operación (O(N) a O(1)) 
-// sucede una sola vez cuando la app arranca, y no cada vez que se repinta una tarjeta.
-const areasColorMap: Record<string, string> = areasColorData.reduce((acc, curr) => {
-    acc[curr.areaFormacion] = curr.colorCodigo;
-    return acc;
-}, {} as Record<string, string>);
+import { useCarrera } from '../../contexts/CarreraContext';
 
 export interface MateriaCardProps {
     materia: MateriaNode;
@@ -19,6 +12,7 @@ export interface MateriaCardProps {
 }
 
 const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
+    const { areasColorMap } = useCarrera();
     const {
         nombre,
         codigoMateria,

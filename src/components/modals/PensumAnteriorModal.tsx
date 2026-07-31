@@ -1,6 +1,6 @@
 import React from 'react';
 import { BookCheck } from 'lucide-react';
-import ajustesData from '../../data/ajustes_pensum_viejo.json';
+import { useCarrera } from '../../contexts/CarreraContext';
 import { ModalHeader } from './shared/ModalHeader';
 
 export interface PensumAnteriorModalProps {
@@ -11,9 +11,11 @@ export interface PensumAnteriorModalProps {
 }
 
 export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen, onClose, pensumAnterior, updatePensumAnterior }) => {
+    const { carreraData } = useCarrera();
     if (!isOpen) return null;
 
-    const materias = ajustesData.map(item => ({
+    const ajustesData = carreraData?.ajustes_pensum_viejo || [];
+    const materias = ajustesData.map((item: any) => ({
         key: item.key,
         nombre: item.nombre,
         uc: item.uc
@@ -38,7 +40,7 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
 
                 {/* Content */}
                 <div className="flex flex-col gap-4 p-6 md:p-8 bg-white">
-                    {materias.map((materia) => (
+                    {materias.map((materia: any) => (
                         <div key={materia.key} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100 hover:border-theme-100 transition-colors">
                             <div className="flex flex-col">
                                 <span className="font-semibold text-gray-700">{materia.nombre}</span>

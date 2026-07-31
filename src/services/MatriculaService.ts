@@ -1,9 +1,8 @@
 import type { MateriaNode } from '../types/materia';
-import matriculaData from '../data/matricula.json';
 
 export interface StudentProfile {
     esSedeGuayana: boolean;
-    carrera: keyof typeof matriculaData.descuentos_carrera;
+    carrera: string;
     esAlumnoNuevo: boolean;
     aplicaRetraso: boolean;
     esIntensivo: boolean;
@@ -29,6 +28,8 @@ export interface MateriaMatricula extends MateriaNode {
 }
 
 export class MatriculaService {
+    constructor(private matriculaData: any) {}
+
 
     public calcularDesglose(materias: MateriaMatricula[], perfil: StudentProfile): MatriculaBreakdown {
         const cantSemestres = 5;
@@ -77,13 +78,13 @@ export class MatriculaService {
     }
 
     private calcularMensualidad(materias: MateriaMatricula[]): number {
-        const costoUC = matriculaData.costo_uc_base;
+        const costoUC = this.matriculaData.costo_uc_base;
         const mensualidad = costoUC * materias.reduce((sum, m) => sum + m.unidadesCredito, 0);
         return mensualidad;
     }
 
     private calcularTaxMensual(materias: MateriaMatricula[]): number {
-        const costoUC = matriculaData.costo_uc_base;
+        const costoUC = this.matriculaData.costo_uc_base;
         const materiasTax = materias;
         let recargoTax = 0;
 
@@ -122,11 +123,11 @@ export class MatriculaService {
 
         // Si la materia es electiva de humanidades especial, se cobra directamente como TA9 (+15%)
         if (materia.esElectivaEspecialHumanidades) {
-            porcentajeTaxonomia = matriculaData.recargos_taxonomia.electivas_especiales_humanidades;
+            porcentajeTaxonomia = this.matriculaData.recargos_taxonomia.electivas_especiales_humanidades;
         } else if (materia.taxonomia) {
-            const key = materia.taxonomia as keyof typeof matriculaData.recargos_taxonomia;
-            if (matriculaData.recargos_taxonomia[key] !== undefined) {
-                porcentajeTaxonomia = matriculaData.recargos_taxonomia[key];
+            const key = materia.taxonomia;
+            if (this.matriculaData.recargos_taxonomia[key] !== undefined) {
+                porcentajeTaxonomia = this.matriculaData.recargos_taxonomia[key];
             }
         }
 
@@ -134,24 +135,24 @@ export class MatriculaService {
     }
 
     private calcularDescuentoSede(costoMaterias: number): number {
-        return costoMaterias * matriculaData.descuentos.sede_guayana;
+        return costoMaterias * this.matriculaData.descuentos.sede_guayana;
     }
 
     private calcularAtraso(mensualidad: number): number {
-        return mensualidad * matriculaData.recargos_adicionales.retraso_pago;
+        return mensualidad * this.matriculaData.recargos_adicionales.retraso_pago;
     }
 
     private calcularInscripcion(esAlumnoNuevo: boolean): { inscripcion: number, confirmacion: number, total: number } {
         const ucInscripcion = esAlumnoNuevo ?
-            matriculaData.derecho_inscripcion_uc.alumno_nuevo_inscripcion :
-            matriculaData.derecho_inscripcion_uc.alumno_regular_inscripcion;
+            this.matriculaData.derecho_inscripcion_uc.alumno_nuevo_inscripcion :
+            this.matriculaData.derecho_inscripcion_uc.alumno_regular_inscripcion;
 
         const ucConfirmacion = esAlumnoNuevo ?
-            matriculaData.derecho_inscripcion_uc.alumno_nuevo_confirmacion :
-            matriculaData.derecho_inscripcion_uc.alumno_regular_confirmacion;
+            this.matriculaData.derecho_inscripcion_uc.alumno_nuevo_confirmacion :
+            this.matriculaData.derecho_inscripcion_uc.alumno_regular_confirmacion;
 
-        const inscripcion = ucInscripcion * matriculaData.costo_uc_base;
-        const confirmacion = ucConfirmacion * matriculaData.costo_uc_base;
+        const inscripcion = ucInscripcion * this.matriculaData.costo_uc_base;
+        const confirmacion = ucConfirmacion * this.matriculaData.costo_uc_base;
 
         return {
             inscripcion,

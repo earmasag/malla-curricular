@@ -3,8 +3,7 @@ import type { MallaCurricularGraph } from '../../../core/MallaCurricularGraph';
 import MateriaCard from '../../malla/MateriaCard';
 import { MatriculaService, type StudentProfile, type MateriaMatricula } from '../../../services/MatriculaService';
 import { Info } from 'lucide-react';
-
-const matriculaService = new MatriculaService();
+import { useCarrera } from '../../../contexts/CarreraContext';
 
 // Default profile for estimations. Users can change this in a real app via settings.
 const defaultProfile: StudentProfile = {
@@ -22,6 +21,13 @@ interface BloqueEstudioCardProps {
 }
 
 export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, index, grafo }) => {
+    const { carreraData } = useCarrera();
+    
+    // Instanciar el servicio con la data de la carrera actual
+    const matriculaService = React.useMemo(() => {
+        return new MatriculaService(carreraData?.matricula || {});
+    }, [carreraData?.matricula]);
+
     let ucBloque = 0;
     let horasBloque = 0;
     const materiasMatricula: MateriaMatricula[] = [];

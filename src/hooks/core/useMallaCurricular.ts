@@ -8,10 +8,11 @@ import { calcularUCAcumuladas, obtenerPrerrequisitosFaltantes, obtenerCorrequisi
 import { MateriaRepository } from "../../repository/MateriaRepository";
 import type { MateriaMatricula } from "../../services/MatriculaService";
 import { useToast } from "../../hooks/ui/useToast";
-import semestresData from "../../data/semestres.json";
+import { useCarrera } from "../../contexts/CarreraContext";
 
 export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: string) => {
     const { showToast } = useToast();
+    const { carreraData } = useCarrera();
     // Instanciamos el evaluador estándar de la malla (Service Layer / Strategy)
     const evaluator = useMemo(() => new StandardMallaEvaluator(), []);
 
@@ -22,7 +23,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
         () => {
             // Intentamos recuperar el progreso guardado a través del Repository
             const progresoGuardado = repository.getStudentProgress();
-            const ucPensum = calcularUCPensumAnterior(repository.getPensumAnterior());
+            const ucPensum = calcularUCPensumAnterior(repository.getPensumAnterior(), carreraData?.ajustes_pensum_viejo || []);
 
             // Si el objeto no está vacío, cargamos los datos y los pasamos por el evaluador
             if (Object.keys(progresoGuardado).length > 0) {
@@ -58,18 +59,19 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
     }, [pensumAnterior, repository]);
 
     const ucPensumAnterior = useMemo(() => {
-        return calcularUCPensumAnterior(pensumAnterior);
-    }, [pensumAnterior]);
+        return calcularUCPensumAnterior(pensumAnterior, carreraData?.ajustes_pensum_viejo || []);
+    }, [pensumAnterior, carreraData?.ajustes_pensum_viejo]);
 
     const ucAcumuladas = useMemo(() => {
         return calcularUCAcumuladas(progreso, grafo) + ucPensumAnterior;
     }, [progreso, grafo, ucPensumAnterior]);
 
     const semestreActual = useMemo(() => {
+        if (!carreraData?.semestres) return 1;
         let curr = 1;
-        const semestres = Object.keys(semestresData).map(Number).sort((a, b) => a - b);
+        const semestres = Object.keys(carreraData.semestres).map(Number).sort((a, b) => a - b);
         for (const s of semestres) {
-            const threshold = (semestresData as Record<string, { ucAcumulada: number }>)[s.toString()].ucAcumulada;
+            const threshold = (carreraData.semestres as Record<string, { ucAcumulada: number }>)[s.toString()].ucAcumulada;
             if (ucAcumuladas >= threshold) {
                 curr = s + 1;
             } else {
@@ -77,7 +79,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             }
         }
         return Math.min(curr, 8); // Assuming 8 is the max semester in semestres.json
-    }, [ucAcumuladas]);
+    }, [ucAcumuladas, carreraData?.semestres]);
 
     // Obtener las materias que actualmente están "cursando"
     const materiasCursando = useMemo(() => {

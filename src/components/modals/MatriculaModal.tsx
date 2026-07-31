@@ -4,16 +4,18 @@ import { MatriculaService, type StudentProfile, type MateriaMatricula } from '..
 import { CustomSelect } from '../ui/CustomSelect';
 import { CustomCheckbox } from '../ui/CustomCheckbox';
 import { ModalHeader } from './shared/ModalHeader';
+import { useCarrera } from '../../contexts/CarreraContext';
 
-interface MatriculaModalProps {
+export interface MatriculaModalProps {
     isOpen: boolean;
     onClose: () => void;
     materiasCursando: MateriaMatricula[];
 }
 
-const matriculaService = new MatriculaService();
-
 export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose, materiasCursando }) => {
+    const { carreraData } = useCarrera();
+    const matriculaService = useMemo(() => new MatriculaService(carreraData?.matricula || {}), [carreraData?.matricula]);
+
     // Estado del perfil del estudiante para cálculo interactivo
     const [perfil, setPerfil] = useState<StudentProfile>({
         esSedeGuayana: true,

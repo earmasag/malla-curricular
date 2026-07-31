@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Check, Pencil } from 'lucide-react';
 import type { MateriaNode } from '../../types/materia';
 import areasColorData from '../../data/areas_color.json';
@@ -13,13 +13,12 @@ const areasColorMap: Record<string, string> = areasColorData.reduce((acc, curr) 
 export interface MateriaCardProps {
     materia: MateriaNode;
     onClick?: () => void;
-    onRightClick?: () => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
     isHovered?: boolean;
 }
 
-const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
+const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
     const {
         nombre,
         codigoMateria,

@@ -9,6 +9,7 @@ export interface SidebarButtonProps {
     variant?: 'solid' | 'light' | 'ghost';
     disabled?: boolean;
     id?: string;
+    showBadge?: boolean;
 }
 
 const colorStyles = {
@@ -29,7 +30,7 @@ const colorStyles = {
     }
 };
 
-export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, label, onClick, color = 'theme', variant = 'ghost', disabled = false, id }) => {
+export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, label, onClick, color = 'theme', variant = 'ghost', disabled = false, id, showBadge = false }) => {
     const baseClasses = "flex items-center rounded-xl transition-colors duration-200 relative group overflow-hidden shrink-0 border";
     const sizeClasses = isExpanded ? "p-3 px-4 w-full gap-3" : "justify-center p-3 w-14 h-14";
     const disabledClasses = disabled ? "opacity-50 cursor-not-allowed grayscale" : "cursor-pointer";
@@ -62,8 +63,11 @@ export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, 
             className={`${baseClasses} ${sizeClasses} ${disabledClasses} ${colorClass}`}
             title={!isExpanded ? label : undefined}
         >
-            <div className={`shrink-0 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 ${iconColorClass}`}>
+            <div className={`shrink-0 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 relative ${iconColorClass}`}>
                 {icon}
+                {showBadge && (
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border-2 border-white shadow-sm"></span>
+                )}
             </div>
             {isExpanded && (
                 <span className="text-[14px] whitespace-nowrap text-left truncate">

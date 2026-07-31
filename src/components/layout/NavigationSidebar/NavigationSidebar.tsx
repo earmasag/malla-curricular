@@ -25,19 +25,19 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
     const { theme, setTheme } = useTheme();
     const { run, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
     const mainTour = useMainAppTour(customRouteState.isCustomRouteMode);
-    const { themeMenu } = useSidebarInteractions(run, ui.setIsExpanded);
-    const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
 
-    // Expandir el sidebar automáticamente en mobile si el tour principal arranca, excepto en el paso inicial
-    React.useEffect(() => {
-        if (mainTour.run && ui.isMobile) {
-            if (mainTour.stepIndex > 0 && !ui.isExpanded) {
-                ui.setIsExpanded(true);
-            } else if (mainTour.stepIndex === 0 && ui.isExpanded) {
-                ui.setIsExpanded(false);
-            }
-        }
-    }, [mainTour.run, mainTour.stepIndex, ui.isMobile, ui.isExpanded, ui.setIsExpanded]);
+    const { themeMenu, sugerencias } = useSidebarInteractions({
+        routeBuilderTourRun: run,
+        mainTourRun: mainTour.run,
+        mainTourStepIndex: mainTour.stepIndex,
+        isExpanded: ui.isExpanded,
+        setIsExpanded: ui.setIsExpanded,
+        isMobile: ui.isMobile,
+        setIsFeedbackModalOpen: ui.modales.setIsFeedbackModalOpen
+    });
+
+    const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
+    const { hasSeenSugerencias, shouldWiggle, handleSugerenciasClick } = sugerencias;
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
@@ -180,15 +180,14 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 />
                             )}
 
-
-                            {ui.modales.setIsFeedbackModalOpen && (
-                                <SidebarButton
-                                    isExpanded={ui.isExpanded}
-                                    icon={<MessageSquareHeart />}
-                                    label="Sugerencias"
-                                    onClick={(e) => { e.stopPropagation(); ui.modales.setIsFeedbackModalOpen(true); }}
-                                />
-                            )}
+                            <SidebarButton
+                                id="tour-main-sugerencias"
+                                isExpanded={ui.isExpanded}
+                                icon={<MessageSquareHeart className={shouldWiggle ? 'animate-wiggle text-theme-500' : ''} />}
+                                label="Sugerencias"
+                                onClick={handleSugerenciasClick}
+                                showBadge={!hasSeenSugerencias}
+                            />
                             <SidebarButton
                                 isExpanded={ui.isExpanded}
                                 icon={<Info />}

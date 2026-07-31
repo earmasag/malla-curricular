@@ -75,6 +75,16 @@ const TOUR_STEPS: Step[] = [
         placement: 'auto',
     },
     {
+        target: '#tour-main-sugerencias',
+        title: 'Tu opinión importa',
+        content: (
+            <span>
+                Desde aquí puedes solicitar tu carrera o reportar errores. Tu opinión da forma a la siguiente versión.
+            </span>
+        ),
+        placement: 'auto',
+    },
+    {
         target: '#tour-main-temas',
         title: 'Personaliza tu experiencia',
         content: (

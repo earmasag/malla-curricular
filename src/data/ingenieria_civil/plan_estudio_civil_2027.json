@@ -203,9 +203,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-9",
-        "prelacion": [
-          "CIVI-02000"
-        ],
+        "prelacion": ["CIVI-02000"],
         "semestre": 2,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -225,9 +223,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02000"
-        ],
+        "prelacion": ["CIVI-02000"],
         "semestre": 2,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -247,10 +243,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02003",
-          "FING-02017"
-        ],
+        "prelacion": ["FING-02017"],
         "semestre": 2,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
@@ -270,9 +263,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02003"
-        ],
+        "prelacion": ["FING-02003"],
         "semestre": 2,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
@@ -292,9 +283,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02004"
-        ],
+        "prelacion": ["FING-02004"],
         "semestre": 3,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
@@ -314,9 +303,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-1",
-        "prelacion": [
-          "UCAB-00001"
-        ],
+        "prelacion": ["UCAB-00001"],
         "semestre": 2,
         "areaFormacion": "Formación Integral",
         "ucRequeridas": 0,
@@ -332,7 +319,7 @@
         "horasPresenciales": 3,
         "horasAutonomas": 5,
         "horasTotales": 8,
-        "unidadesCredito": 4,
+        "unidadesCredito": 3,
         "tipo": "C*",
         "modalidad": "PRE",
         "taxonomia": "TA-9",
@@ -356,11 +343,8 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02004",
-          "FING-02017"
-        ],
-        "semestre": 3,
+        "prelacion": ["FING-02017", "FING-02003"],
+        "semestre": 2,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
         "correquisito": []
@@ -379,13 +363,11 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [],
+        "prelacion": ["FING-02007"],
         "semestre": 3,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
-        "correquisito": [
-          "FING-02007"
-        ]
+        "correquisito": []
       },
       {
         "departamento": "CIVI",
@@ -401,9 +383,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02023"
-        ],
+        "prelacion": ["CIVI-02023"],
         "semestre": 3,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -423,9 +403,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02002"
-        ],
+        "prelacion": ["CIVI-02002", "FING-02004"],
         "semestre": 3,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -445,13 +423,11 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-8",
-        "prelacion": [
-          "CIVI-02000"
-        ],
+        "prelacion": [],
         "semestre": 3,
         "areaFormacion": "Vías de Comunicación y Geodesia",
         "ucRequeridas": 0,
-        "correquisito": []
+        "correquisito": ["CIVI-02024", "CIVI-02004"]
       },
       {
         "departamento": "FING",
@@ -467,9 +443,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02004"
-        ],
+        "prelacion": ["FING-02004"],
         "semestre": 3,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
@@ -509,15 +483,11 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-9",
-        "prelacion": [
-          "FING-02006"
-        ],
+        "prelacion": ["FING-02006"],
         "semestre": 4,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
-        "correquisito": [
-          "FING-02008"
-        ]
+        "correquisito": []
       },
       {
         "departamento": "CIVI",
@@ -533,10 +503,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02005",
-          "FING-02001"
-        ],
+        "prelacion": ["CIVI-02005", "FING-02001"],
         "semestre": 4,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -556,10 +523,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02004",
-          "FING-02017"
-        ],
+        "prelacion": ["FING-02006", "CIVI-02002"],
         "semestre": 4,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
@@ -568,7 +532,7 @@
       {
         "departamento": "CIVI",
         "codigoMateria": "CIVI-02008",
-        "nombre": "Fotogrametría y SIG",
+        "nombre": "FOTOGRAMETRÍA Y SIS. DE INFORMACIÓN GEOGRÁFICA",
         "horasTeoricas": 0,
         "horasPracticas": 0,
         "horasLaboratorio": 2,
@@ -579,13 +543,11 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-9",
-        "prelacion": [
-          "CIVI-02003"
-        ],
+        "prelacion": ["CIVI-02003"],
         "semestre": 4,
         "areaFormacion": "Vías de Comunicación y Geodesia",
         "ucRequeridas": 0,
-        "correquisito": []
+        "correquisito": ["CIVI-02007"]
       },
       {
         "departamento": "CIVI",
@@ -601,7 +563,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [],
+        "prelacion": ["CIVI-02003"],
         "semestre": 4,
         "areaFormacion": "Geotecnia",
         "ucRequeridas": 0,
@@ -621,9 +583,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "UCAB-00003"
-        ],
+        "prelacion": ["UCAB-00003"],
         "semestre": 4,
         "areaFormacion": "Ingeniería Sanitaria y Ambiental",
         "ucRequeridas": 0,
@@ -663,9 +623,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02001"
-        ],
+        "prelacion": ["FING-02001"],
         "semestre": 4,
         "areaFormacion": "Fundamentos de Ingeniería",
         "ucRequeridas": 0,
@@ -689,9 +647,7 @@
         "semestre": 5,
         "areaFormacion": "Gerencia de Construcción",
         "ucRequeridas": 0,
-        "correquisito": [
-          "CIVI-02026"
-        ]
+        "correquisito": ["CIVI-02026"]
       },
       {
         "departamento": "CIVI",
@@ -707,9 +663,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02012"
-        ],
+        "prelacion": ["CIVI-02012"],
         "semestre": 5,
         "areaFormacion": "Gerencia de Construcción",
         "ucRequeridas": 0,
@@ -729,9 +683,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02009"
-        ],
+        "prelacion": ["CIVI-02007"],
         "semestre": 5,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -751,9 +703,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02031"
-        ],
+        "prelacion": ["CIVI-02031"],
         "semestre": 5,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
@@ -773,9 +723,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "FING-02011"
-        ],
+        "prelacion": ["CIVI-02031"],
         "semestre": 5,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
@@ -795,9 +743,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02003"
-        ],
+        "prelacion": ["CIVI-02008"],
         "semestre": 5,
         "areaFormacion": "Vías de Comunicación y Geodesia",
         "ucRequeridas": 0,
@@ -817,10 +763,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02007",
-          "CIVI-02009"
-        ],
+        "prelacion": ["CIVI-02007", "CIVI-02009"],
         "semestre": 5,
         "areaFormacion": "Geotecnia",
         "ucRequeridas": 0,
@@ -840,10 +783,8 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02027"
-        ],
-        "semestre": 5,
+        "prelacion": ["CIVI-02027"],
+        "semestre": 6,
         "areaFormacion": "Geotecnia",
         "ucRequeridas": 0,
         "correquisito": []
@@ -863,12 +804,10 @@
         "modalidad": "PRE",
         "taxonomia": "TA-9",
         "prelacion": [],
-        "semestre": 5,
+        "semestre": 6,
         "areaFormacion": "Geotecnia",
         "ucRequeridas": 0,
-        "correquisito": [
-          "CIVI-02032"
-        ]
+        "correquisito": ["CIVI-02032"]
       },
       {
         "departamento": "CIVI",
@@ -884,9 +823,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02031"
-        ],
+        "prelacion": ["CIVI-02031"],
         "semestre": 6,
         "areaFormacion": "Ingeniería Sanitaria y Ambiental",
         "ucRequeridas": 0,
@@ -907,9 +844,9 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
         "prelacion": [],
-        "semestre": 6,
+        "semestre": 5,
         "areaFormacion": "Gerencia de Construcción",
-        "ucRequeridas": 0,
+        "ucRequeridas": 108,
         "correquisito": []
       },
       {
@@ -926,9 +863,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02029"
-        ],
+        "prelacion": ["CIVI-02029"],
         "semestre": 6,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -948,9 +883,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02029"
-        ],
+        "prelacion": ["CIVI-02029"],
         "semestre": 6,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -970,9 +903,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02012_V"
-        ],
+        "prelacion": ["CIVI-02012_V"],
         "semestre": 6,
         "areaFormacion": "Vías de Comunicación y Geodesia",
         "ucRequeridas": 0,
@@ -992,9 +923,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02006"
-        ],
+        "prelacion": ["CIVI-02006"],
         "semestre": 6,
         "areaFormacion": "Gerencia de Construcción",
         "ucRequeridas": 0,
@@ -1014,9 +943,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02028"
-        ],
+        "prelacion": ["CIVI-02028"],
         "semestre": 6,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -1036,9 +963,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02030"
-        ],
+        "prelacion": ["CIVI-02030"],
         "semestre": 6,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -1058,9 +983,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02014"
-        ],
+        "prelacion": ["CIVI-02014"],
         "semestre": 7,
         "areaFormacion": "Ingeniería Sanitaria y Ambiental",
         "ucRequeridas": 0,
@@ -1084,9 +1007,7 @@
         "semestre": 7,
         "areaFormacion": "Ingeniería Sanitaria y Ambiental",
         "ucRequeridas": 0,
-        "correquisito": [
-          "CIVI-02019"
-        ]
+        "correquisito": ["CIVI-02019"]
       },
       {
         "departamento": "CIVI",
@@ -1102,9 +1023,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02033"
-        ],
+        "prelacion": ["CIVI-02033"],
         "semestre": 7,
         "areaFormacion": "Ingeniería Estructural",
         "ucRequeridas": 0,
@@ -1124,9 +1043,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02031"
-        ],
+        "prelacion": ["CIVI-02015"],
         "semestre": 7,
         "areaFormacion": "Ingeniería Sanitaria y Ambiental",
         "ucRequeridas": 0,
@@ -1150,9 +1067,7 @@
         "semestre": 7,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
-        "correquisito": [
-          "CIVI-02034"
-        ]
+        "correquisito": ["CIVI-02034"]
       },
       {
         "departamento": "CIVI",
@@ -1168,9 +1083,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02034"
-        ],
+        "prelacion": ["CIVI-02034"],
         "semestre": 7,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
@@ -1190,9 +1103,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02035"
-        ],
+        "prelacion": ["CIVI-02035"],
         "semestre": 7,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
@@ -1212,9 +1123,7 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02032"
-        ],
+        "prelacion": ["CIVI-02032"],
         "semestre": 7,
         "areaFormacion": "Vías de Comunicación y Geodesia",
         "ucRequeridas": 0,
@@ -1234,9 +1143,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02034"
-        ],
+        "prelacion": ["CIVI-02034"],
         "semestre": 8,
         "areaFormacion": "Ingeniería Hidráulica",
         "ucRequeridas": 0,
@@ -1296,9 +1203,7 @@
         "tipo": "CR",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02032"
-        ],
+        "prelacion": ["CIVI-02032"],
         "semestre": 8,
         "areaFormacion": "Geotecnia",
         "ucRequeridas": 0,
@@ -1325,6 +1230,26 @@
         "correquisito": []
       },
       {
+        "departamento": "UCAB",
+        "codigoMateria": "UCAB-SSC",
+        "nombre": "Seminario de Srevicio Comunitario",
+        "horasTeoricas": 0,
+        "horasPracticas": 0,
+        "horasLaboratorio": 0,
+        "horasPresenciales": 0,
+        "horasAutonomas": 0,
+        "horasTotales": 0,
+        "unidadesCredito": 0,
+        "tipo": "C",
+        "modalidad": "PRE",
+        "taxonomia": "TA-4E",
+        "prelacion": [],
+        "semestre": 5,
+        "areaFormacion": "Formación Integral",
+        "ucRequeridas": 117,
+        "correquisito": []
+      },
+      {
         "departamento": "CIVI",
         "codigoMateria": "CIVI-TG",
         "nombre": "Trabajo de Grado",
@@ -1338,11 +1263,29 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-4E",
-        "prelacion": [
-          "CIVI-02036"
-        ],
+        "prelacion": ["CIVI-02036"],
         "semestre": 8,
         "areaFormacion": "Formación Integral",
+        "ucRequeridas": 0,
+        "correquisito": []
+      },
+      {
+        "departamento": "CIVI",
+        "codigoMateria": "CIVI-02014",
+        "nombre": "PLANTAS POTABILIZADORAS DE AGUA",
+        "horasTeoricas": 2,
+        "horasPracticas": 1,
+        "horasLaboratorio": 0,
+        "horasPresenciales": 3,
+        "horasAutonomas": 4,
+        "horasTotales": 6,
+        "unidadesCredito": 4,
+        "tipo": "C",
+        "modalidad": "PRE",
+        "taxonomia": "TA-4E",
+        "prelacion": ["CIVI-02011", "CIVI-02012", "CIVI 02031"],
+        "semestre": 5,
+        "areaFormacion": "Ingeniería Sanitaria y Ambiental",
         "ucRequeridas": 0,
         "correquisito": []
       }

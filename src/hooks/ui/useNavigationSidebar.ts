@@ -48,7 +48,8 @@ export const useNavigationSidebar = () => {
             cantidadAprobadas,
             ucAcumuladas,
             semestreActual,
-            ucCursando
+            ucCursando,
+            materiasCursando
         },
         customRouteState: {
             isCustomRouteMode,

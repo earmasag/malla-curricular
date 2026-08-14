@@ -23,7 +23,7 @@ export class StandardMallaEvaluator implements IMallaEvaluator {
                 const cumpleReqs = reqs.every(req => nuevoProgreso[req] === "aprobada");
                 const cumpleCorreqs = correqs.length === 0 || correqs.every(req =>
                     nuevoProgreso[req] === "aprobada" ||
-                    nuevoProgreso[req] === "disponible" ||
+                    //nuevoProgreso[req] === "disponible" ||
                     nuevoProgreso[req] === "cursando");
                 const cumpleUC = ucActual >= materia.ucRequeridas;
 

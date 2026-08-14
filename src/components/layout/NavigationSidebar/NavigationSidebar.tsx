@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
@@ -22,6 +22,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
     totalMaterias,
 }) => {
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
+    const [isCursandoDropdownOpen, setIsCursandoDropdownOpen] = useState(false);
     const { theme, setTheme } = useTheme();
     const { run, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
     const mainTour = useMainAppTour(customRouteState.isCustomRouteMode);
@@ -50,7 +51,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     return (
         <aside
-            className={`fixed z-50 flex flex-col bg-theme-50/40 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu overflow-hidden
+            className={`fixed z-50 flex flex-col bg-theme-50/40 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu
                 ${ui.isMobile ? mobileClasses : desktopClasses}`}
         >
             {/* Toggle Button */}
@@ -119,18 +120,55 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                                 {/* UC Cursando */}
                                 {mallaStats.ucCursando > 0 && (
-                                    <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                        <div className="relative shrink-0 flex items-center justify-center w-5 h-5">
-                                            <span className="absolute w-2.5 h-2.5 rounded-full bg-theme-500 animate-ping opacity-75"></span>
-                                            <span className="relative w-2 h-2 rounded-full bg-theme-500"></span>
-                                        </div>
-                                        {ui.isExpanded ? (
-                                            <div className="flex-1 flex justify-between items-center">
-                                                <span className="text-sm font-semibold text-slate-700">UC Cursando</span>
-                                                <span className="text-slate-800 font-black">{mallaStats.ucCursando}</span>
+                                    <div className="relative w-full group">
+                                        <div 
+                                            className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${ui.isMobile ? 'cursor-pointer active:scale-95' : 'cursor-default'} ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2 mx-auto' : ''}`}
+                                            onClick={() => { if (ui.isMobile) setIsCursandoDropdownOpen(!isCursandoDropdownOpen); }}
+                                        >
+                                            <div className="relative shrink-0 flex items-center justify-center w-5 h-5">
+                                                <span className="absolute w-2.5 h-2.5 rounded-full bg-theme-500 animate-ping opacity-75"></span>
+                                                <span className="relative w-2 h-2 rounded-full bg-theme-500"></span>
                                             </div>
-                                        ) : (
-                                            <span className="text-[10px] sm:text-xs font-black text-slate-800 leading-none">{mallaStats.ucCursando}</span>
+                                            {ui.isExpanded ? (
+                                                <div className="flex-1 flex justify-between items-center">
+                                                    <span className="text-sm font-semibold text-slate-700">UC Cursando</span>
+                                                    <span className="text-slate-800 font-black">{mallaStats.ucCursando}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-[10px] sm:text-xs font-black text-slate-800 leading-none">{mallaStats.ucCursando}</span>
+                                            )}
+                                        </div>
+
+                                        {/* Mobile Accordion */}
+                                        {ui.isMobile && isCursandoDropdownOpen && ui.isExpanded && (
+                                            <div className="w-full mt-2 bg-white/60 border border-white/50 shadow-inner rounded-xl p-3 transition-all animate-fade-in-up">
+                                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Materias Cursando</h4>
+                                                <ul className="flex flex-col gap-2 max-h-48 overflow-y-auto hide-scrollbar">
+                                                    {mallaStats.materiasCursando?.map((m: any) => (
+                                                        <li key={m.id} className="text-sm text-slate-700 font-medium flex justify-between gap-2">
+                                                            <span className="truncate">{m.nombre}</span>
+                                                            <span className="text-xs text-theme-600 font-bold shrink-0">{m.unidadesCredito} UC</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {/* Desktop Hover Tooltip */}
+                                        {!ui.isMobile && (
+                                            <div className="absolute left-full top-0 ml-4 hidden group-hover:block w-64 z-[100] pointer-events-none">
+                                                <div className="bg-white/95 backdrop-blur-xl border border-white/60 shadow-xl rounded-2xl p-4 transform translate-y-[-20%] animate-fade-in-up">
+                                                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Materias Cursando</h4>
+                                                    <ul className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto hide-scrollbar">
+                                                        {mallaStats.materiasCursando?.map((m: any) => (
+                                                            <li key={m.id} className="text-sm text-slate-700 font-medium flex justify-between items-start gap-2">
+                                                                <span className="leading-tight">{m.nombre}</span>
+                                                                <span className="text-xs text-theme-600 font-bold shrink-0 bg-theme-50 px-1.5 py-0.5 rounded-md">{m.unidadesCredito} UC</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         )}
                                     </div>
                                 )}
@@ -279,6 +317,18 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 label="Ajustes"
                                 onClick={(e) => { e.stopPropagation(); ui.modales.setIsSettingsOpen(true); }}
                             />
+
+                            <div className="h-px bg-slate-200 my-2 mx-2"></div>
+
+                            <SidebarButton
+                                id="tour-main-borrar-todo"
+                                isExpanded={ui.isExpanded}
+                                icon={<Trash2 />}
+                                label="Borrar Todo"
+                                onClick={actions.handleResetProgreso}
+                                color="red"
+                                variant="ghost"
+                            />
                         </>
                     ) : (
                         // Custom Mode Stats & Actions
@@ -390,19 +440,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
             </div>
 
-            {/* Bottom Actions Fixed Area */}
-            {!customRouteState.isCustomRouteMode && (
-                <div id="tour-main-borrar-todo" className={`p-4 border-t border-gray-100 bg-gray-50/50 transition-opacity duration-300 ${!ui.isExpanded && ui.isMobile ? 'opacity-0 pointer-events-none' : 'opacity-100 delay-100'} ${ui.isMobile ? 'rounded-b-none pb-8' : 'rounded-b-3xl'} ${!ui.isExpanded ? 'flex justify-center' : ''}`}>
-                    <SidebarButton
-                        isExpanded={ui.isExpanded}
-                        icon={<Trash2 />}
-                        label="Borrar Todo"
-                        onClick={actions.handleResetProgreso}
-                        color="red"
-                        variant="ghost"
-                    />
-                </div>
-            )}
+
 
             <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
             <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />

@@ -42,7 +42,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
         ? 'left-3 top-3 w-[calc(100vw-1.5rem)] h-[calc(100dvh-1.5rem)] rounded-3xl origin-top-left' // Ancla superior izquierda, expande w/h
-        : 'left-3 top-3 w-9 h-9 rounded-xl justify-center items-center shadow-md origin-top-left'; // Botón flotante cuadrado redondeado
+        : 'left-3 top-3 w-9 h-9 rounded-xl shadow-md origin-top-left'; // Botón flotante cuadrado redondeado
 
     const desktopClasses = ui.isExpanded
         ? 'left-4 top-4 bottom-4 w-72 rounded-3xl'
@@ -50,7 +50,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     return (
         <aside
-            className={`fixed z-50 flex flex-col bg-theme-50/40 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu
+            className={`fixed z-50 flex flex-col bg-theme-50/40 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu overflow-hidden
                 ${ui.isMobile ? mobileClasses : desktopClasses}`}
         >
             {/* Toggle Button */}
@@ -71,11 +71,10 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                 </button>
             </div>
 
-            {/* Content Area (Hidden on mobile if collapsed) */}
-            {(!ui.isMobile || ui.isExpanded) && (
-                <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-3 p-3 hide-scrollbar">
+            {/* Content Area (Fades out on mobile if collapsed) */}
+            <div className={`flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-3 p-3 hide-scrollbar transition-opacity duration-300 ${!ui.isExpanded && ui.isMobile ? 'opacity-0 pointer-events-none' : 'opacity-100 delay-100'}`}>
 
-                    {/* Regular Mode Stats */}
+                {/* Regular Mode Stats */}
                     {!customRouteState.isCustomRouteMode ? (
                         <>
                             <div id="tour-main-stats" className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
@@ -389,12 +388,11 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                     )}
 
 
-                </div>
-            )}
+            </div>
 
             {/* Bottom Actions Fixed Area */}
-            {(!ui.isMobile || ui.isExpanded) && !customRouteState.isCustomRouteMode && (
-                <div id="tour-main-borrar-todo" className={`p-4 border-t border-gray-100 bg-gray-50/50 ${ui.isMobile ? 'rounded-b-none pb-8' : 'rounded-b-3xl'} ${!ui.isExpanded ? 'flex justify-center' : ''}`}>
+            {!customRouteState.isCustomRouteMode && (
+                <div id="tour-main-borrar-todo" className={`p-4 border-t border-gray-100 bg-gray-50/50 transition-opacity duration-300 ${!ui.isExpanded && ui.isMobile ? 'opacity-0 pointer-events-none' : 'opacity-100 delay-100'} ${ui.isMobile ? 'rounded-b-none pb-8' : 'rounded-b-3xl'} ${!ui.isExpanded ? 'flex justify-center' : ''}`}>
                     <SidebarButton
                         isExpanded={ui.isExpanded}
                         icon={<Trash2 />}

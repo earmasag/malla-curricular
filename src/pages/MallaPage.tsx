@@ -152,7 +152,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                                         hoveredMateria={hoveredMateria}
                                         containerRef={contentRef}
                                     />
-                                    <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-36 pb-32 min-w-max min-h-max">
+                                    <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-36 pb-32 landscape:pt-16 landscape:pb-16 min-w-max min-h-max">
                                         {semestresArray.map((numeroSemestre: number, index: number) => {
                                             return (
                                                 <SemestreColumn

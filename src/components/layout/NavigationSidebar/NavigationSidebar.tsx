@@ -41,7 +41,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
-        ? 'left-3 top-3 w-[calc(100vw-1.5rem)] h-[calc(100dvh-1.5rem)] rounded-3xl origin-top-left' // Ancla superior izquierda, expande w/h
+        ? 'left-3 top-3 w-[calc(100vw-1.5rem)] landscape:w-[calc(50vw-1.5rem)] h-[calc(100dvh-1.5rem)] rounded-3xl origin-top-left' // Ancla superior izquierda, expande w/h
         : 'left-3 top-3 w-9 h-9 rounded-xl shadow-md origin-top-left'; // Botón flotante cuadrado redondeado
 
     const desktopClasses = ui.isExpanded

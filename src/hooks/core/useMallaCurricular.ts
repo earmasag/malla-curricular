@@ -176,7 +176,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             }
 
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
-            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior);
+            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior, progresoActual);
         });
     }, [grafo, evaluator, progreso, showToast]);
 
@@ -232,7 +232,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             }
 
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
-            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior);
+            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior, progresoActual);
         });
     }, [grafo, evaluator, progreso, showToast]);
 
@@ -260,7 +260,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
 
             // Forzamos la reevaluación estricta de la malla para revertir aprobaciones inválidas o 
             // bloquear materias que dependían de las que acabamos de desaprobar.
-            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior);
+            return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior, progresoActual);
         });
     }, [grafo, evaluator]);
 

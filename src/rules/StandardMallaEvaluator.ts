@@ -5,7 +5,7 @@ import { calcularUCAcumuladas } from "../utils/mallaUtils";
 
 export class StandardMallaEvaluator implements IMallaEvaluator {
     // Función pura que reevalúa toda la malla hasta estabilizar todos los bloqueos y desbloqueos
-    public evaluate(progresoBase: ProgresoMalla, grafo: MallaCurricularGraph, ucAdicionales: number = 0): ProgresoMalla {
+    public evaluate(progresoBase: ProgresoMalla, grafo: MallaCurricularGraph, ucAdicionales: number = 0, progresoAnterior?: ProgresoMalla): ProgresoMalla {
         const nuevoProgreso = { ...progresoBase };
         let cambiado = true;
 
@@ -33,8 +33,32 @@ export class StandardMallaEvaluator implements IMallaEvaluator {
                 if (estadoAnterior === "aprobada") {
                     // Si la teníamos aprobada pero perdió los requisitos (ej. perdimos UC o desaprobamos una prelativa)
                     if (!puedeCursarse) {
-                        nuevoProgreso[cod] = "bloqueada";
-                        cambiado = true;
+                        let eraExenta = true;
+                        
+                        if (progresoAnterior) {
+                             const ucAnterior = calcularUCAcumuladas(progresoAnterior, grafo) + ucAdicionales;
+                             
+                             const cumpliaReqs = reqs.every(req => progresoAnterior[req] === "aprobada");
+                             const cumpliaCorreqs = correqs.length === 0 || correqs.every(req =>
+                                progresoAnterior[req] === "aprobada" ||
+                                progresoAnterior[req] === "disponible" ||
+                                progresoAnterior[req] === "cursando");
+                             const cumpliaUC = ucAnterior >= materia.ucRequeridas;
+
+                             const teniaRequisitosAntes = cumpliaReqs && cumpliaCorreqs && cumpliaUC;
+                             
+                             // Si tenía los requisitos ANTES de la acción del usuario, 
+                             // significa que la acción del usuario le quitó los requisitos (no era una materia migrada exenta).
+                             // Por lo tanto, debe bloquearse.
+                             if (teniaRequisitosAntes) {
+                                 eraExenta = false;
+                             }
+                        }
+
+                        if (!eraExenta) {
+                            nuevoProgreso[cod] = "bloqueada";
+                            cambiado = true;
+                        }
                     }
                 } else if (estadoAnterior === "disponible" || estadoAnterior === "cursando") {
                     // Si estaba disponible o cursando pero ya no cumple los requisitos regresará a bloqueada

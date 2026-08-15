@@ -9,7 +9,8 @@ import { useSemestreColumn } from '../../hooks/malla/useSemestreColumn';
 const MateriaCardWrapper = memo(({ 
     materiaInmutable, 
     progreso, 
-    onSelectMateria, 
+    onSelectMateria,
+    onToggleCursandoMateria
 }: {
     materiaInmutable: MateriaNode;
     progreso: ProgresoMalla;
@@ -24,6 +25,7 @@ const MateriaCardWrapper = memo(({
         <MateriaCard
             materia={materiaPaPintar}
             onClick={() => onSelectMateria(materiaInmutable.codigoMateria)}
+            onRightClick={() => onToggleCursandoMateria(materiaInmutable.codigoMateria)}
             onMouseEnter={() => setHoveredMateria(materiaInmutable.codigoMateria)}
             onMouseLeave={() => setHoveredMateria(null)}
             isHovered={hoveredMateria === materiaInmutable.codigoMateria}

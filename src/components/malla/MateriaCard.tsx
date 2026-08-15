@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { Check, Pencil } from 'lucide-react';
 import type { MateriaNode } from '../../types/materia';
 import { useCarrera } from '../../contexts/CarreraContext';
@@ -6,13 +6,17 @@ import { useCarrera } from '../../contexts/CarreraContext';
 export interface MateriaCardProps {
     materia: MateriaNode;
     onClick?: () => void;
+    onRightClick?: () => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
     isHovered?: boolean;
 }
 
-const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
+const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMouseLeave, isHovered }: MateriaCardProps) => {
     const { areasColorMap } = useCarrera();
+    const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const wasLongPress = useRef(false);
+    const touchStartPos = useRef<{ x: number, y: number } | null>(null);
     const {
         nombre,
         codigoMateria,
@@ -41,16 +45,60 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
     const currentHexColor = colorArea;
 
     // --- Interacción Táctil: mostrar prelaciones al tocar (equivalente al hover de desktop) ---
-    const handleTouchStart = () => {
+    const handleTouchStart = (e: React.TouchEvent) => {
+        wasLongPress.current = false;
+        touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        
         if (onMouseEnter) onMouseEnter();
+        if (onRightClick) {
+            longPressTimer.current = setTimeout(() => {
+                wasLongPress.current = true;
+                onRightClick();
+                // Opcional: proveer feedback táctil si el dispositivo lo soporta
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(50);
+                }
+            }, 450); // Reducido a 450ms para que se sienta más responsivo
+        }
     };
 
     const handleTouchEnd = () => {
+        touchStartPos.current = null;
         if (onMouseLeave) onMouseLeave();
+        if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current);
+            longPressTimer.current = null;
+        }
     };
 
-    const handleClick = () => {
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (!touchStartPos.current) return;
+        
+        const deltaX = Math.abs(e.touches[0].clientX - touchStartPos.current.x);
+        const deltaY = Math.abs(e.touches[0].clientY - touchStartPos.current.y);
+        
+        // Si el usuario mueve el dedo más de 10px, asumimos que está haciendo scroll y cancelamos el long press
+        if (deltaX > 10 || deltaY > 10) {
+            handleTouchEnd();
+        }
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+        if (wasLongPress.current) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Reseteamos el flag después de prevenir el click
+            setTimeout(() => { wasLongPress.current = false; }, 50);
+            return;
+        }
         if (onClick) onClick();
+    };
+
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault(); // Deshabilitar el menú contextual nativo
+        // Si ya se disparó por el temporizador de touch (mobile), ignoramos el evento nativo
+        if (wasLongPress.current) return;
+        if (onRightClick) onRightClick();
     };
 
     // Si está bloqueada, le aplicamos una grilla con CSS lineal
@@ -70,7 +118,8 @@ const MateriaCardContent = ({ materia, onClick, onMouseEnter, onMouseLeave, isHo
             onClick={handleClick}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            onTouchMove={handleTouchEnd}
+            onTouchMove={handleTouchMove}
+            onContextMenu={handleContextMenu}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             className={`materia-card relative w-48 h-20 rounded-br-[20px] my-1 border-[3px] select-none ${opacityClass} transition-all duration-300 transform-gpu ${onClick ? 'cursor-pointer [@media(hover:hover)]:hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-theme-500 z-50' : 'z-10'} ${isCursando ? 'shadow-[0_0_15px_rgba(59,130,246,0.6)] ring-2 ring-blue-400 ring-offset-1' : 'shadow-sm'}`}

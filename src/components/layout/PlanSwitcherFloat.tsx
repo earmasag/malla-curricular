@@ -4,7 +4,7 @@ import type { PlanId } from '../../contexts/PlanContext';
 import { MigrationConfirmModal } from '../modals/MigrationConfirmModal';
 import { MateriaRepository } from '../../repository/MateriaRepository';
 import { MigrationService } from '../../services/MigrationService';
-import { StandardMallaEvaluator } from '../../rules/StandardMallaEvaluator';
+import { MigrationMallaEvaluator } from '../../rules/MigrationMallaEvaluator';
 import { MallaCurricularBuilder } from '../../core/MallaCurricularBuilder';
 import { useCarrera } from '../../contexts/CarreraContext';
 import { RefreshCw } from 'lucide-react';
@@ -23,7 +23,7 @@ export const PlanSwitcherFloat: React.FC = () => {
         const newRepo = new MateriaRepository("202715");
         const oldProgress = oldRepo.getStudentProgress();
         
-        const evaluator = new StandardMallaEvaluator();
+        const evaluator = new MigrationMallaEvaluator();
         const migrationService = new MigrationService(evaluator);
         
         const builder = new MallaCurricularBuilder();

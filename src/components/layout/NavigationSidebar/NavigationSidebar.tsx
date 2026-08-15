@@ -162,7 +162,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                         {/* Desktop Hover Tooltip (Portaled to document.body to escape overflow) */}
                                         {!ui.isMobile && cursandoHoverRect && createPortal(
                                             <div 
-                                                className="fixed z-[100] pointer-events-none"
+                                                className="fixed z-100 pointer-events-none"
                                                 style={{
                                                     top: cursandoHoverRect.top - 20,
                                                     left: cursandoHoverRect.right + 16,

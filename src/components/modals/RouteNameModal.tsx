@@ -33,7 +33,7 @@ export const RouteNameModal: React.FC<RouteNameModalProps> = ({
     };
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-fade-in">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-scale-up border border-gray-200">
                 <div className="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
                     <h3 className="font-bold text-gray-800 flex items-center gap-2">

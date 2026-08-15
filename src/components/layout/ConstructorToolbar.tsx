@@ -31,7 +31,7 @@ export const ConstructorToolbar: React.FC = () => {
     return (
         <>
             <div className="fixed bottom-0 left-0 right-0 z-40 p-3 sm:p-5 pointer-events-none flex justify-center">
-                <div className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl rounded-[1.5rem] md:rounded-full p-3 md:px-5 md:py-3 pointer-events-auto flex flex-col md:flex-row items-center gap-3 md:gap-6 w-full max-w-[95%] md:max-w-max animate-slide-up">
+                <div className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-2xl rounded-3xl md:rounded-full p-3 md:px-5 md:py-3 pointer-events-auto flex flex-col md:flex-row items-center gap-3 md:gap-6 w-full max-w-[95%] md:max-w-max animate-slide-up">
                     
                     {/* Contenedor de Estadísticas */}
                     <div id="tour-toolbar-stats" className="flex items-center justify-between md:justify-center gap-2 w-full md:w-auto">
@@ -50,7 +50,7 @@ export const ConstructorToolbar: React.FC = () => {
 
                         {/* UCs */}
                         <div 
-                            className="flex flex-col items-center justify-center px-3 h-11 bg-white/50 backdrop-blur-md border border-white/60 shadow-sm rounded-xl min-w-[4rem] flex-1 md:flex-none"
+                            className="flex flex-col items-center justify-center px-3 h-11 bg-white/50 backdrop-blur-md border border-white/60 shadow-sm rounded-xl min-w-16 flex-1 md:flex-none"
                             title={`Semestre: ${currentSemesterUCs} UC | Total Ruta: ${totalCustomUCs} UC`}
                         >
                             <span className="text-sm font-black text-slate-800 leading-none">{currentSemesterUCs}</span>

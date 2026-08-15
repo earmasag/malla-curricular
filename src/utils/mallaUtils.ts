@@ -57,7 +57,7 @@ export const calcularUCPensumAnterior = (pensumAnterior: Record<string, boolean>
 
     ajustesData.forEach(ajuste => {
         if (pensumAnterior[ajuste.key]) {
-            total += ajuste.uc;
+            total += ajuste.uc || 0;
         }
     });
 

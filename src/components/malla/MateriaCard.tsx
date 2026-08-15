@@ -16,6 +16,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
     const { areasColorMap } = useCarrera();
     const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const wasLongPress = useRef(false);
+    const wasDragging = useRef(false);
     const touchStartPos = useRef<{ x: number, y: number } | null>(null);
     const {
         nombre,
@@ -47,6 +48,7 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
     // --- Interacción Táctil: mostrar prelaciones al tocar (equivalente al hover de desktop) ---
     const handleTouchStart = (e: React.TouchEvent) => {
         wasLongPress.current = false;
+        wasDragging.current = false;
         touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         
         if (onMouseEnter) onMouseEnter();
@@ -79,16 +81,20 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
         
         // Si el usuario mueve el dedo más de 10px, asumimos que está haciendo scroll y cancelamos el long press
         if (deltaX > 10 || deltaY > 10) {
+            wasDragging.current = true;
             handleTouchEnd();
         }
     };
 
     const handleClick = (e: React.MouseEvent) => {
-        if (wasLongPress.current) {
+        if (wasLongPress.current || wasDragging.current) {
             e.preventDefault();
             e.stopPropagation();
-            // Reseteamos el flag después de prevenir el click
-            setTimeout(() => { wasLongPress.current = false; }, 50);
+            // Reseteamos los flags después de prevenir el click
+            setTimeout(() => { 
+                wasLongPress.current = false; 
+                wasDragging.current = false;
+            }, 50);
             return;
         }
         if (onClick) onClick();

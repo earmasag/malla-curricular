@@ -789,7 +789,7 @@
         "modalidad": "PRE",
         "taxonomia": "-",
         "prelacion": [],
-        "semestre": 6,
+        "semestre": 5,
         "areaFormacion": "Formación Integral",
         "ucRequeridas": 120,
         "correquisito": []
@@ -962,7 +962,7 @@
         "modalidad": "PRE",
         "taxonomia": "-",
         "prelacion": [],
-        "semestre": 6,
+        "semestre": 8,
         "areaFormacion": "Prácticas Profesionales",
         "ucRequeridas": 151,
         "correquisito": []
@@ -984,8 +984,8 @@
         "prelacion": [
           "CURSO-SC"
         ],
-        "semestre": 7,
-        "areaFormacion": "Formación Integral",
+        "semestre": 6,
+        "areaFormacion": "Prácticas Profesionales",
         "ucRequeridas": 0,
         "correquisito": []
       },

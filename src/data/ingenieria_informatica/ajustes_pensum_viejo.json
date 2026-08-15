@@ -21,6 +21,13 @@
     "tipo": "derogada"
   },
   {
+    "key": "FING-02008-DEROGADA",
+    "oldCodes": ["FING-02008"],
+    "nombre": "Fundamentos de Programación (Derogada parcial)",
+    "uc": 3,
+    "tipo": "derogada"
+  },
+  {
     "key": "INFO-02006-derogada",
     "oldCodes": ["INFO-02006"],
     "nombre": "Programación Orientada a la Web",
@@ -94,7 +101,7 @@
     "key": "INFO-02001-AJUSTE",
     "oldCodes": ["FING-02008", "INFO-02001"],
     "nombre": "Algoritmos y Programación (Ajuste Pensum Viejo)",
-    "uc": -1,
+    "uc": -4,
     "tipo": "ajuste"
   },
   {

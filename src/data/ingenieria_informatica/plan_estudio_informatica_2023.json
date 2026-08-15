@@ -790,7 +790,7 @@
         "taxonomia": "-",
         "prelacion": [],
         "semestre": 5,
-        "areaFormacion": "Formación Integral",
+        "areaFormacion": "Extensión Social",
         "ucRequeridas": 120,
         "correquisito": []
       },
@@ -985,7 +985,7 @@
           "CURSO-SC"
         ],
         "semestre": 6,
-        "areaFormacion": "Prácticas Profesionales",
+        "areaFormacion": "Extensión Social",
         "ucRequeridas": 0,
         "correquisito": []
       },

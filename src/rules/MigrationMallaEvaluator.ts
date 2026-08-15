@@ -3,13 +3,13 @@ import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 import type { IMallaEvaluator } from "./IMallaEvaluator";
 import { calcularUCAcumuladas } from "../utils/mallaUtils";
 
-export class StandardMallaEvaluator implements IMallaEvaluator {
-    // Función pura que reevalúa toda la malla hasta estabilizar todos los bloqueos y desbloqueos
+export class MigrationMallaEvaluator implements IMallaEvaluator {
+    // Función que evalúa la malla durante la migración respetando las materias ya aprobadas
     public evaluate(progresoBase: ProgresoMalla, grafo: MallaCurricularGraph, ucAdicionales: number = 0): ProgresoMalla {
         const nuevoProgreso = { ...progresoBase };
         let cambiado = true;
 
-        // Repetimos hasta que ningún estado cambie (efecto dominó global)
+        // Repetimos hasta que ningún estado cambie
         while (cambiado) {
             cambiado = false;
             const ucActual = calcularUCAcumuladas(nuevoProgreso, grafo) + ucAdicionales;
@@ -17,6 +17,13 @@ export class StandardMallaEvaluator implements IMallaEvaluator {
             for (const materia of grafo.getAllNodes()) {
                 const cod = materia.codigoMateria;
                 const estadoAnterior = nuevoProgreso[cod] || "bloqueada";
+
+                // Si la materia ya fue aprobada (mapeada por migración), NO la tocamos.
+                // Esto previene que se re-evalúen pre-requisitos nuevos que el estudiante
+                // no tenía en el pensum viejo pero que fueron validados en su momento.
+                if (estadoAnterior === "aprobada") {
+                    continue;
+                }
 
                 const reqs = grafo.getMateriasRequeridas(cod);
                 const correqs = grafo.getCorrequisitos(cod);
@@ -30,13 +37,7 @@ export class StandardMallaEvaluator implements IMallaEvaluator {
                 // Una materia está lista para cursarse si cumple pre-requisitos explícitos, correquisitos Y créditos (UC)
                 const puedeCursarse = cumpleReqs && cumpleCorreqs && cumpleUC;
 
-                if (estadoAnterior === "aprobada") {
-                    // Si la teníamos aprobada pero perdió los requisitos (ej. perdimos UC o desaprobamos una prelativa)
-                    if (!puedeCursarse) {
-                        nuevoProgreso[cod] = "bloqueada";
-                        cambiado = true;
-                    }
-                } else if (estadoAnterior === "disponible" || estadoAnterior === "cursando") {
+                if (estadoAnterior === "disponible" || estadoAnterior === "cursando") {
                     // Si estaba disponible o cursando pero ya no cumple los requisitos regresará a bloqueada
                     if (!puedeCursarse) {
                         nuevoProgreso[cod] = "bloqueada";

@@ -3,37 +3,15 @@ import type { IMallaEvaluator } from "../rules/IMallaEvaluator";
 import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 import { calcularUCPensumAnterior } from "../utils/mallaUtils";
 
-// ==========================================
-// MIGRATION RULES (202415 -> 202715)
-// ==========================================
-
-export const MIGRATION_RULES = {
-    // 1:1 Mappings (Old Code -> New Code)
-    oneToOne: {
-        "ADCO-00350": "INFO-00002", // Principios de Marketing -> Estrategia y Proyección Profesional
-        "FING-02015": "FING-02017", // Física General -> Mecánica
-        "INFO-02008": "INFO-02030", // Interacción Humano-Computador -> Diseño de Experiencia de Usuario
-        "CUSC": "CURSO-SC", // Curso de Servicio Comunitario
-        "IISC": "PROY-SC", // Servicio Comunitario
-        "VARIABLE": "FING-ELEC1", // Electiva Informatica I
-        "VARIABLE-2": "FING-ELEC2", // Electiva Complementaria
-    } as Record<string, string>,
-
-    // N:1 Mappings (New Code -> Array of Old Codes required)
-    manyToOne: {
-        "INFO-02001": ["FING-02008", "INFO-02001"], // Fundamentos + Algoritmos = Algoritmos (7 UC)
-        "INFO-00001": ["INFO-02014", "INFO-02021"], // Inglés I + Inglés II = Inglés (3 UC)
-    } as Record<string, string[]>,
-
-    // 1:N Mappings (Old Code -> Array of New Codes granted)
-    oneToMany: {
-        "INFO-02023": ["INFO-02031", "INFO-02032"], // Ciberseguridad -> Ofensiva + Defensiva
-    } as Record<string, string[]>
-};
-
-// ==========================================
-// MIGRATION RULES (202415 -> 202715)
-// ==========================================
+// Formato de reglas en el JSON:
+// {
+//    "key": "identificador_unico",
+//    "oldCodes": ["viejo_1", "viejo_2"],
+//    "newCodes": ["nuevo_1"],
+//    "nombre": "Descripción",
+//    "uc": 4, // Opcional, usado para derogadas/ajustes
+//    "tipo": "derogada" | "ajuste" | "1:1" | "N:1" | "1:N" | "excluida"
+// }
 
 export class MigrationService {
     constructor(private evaluator: IMallaEvaluator) { }
@@ -42,76 +20,71 @@ export class MigrationService {
      * Migra el progreso del plan 202415 al plan 202715.
      * @param oldProgreso Progreso en el plan viejo
      * @param newGraph Grafo del nuevo plan
-     * @param ajustesData Datos de ajustes para el pensum viejo
+     * @param rulesData Array con las reglas de transición (JSON)
      * @returns Nuevo Progreso evaluado
      */
-    public migrateTo2027(oldProgreso: ProgresoMalla, newGraph: MallaCurricularGraph, ajustesData: any[] = []): { newProgreso: ProgresoMalla, pensumAnterior: Record<string, boolean> } {
+    public migrateTo2027(oldProgreso: ProgresoMalla, newGraph: MallaCurricularGraph, rulesData: any[] = []): { newProgreso: ProgresoMalla, pensumAnterior: Record<string, boolean> } {
         const baseNewProgreso: ProgresoMalla = {};
         const pensumAnterior: Record<string, boolean> = {};
 
         // Helper: verificar si una materia vieja fue aprobada
         const isApprovedInOld = (oldCode: string) => oldProgreso[oldCode] === "aprobada";
 
-        // --- LÓGICA DE COMPENSACIÓN DE UC ---
-        
-        // 1 y 3. Marcar materias derogadas y ajustes por materias que cambiaron de UC
-        ajustesData.forEach((ajuste: any) => {
-            // Si la regla requiere varios "oldCodes" (e.g. Algoritmos + Fundamentos = Algoritmos 7 UC)
-            // Se deben cumplir todos para aplicar el ajuste
-            if (ajuste.oldCodes.every((code: string) => isApprovedInOld(code))) {
-                pensumAnterior[ajuste.key] = true;
+        const excludedCodes = new Set<string>();
+
+        // 1. Primer paso: Analizar todas las reglas
+        rulesData.forEach((rule: any) => {
+            const { tipo, oldCodes, newCodes, key } = rule;
+            
+            // Verificar que se cumplen todos los prerequisitos de la regla en el pensum viejo
+            const conditionMet = oldCodes && oldCodes.length > 0 && oldCodes.every((code: string) => isApprovedInOld(code));
+
+            if (tipo === "derogada" || tipo === "ajuste") {
+                if (conditionMet && key) {
+                    pensumAnterior[key] = true;
+                }
+            } else if (tipo === "excluida") {
+                // Registrar códigos para no mapearlos implícitamente
+                if (oldCodes) {
+                    oldCodes.forEach((code: string) => excludedCodes.add(code));
+                }
+            } else if (tipo === "1:1" || tipo === "N:1" || tipo === "1:N") {
+                if (conditionMet && newCodes) {
+                    newCodes.forEach((code: string) => {
+                        baseNewProgreso[code] = "aprobada";
+                    });
+                }
             }
         });
 
-        // 2. Conservar Inglés I y II del pensum anterior
-        const hasIngles1 = isApprovedInOld("INFO-02014"); // 4 UC
-        const hasIngles2 = isApprovedInOld("INFO-02021"); // 4 UC
+        // 2. Conservar Inglés I y II explícitamente en el pensumAnterior 
+        // (ya están marcadas como derogadas en el JSON si las tienen, pero las agregamos explícitamente si existen
+        // en el viejo progreso para la compensación, aunque la regla "derogada" ya lo haría si key coincide con el code)
+        // Ya no es necesario hardcodearlo aquí porque el JSON lo maneja, pero lo mantenemos por consistencia si 
+        // oldCodes o key son diferentes, o si dependemos de la regla "ajuste" que evalúa INFO-02014 y INFO-02021.
+        
+        // De hecho, el JSON ya tiene "INFO-02014" y "INFO-02021" como derogadas, así que se añadirán al pensumAnterior.
 
-        if (hasIngles1) pensumAnterior['INFO-02014'] = true;
-        if (hasIngles2) pensumAnterior['INFO-02021'] = true;
-
-        // Obtener todos los nodos del nuevo grafo
+        // Obtener todos los nodos del nuevo grafo para el mapeo implícito 1:1
         const newNodes = newGraph.getAllNodes();
 
         newNodes.forEach(newNode => {
             const newCode = newNode.codigoMateria;
 
-            // 1. Chequear mapeos N:1 (Varios a Uno)
-            if (MIGRATION_RULES.manyToOne[newCode]) {
-                const requiredOldCodes = MIGRATION_RULES.manyToOne[newCode];
-                if (requiredOldCodes.every(isApprovedInOld)) {
+            // Mapeo implícito 1:1 (Mismo código)
+            // Si el código existe en el plan viejo y fue aprobado, y NO está en excluidos
+            // y no fue ya mapeado por una regla explícita
+            if (baseNewProgreso[newCode] !== "aprobada") {
+                if (!excludedCodes.has(newCode) && isApprovedInOld(newCode)) {
                     baseNewProgreso[newCode] = "aprobada";
                 }
-                return; // Continuamos al siguiente nodo
-            }
-
-            // 2. Chequear mapeos 1:N (Uno a Varios)
-            for (const [oldCode, newCodesArray] of Object.entries(MIGRATION_RULES.oneToMany)) {
-                if (newCodesArray.includes(newCode) && isApprovedInOld(oldCode)) {
-                    baseNewProgreso[newCode] = "aprobada";
-                    return;
-                }
-            }
-
-            // 3. Chequear mapeos 1:1 (Cambio de código)
-            for (const [oldCode, mappedNewCode] of Object.entries(MIGRATION_RULES.oneToOne)) {
-                if (mappedNewCode === newCode && isApprovedInOld(oldCode)) {
-                    baseNewProgreso[newCode] = "aprobada";
-                    return;
-                }
-            }
-
-            // 4. Mapeo implícito 1:1 (Mismo código)
-            // Evitamos mapear INFO-02006 porque en el pensum viejo era Prog Web y en el nuevo es Inglés Técnico
-            if (newCode !== "INFO-02006" && isApprovedInOld(newCode)) {
-                baseNewProgreso[newCode] = "aprobada";
             }
         });
 
         // Una vez que tenemos las aprobaciones crudas mapeadas, 
         // pasamos el progreso por el evaluador de reglas para desbloquear
         // las materias disponibles, cursando, etc.
-        const ucAdicionales = calcularUCPensumAnterior(pensumAnterior, ajustesData);
+        const ucAdicionales = calcularUCPensumAnterior(pensumAnterior, rulesData);
         const evaluatedProgreso = this.evaluator.evaluate(baseNewProgreso, newGraph, ucAdicionales);
 
         return {

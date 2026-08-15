@@ -23,6 +23,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 }) => {
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
     const [isCursandoDropdownOpen, setIsCursandoDropdownOpen] = useState(false);
+    const [cursandoHoverRect, setCursandoHoverRect] = useState<DOMRect | null>(null);
     const { theme, setTheme } = useTheme();
     const { run, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
     const mainTour = useMainAppTour(customRouteState.isCustomRouteMode);
@@ -120,7 +121,11 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                                 {/* UC Cursando */}
                                 {mallaStats.ucCursando > 0 && (
-                                    <div className="relative w-full group">
+                                    <div 
+                                        className="relative w-full group"
+                                        onMouseEnter={(e) => { if (!ui.isMobile) setCursandoHoverRect(e.currentTarget.getBoundingClientRect()); }}
+                                        onMouseLeave={() => { if (!ui.isMobile) setCursandoHoverRect(null); }}
+                                    >
                                         <div 
                                             className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${ui.isMobile ? 'cursor-pointer active:scale-95' : 'cursor-default'} ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2 mx-auto' : ''}`}
                                             onClick={() => { if (ui.isMobile) setIsCursandoDropdownOpen(!isCursandoDropdownOpen); }}
@@ -154,10 +159,16 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                             </div>
                                         )}
 
-                                        {/* Desktop Hover Tooltip */}
-                                        {!ui.isMobile && (
-                                            <div className="absolute left-full top-0 ml-4 hidden group-hover:block w-64 z-100 pointer-events-none">
-                                                <div className="bg-white/95 backdrop-blur-xl border border-white/60 shadow-xl rounded-2xl p-4 transform translate-y-[-20%] animate-fade-in-up">
+                                        {/* Desktop Hover Tooltip (Portaled to document.body to escape overflow) */}
+                                        {!ui.isMobile && cursandoHoverRect && createPortal(
+                                            <div 
+                                                className="fixed z-[100] pointer-events-none"
+                                                style={{
+                                                    top: cursandoHoverRect.top - 20,
+                                                    left: cursandoHoverRect.right + 16,
+                                                }}
+                                            >
+                                                <div className="w-64 bg-white/95 backdrop-blur-xl border border-white/60 shadow-xl rounded-2xl p-4 animate-fade-in-up">
                                                     <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Materias Cursando</h4>
                                                     <ul className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto hide-scrollbar">
                                                         {mallaStats.materiasCursando?.map((m: any) => (
@@ -168,7 +179,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                                         ))}
                                                     </ul>
                                                 </div>
-                                            </div>
+                                            </div>,
+                                            document.body
                                         )}
                                     </div>
                                 )}

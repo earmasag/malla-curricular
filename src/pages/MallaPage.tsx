@@ -22,6 +22,7 @@ import { usePlanEstudio } from "../contexts/PlanContext";
 import { useCarrera } from "../contexts/CarreraContext";
 import { WelcomeModal } from "../components/modals/WelcomeModal";
 import { PlanSwitcherFloat } from "../components/layout/PlanSwitcherFloat";
+import { ConstructorToolbar } from "../components/layout/ConstructorToolbar";
 import { useTourPanHandler } from "../hooks/ui/useTourPanHandler";
 
 const TourPanHandler = ({ zoomToElement, currentScale }: { zoomToElement: any, currentScale: number }) => {
@@ -154,7 +155,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                                         hoveredMateria={hoveredMateria}
                                         containerRef={contentRef}
                                     />
-                                    <div className="relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-48 pb-32 landscape:pt-28 landscape:pb-16 min-w-max min-h-max">
+                                    <div className={`relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-48 landscape:pt-28 min-w-max min-h-max ${estadoCustom.isCustomRouteMode ? 'pb-48 landscape:pb-48' : 'pb-32 landscape:pb-16'}`}>
                                         {semestresArray.map((numeroSemestre: number, index: number) => {
                                             return (
                                                 <SemestreColumn
@@ -171,6 +172,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                         </React.Fragment>
                     )}
                 </TransformWrapper>
+                <ConstructorToolbar />
             </div>
         </div>
     );

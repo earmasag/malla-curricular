@@ -13,6 +13,7 @@ const RouteBuilderTour = React.lazy(() => import('../../ui/RouteBuilderTour').th
 import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
 import { useMainAppTour } from '../../../hooks/ui/useMainAppTour';
 const MainAppTour = React.lazy(() => import('../../ui/MainAppTour').then(m => ({ default: m.MainAppTour })));
+import { RouteNameModal } from '../../modals/RouteNameModal';
 
 export interface NavigationSidebarProps {
     totalMaterias: number;
@@ -23,6 +24,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 }) => {
     const { ui, mallaStats, customRouteState, actions } = useNavigationSidebar();
     const [isCursandoDropdownOpen, setIsCursandoDropdownOpen] = useState(false);
+    const [isRouteModalOpen, setIsRouteModalOpen] = useState(false);
     const [cursandoHoverRect, setCursandoHoverRect] = useState<DOMRect | null>(null);
     const { theme, setTheme } = useTheme();
     const { run, startTourManually, handleJoyrideCallback } = useRouteBuilderTour(customRouteState.isCustomRouteMode);
@@ -406,8 +408,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 label="Guardar y Terminar"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const name = window.prompt("¿Qué nombre le pondrás a esta ruta?");
-                                    if (name) actions.handlers.handleFinishCustomRoute?.(name);
+                                    setIsRouteModalOpen(true);
                                 }}
                                 disabled={customRouteState.customSemestersCount === 0 || (customRouteState.customSemestersCount === 1 && customRouteState.customCurrentSemesterCount === 0)}
                                 variant="light"
@@ -457,6 +458,12 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
             <React.Suspense fallback={null}>
                 <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
                 <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
+                
+                <RouteNameModal 
+                    isOpen={isRouteModalOpen}
+                    onClose={() => setIsRouteModalOpen(false)}
+                    onConfirm={(name) => actions.handlers.handleFinishCustomRoute?.(name)}
+                />
             </React.Suspense>
         </aside>
     );

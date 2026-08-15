@@ -25,34 +25,34 @@ const TOUR_STEPS: Step[] = [
         placement: 'right',
     },
     {
-        target: '#tour-stats',
+        target: '#tour-toolbar-stats',
         title: 'Monitorea tu progreso',
         content: (
             <span>
                 Aquí verás cuántas <strong>Unidades de Crédito (UCs)</strong> y materias has seleccionado para el semestre que estás armando.
             </span>
         ),
-        placement: 'right',
+        placement: 'top',
     },
     {
-        target: '#tour-avanzar',
+        target: '#tour-toolbar-avanzar',
         title: 'Avanza al siguiente semestre',
         content: (
             <span>
                 Una vez hayas seleccionado <strong>todas las materias</strong> para este semestre, haz clic aquí para avanzar y empezar a planificar el siguiente. <em>(Si te equivocas, aparecerá un botón para retroceder)</em>.
             </span>
         ),
-        placement: 'right',
+        placement: 'top',
     },
     {
-        target: '#tour-guardar',
+        target: '#tour-toolbar-guardar',
         title: '¡Guarda tu ruta!',
         content: (
             <span>
-                Cuando hayas terminado de planificar todos tus semestres, haz clic en <strong>"Guardar y Terminar"</strong> para nombrar y guardar tu nueva ruta personalizada.
+                Cuando hayas terminado de planificar todos tus semestres, haz clic en <strong>"Guardar"</strong> para nombrar y guardar tu nueva ruta personalizada.
             </span>
         ),
-        placement: 'right',
+        placement: 'top',
     }
 ];
 

@@ -9,13 +9,13 @@ import { useIsMobile } from "../hooks/ui/useIsMobile";
 import { MallaProvider, useMallaData, useMallaUI, useMallaHover } from "../contexts/MallaContexts";
 import { NavigationSidebar } from "../components/layout/NavigationSidebar/NavigationSidebar";
 import { ZoomControls } from "../components/ui/ZoomControls";
-import { RutaModal } from "../components/modals/RutaModal/RutaModal";
-import { MisRutasModal } from "../components/modals/MisRutasModal";
-import { FeedbackModal } from "../components/modals/FeedbackModal";
-import { MatriculaModal } from "../components/modals/MatriculaModal";
-import { SettingsModal } from "../components/modals/SettingsModal";
-import { LeyendaModal } from "../components/modals/LeyendaModal";
-import { PensumAnteriorModal } from "../components/modals/PensumAnteriorModal";
+const RutaModal = React.lazy(() => import("../components/modals/RutaModal/RutaModal").then(m => ({ default: m.RutaModal })));
+const MisRutasModal = React.lazy(() => import("../components/modals/MisRutasModal").then(m => ({ default: m.MisRutasModal })));
+const FeedbackModal = React.lazy(() => import("../components/modals/FeedbackModal").then(m => ({ default: m.FeedbackModal })));
+const MatriculaModal = React.lazy(() => import("../components/modals/MatriculaModal").then(m => ({ default: m.MatriculaModal })));
+const SettingsModal = React.lazy(() => import("../components/modals/SettingsModal").then(m => ({ default: m.SettingsModal })));
+const LeyendaModal = React.lazy(() => import("../components/modals/LeyendaModal").then(m => ({ default: m.LeyendaModal })));
+const PensumAnteriorModal = React.lazy(() => import("../components/modals/PensumAnteriorModal").then(m => ({ default: m.PensumAnteriorModal })));
 
 
 import { usePlanEstudio } from "../contexts/PlanContext";
@@ -56,69 +56,71 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                 totalMaterias={totalMaterias}
             />
 
-            {modales.isMatriculaModalOpen && (
-                <MatriculaModal
-                    isOpen={modales.isMatriculaModalOpen}
-                    onClose={() => modales.setIsMatriculaModalOpen(false)}
-                    materiasCursando={materiasCursando}
-                />
-            )}
+            <React.Suspense fallback={null}>
+                {modales.isMatriculaModalOpen && (
+                    <MatriculaModal
+                        isOpen={modales.isMatriculaModalOpen}
+                        onClose={() => modales.setIsMatriculaModalOpen(false)}
+                        materiasCursando={materiasCursando}
+                    />
+                )}
 
-            {modales.isMisRutasModalOpen && (
-                <MisRutasModal
-                    isOpen={modales.isMisRutasModalOpen}
-                    onClose={() => modales.setIsMisRutasModalOpen(false)}
-                    savedRoutes={datos.savedRoutesList}
-                    onViewRoute={handlers.handleViewSavedRoute}
-                    onDeleteRoute={handlers.handleDeleteSavedRoute}
-                />
-            )}
+                {modales.isMisRutasModalOpen && (
+                    <MisRutasModal
+                        isOpen={modales.isMisRutasModalOpen}
+                        onClose={() => modales.setIsMisRutasModalOpen(false)}
+                        savedRoutes={datos.savedRoutesList}
+                        onViewRoute={handlers.handleViewSavedRoute}
+                        onDeleteRoute={handlers.handleDeleteSavedRoute}
+                    />
+                )}
 
-            {modales.isFeedbackModalOpen && (
-                <FeedbackModal
-                    isOpen={modales.isFeedbackModalOpen}
-                    onClose={() => modales.setIsFeedbackModalOpen(false)}
-                />
-            )}
+                {modales.isFeedbackModalOpen && (
+                    <FeedbackModal
+                        isOpen={modales.isFeedbackModalOpen}
+                        onClose={() => modales.setIsFeedbackModalOpen(false)}
+                    />
+                )}
 
-            {modales.isSettingsOpen && (
-                <SettingsModal
-                    isOpen={modales.isSettingsOpen}
-                    onClose={() => modales.setIsSettingsOpen(false)}
-                    configuraciones={configuraciones}
-                />
-            )}
+                {modales.isSettingsOpen && (
+                    <SettingsModal
+                        isOpen={modales.isSettingsOpen}
+                        onClose={() => modales.setIsSettingsOpen(false)}
+                        configuraciones={configuraciones}
+                    />
+                )}
 
-            {modales.isPensumAnteriorModalOpen && (
-                <PensumAnteriorModal
-                    isOpen={modales.isPensumAnteriorModalOpen}
-                    onClose={() => modales.setIsPensumAnteriorModalOpen(false)}
-                    pensumAnterior={estadoMalla.pensumAnterior}
-                    updatePensumAnterior={accionesMalla.updatePensumAnterior}
-                />
-            )}
+                {modales.isPensumAnteriorModalOpen && (
+                    <PensumAnteriorModal
+                        isOpen={modales.isPensumAnteriorModalOpen}
+                        onClose={() => modales.setIsPensumAnteriorModalOpen(false)}
+                        pensumAnterior={estadoMalla.pensumAnterior}
+                        updatePensumAnterior={accionesMalla.updatePensumAnterior}
+                    />
+                )}
 
-            {ui.isLeyendaOpen && (
-                <LeyendaModal
-                    isOpen={ui.isLeyendaOpen}
-                    onClose={() => ui.setIsLeyendaOpen(false)}
-                    tituloCarrera="Ingeniería Informática"
-                    totalSemestres={totalSemestres}
-                    totalUc={totalUc}
-                    areasFormacion={carreraData?.areas_color || []}
-                />
-            )}
+                {ui.isLeyendaOpen && (
+                    <LeyendaModal
+                        isOpen={ui.isLeyendaOpen}
+                        onClose={() => ui.setIsLeyendaOpen(false)}
+                        tituloCarrera="Ingeniería Informática"
+                        totalSemestres={totalSemestres}
+                        totalUc={totalUc}
+                        areasFormacion={carreraData?.areas_color || []}
+                    />
+                )}
 
-            {modales.isModalOpen && (
-                <RutaModal
-                    isOpen={modales.isModalOpen}
-                    onClose={() => modales.setIsModalOpen(false)}
-                    generarRutaOptima={accionesMalla.generarRutaOptima}
-                    grafo={grafo}
-                    optimaRuta={datos.optimaRuta}
-                    customRoute={datos.customRouteResult}
-                />
-            )}
+                {modales.isModalOpen && (
+                    <RutaModal
+                        isOpen={modales.isModalOpen}
+                        onClose={() => modales.setIsModalOpen(false)}
+                        generarRutaOptima={accionesMalla.generarRutaOptima}
+                        grafo={grafo}
+                        optimaRuta={datos.optimaRuta}
+                        customRoute={datos.customRouteResult}
+                    />
+                )}
+            </React.Suspense>
 
             {/* Main Content Area (Grilla Horizontal Libre de Zoom y Paneo) */}
             <div className="w-full h-full relative cursor-grab active:cursor-grabbing">

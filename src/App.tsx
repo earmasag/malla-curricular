@@ -1,4 +1,3 @@
-import './App.css'
 import { MallaPage } from './pages/MallaPage';
 
 import { NotificationProvider } from './contexts/NotificationContext';

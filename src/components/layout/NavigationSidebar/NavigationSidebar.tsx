@@ -9,10 +9,10 @@ import { SidebarButton } from './SidebarButton';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
 import { useTheme, AVAILABLE_THEMES } from '../../../contexts/ThemeContext';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
-import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
+const RouteBuilderTour = React.lazy(() => import('../../ui/RouteBuilderTour').then(m => ({ default: m.RouteBuilderTour })));
 import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
 import { useMainAppTour } from '../../../hooks/ui/useMainAppTour';
-import { MainAppTour } from '../../ui/MainAppTour';
+const MainAppTour = React.lazy(() => import('../../ui/MainAppTour').then(m => ({ default: m.MainAppTour })));
 
 export interface NavigationSidebarProps {
     totalMaterias: number;
@@ -156,7 +156,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
                                         {/* Desktop Hover Tooltip */}
                                         {!ui.isMobile && (
-                                            <div className="absolute left-full top-0 ml-4 hidden group-hover:block w-64 z-[100] pointer-events-none">
+                                            <div className="absolute left-full top-0 ml-4 hidden group-hover:block w-64 z-100 pointer-events-none">
                                                 <div className="bg-white/95 backdrop-blur-xl border border-white/60 shadow-xl rounded-2xl p-4 transform translate-y-[-20%] animate-fade-in-up">
                                                     <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Materias Cursando</h4>
                                                     <ul className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto hide-scrollbar">
@@ -442,8 +442,10 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
 
 
-            <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
-            <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
+            <React.Suspense fallback={null}>
+                <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
+                <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
+            </React.Suspense>
         </aside>
     );
 };

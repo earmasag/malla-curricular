@@ -1,8 +1,9 @@
 import React from 'react';
-import {Joyride} from 'react-joyride';
+import { Joyride } from 'react-joyride';
 
 import type { Step, EventData } from 'react-joyride';
-import { useTheme, AVAILABLE_THEMES } from '../../contexts/ThemeContext';
+import { useTheme } from '../../hooks/useTheme';
+import { AVAILABLE_THEMES } from '../../constants/theme';
 
 interface SharedTourProps {
     run: boolean;

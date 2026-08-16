@@ -70,6 +70,18 @@
   --bg-app: var(--theme-50);
 }
 
+:root[data-theme="red"] {
+  /* Tema Rojo */
+  --theme-50: #fef2f2;
+  --theme-100: #fee2e2;
+  --theme-200: #fecaca;
+  --theme-500: #ef4444;
+  --theme-600: #dc2626;
+  --theme-700: #72090f;
+  
+  --bg-app: var(--theme-50);
+}
+
 @keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-15deg); }

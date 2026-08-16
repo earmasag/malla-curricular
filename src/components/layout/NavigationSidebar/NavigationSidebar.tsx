@@ -6,8 +6,10 @@ import {
     Menu, LayoutDashboard, Info, GraduationCap, Settings, Palette, HelpCircle
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
+import { useTheme } from '../../../hooks/useTheme';
+import { AVAILABLE_THEMES } from '../../../constants/theme';
+import type { MateriaNode } from '../../../types/materia';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
-import { useTheme, AVAILABLE_THEMES } from '../../../contexts/ThemeContext';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
 const RouteBuilderTour = React.lazy(() => import('../../ui/RouteBuilderTour').then(m => ({ default: m.RouteBuilderTour })));
 import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
@@ -151,8 +153,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                             <div className="w-full mt-2 bg-white/60 border border-white/50 shadow-inner rounded-xl p-3 transition-all animate-fade-in-up">
                                                 <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Materias Cursando</h4>
                                                 <ul className="flex flex-col gap-2 max-h-48 overflow-y-auto hide-scrollbar">
-                                                    {mallaStats.materiasCursando?.map((m: any) => (
-                                                        <li key={m.id} className="text-sm text-slate-700 font-medium flex justify-between gap-2">
+                                                    {mallaStats.materiasCursando?.map((m: MateriaNode) => (
+                                                        <li key={m.codigoMateria} className="text-sm text-slate-700 font-medium flex justify-between gap-2">
                                                             <span className="truncate">{m.nombre}</span>
                                                             <span className="text-xs text-theme-600 font-bold shrink-0">{m.unidadesCredito} UC</span>
                                                         </li>
@@ -173,8 +175,8 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                                 <div className="w-64 bg-white/95 backdrop-blur-xl border border-white/60 shadow-xl rounded-2xl p-4 animate-fade-in-up">
                                                     <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Materias Cursando</h4>
                                                     <ul className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto hide-scrollbar">
-                                                        {mallaStats.materiasCursando?.map((m: any) => (
-                                                            <li key={m.id} className="text-sm text-slate-700 font-medium flex justify-between items-start gap-2">
+                                                        {mallaStats.materiasCursando?.map((m: MateriaNode) => (
+                                                            <li key={m.codigoMateria} className="text-sm text-slate-700 font-medium flex justify-between items-start gap-2">
                                                                 <span className="leading-tight">{m.nombre}</span>
                                                                 <span className="text-xs text-theme-600 font-bold shrink-0 bg-theme-50 px-1.5 py-0.5 rounded-md">{m.unidadesCredito} UC</span>
                                                             </li>

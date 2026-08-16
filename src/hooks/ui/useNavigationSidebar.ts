@@ -3,6 +3,8 @@ import { useNotification } from './useNotification';
 import { useMallaData, useMallaUI } from '../../contexts/MallaContexts';
 import { useIsMobile } from './useIsMobile';
 
+import type { MateriaNode } from '../../types/materia';
+
 export const useNavigationSidebar = () => {
     const { estadoMalla, accionesMalla, estadoCustom, accionesCustom } = useMallaData();
     const { modales, handlers, ui: mallaUIConfig } = useMallaUI();
@@ -18,7 +20,7 @@ export const useNavigationSidebar = () => {
         hasDraftRoute
     } = estadoCustom;
 
-    const ucCursando = materiasCursando.reduce((sum: number, m: any) => sum + m.unidadesCredito, 0);
+    const ucCursando = materiasCursando.reduce((sum: number, m: MateriaNode) => sum + m.unidadesCredito, 0);
     const customSemestersCount = customSemesters.length;
     const customCurrentSemesterCount = customSemestersCount > 0 ? customSemesters[customSemestersCount - 1].length : 0;
 

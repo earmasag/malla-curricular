@@ -1,22 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-
-// Se define la lista de temas disponibles en un solo lugar.
-// Para agregar un tema, solo hay que añadir su CSS en index.css y registrarlo aquí.
-export const AVAILABLE_THEMES = [
-    { id: 'blue', label: 'Azul', hex: '#3b82f6' },
-    { id: 'pink', label: 'Rosado', hex: '#ec4899' },
-    { id: 'purple', label: 'Morado', hex: '#7B2CBF' },
-    { id: 'green', label: 'Verde', hex: '#2E7D32' }
-];
-
-export type Theme = string;
-
-interface ThemeContextType {
-    theme: Theme;
-    setTheme: (theme: Theme) => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+import { useEffect, useState, type ReactNode } from 'react';
+import { ThemeContext } from './theme';
+import type { Theme } from '../constants/theme';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const [theme, setThemeState] = useState<Theme>(() => {
@@ -40,12 +24,4 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
             {children}
         </ThemeContext.Provider>
     );
-};
-
-export const useTheme = () => {
-    const context = useContext(ThemeContext);
-    if (context === undefined) {
-        throw new Error('useTheme must be used within a ThemeProvider');
-    }
-    return context;
 };

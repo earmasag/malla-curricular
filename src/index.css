@@ -82,6 +82,18 @@
   --bg-app: var(--theme-50);
 }
 
+:root[data-theme="black"] {
+  /* Tema Negro */
+  --theme-50: #f8fafc;
+  --theme-100: #f1f5f9;
+  --theme-200: #e2e8f0;
+  --theme-500: #64748b;
+  --theme-600: #475569;
+  --theme-700: #0f172a;
+  
+  --bg-app: var(--theme-50);
+}
+
 @keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-15deg); }

@@ -38,7 +38,7 @@ export const ConstructorToolbar: React.FC = () => {
                         
                         {/* Semestre actual */}
                         <div className="flex items-center justify-center gap-1.5 px-3 h-11 bg-white/50 backdrop-blur-md border border-white/60 shadow-sm rounded-xl flex-1 md:flex-none">
-                            <Wrench className="w-4 h-4 text-purple-600 animate-pulse shrink-0" />
+                            <Wrench className="w-4 h-4 text-theme-600 animate-pulse shrink-0" />
                             <span className="font-bold text-xs text-slate-800 whitespace-nowrap">Sem {customSemestersCount}</span>
                         </div>
 

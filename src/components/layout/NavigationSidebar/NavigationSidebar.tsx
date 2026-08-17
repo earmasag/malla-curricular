@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
-    Wrench, BookOpen, ArrowRight, X, Lightbulb, Flag, Calculator,
-    Menu, LayoutDashboard, Info, GraduationCap, Settings, Palette, HelpCircle
+    Wrench, BookOpen, X, Lightbulb, Calculator,
+    Menu, LayoutDashboard, Info, GraduationCap, Settings, Palette, HelpCircle, Pencil
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
+import { SidebarStatLabel } from './SidebarStatLabel';
+import { SidebarRouteBuilder } from './SidebarRouteBuilder';
 import { useTheme } from '../../../hooks/useTheme';
 import { AVAILABLE_THEMES } from '../../../constants/theme';
 import type { MateriaNode } from '../../../types/materia';
@@ -85,43 +87,32 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                         <>
                             <div id="tour-main-stats" className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
                                 {/* Aprobadas Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <BookOpen className={`text-theme-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
-                                    {ui.isExpanded ? (
-                                        <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-slate-700">Aprobadas</span>
-                                            <span className="text-slate-800 font-black">{mallaStats.cantidadAprobadas}/{totalMaterias}</span>
-                                        </div>
-                                    ) : (
-                                        <span className="text-xs font-black text-slate-800 leading-none">{mallaStats.cantidadAprobadas}</span>
-                                    )}
-                                </div>
+                                <SidebarStatLabel 
+                                    isExpanded={ui.isExpanded}
+                                    icon={BookOpen}
+                                    iconColorClass="text-theme-500"
+                                    title="Aprobadas"
+                                    value={`${mallaStats.cantidadAprobadas}/${totalMaterias}`}
+                                    collapsedValue={mallaStats.cantidadAprobadas}
+                                />
 
                                 {/* UC Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <Lightbulb className={`text-amber-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
-                                    {ui.isExpanded ? (
-                                        <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-slate-700">UC Aprobadas</span>
-                                            <span className="text-slate-800 font-black">{mallaStats.ucAcumuladas}</span>
-                                        </div>
-                                    ) : (
-                                        <span className="text-xs font-black text-slate-800 leading-none">{mallaStats.ucAcumuladas}</span>
-                                    )}
-                                </div>
+                                <SidebarStatLabel 
+                                    isExpanded={ui.isExpanded}
+                                    icon={Lightbulb}
+                                    iconColorClass="text-green-500"
+                                    title="UC Aprobadas"
+                                    value={mallaStats.ucAcumuladas}
+                                />
 
                                 {/* Semestre Actual Stat */}
-                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <GraduationCap className={`text-purple-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
-                                    {ui.isExpanded ? (
-                                        <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-slate-700">Semestre Actual</span>
-                                            <span className="text-slate-800 font-black">{mallaStats.semestreActual}</span>
-                                        </div>
-                                    ) : (
-                                        <span className="text-xs font-black text-slate-800 leading-none">{mallaStats.semestreActual}</span>
-                                    )}
-                                </div>
+                                <SidebarStatLabel 
+                                    isExpanded={ui.isExpanded}
+                                    icon={GraduationCap}
+                                    iconColorClass="text-theme-500"
+                                    title="Semestre Actual"
+                                    value={mallaStats.semestreActual}
+                                />
 
                                 {/* UC Cursando */}
                                 {mallaStats.ucCursando > 0 && (
@@ -130,23 +121,16 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                         onMouseEnter={(e) => { if (!ui.isMobile) setCursandoHoverRect(e.currentTarget.getBoundingClientRect()); }}
                                         onMouseLeave={() => { if (!ui.isMobile) setCursandoHoverRect(null); }}
                                     >
-                                        <div 
-                                            className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${ui.isMobile ? 'cursor-pointer active:scale-95' : 'cursor-default'} ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2 mx-auto' : ''}`}
-                                            onClick={() => { if (ui.isMobile) setIsCursandoDropdownOpen(!isCursandoDropdownOpen); }}
-                                        >
-                                            <div className="relative shrink-0 flex items-center justify-center w-5 h-5">
-                                                <span className="absolute w-2.5 h-2.5 rounded-full bg-theme-500 animate-ping opacity-75"></span>
-                                                <span className="relative w-2 h-2 rounded-full bg-theme-500"></span>
-                                            </div>
-                                            {ui.isExpanded ? (
-                                                <div className="flex-1 flex justify-between items-center">
-                                                    <span className="text-sm font-semibold text-slate-700">UC Cursando</span>
-                                                    <span className="text-slate-800 font-black">{mallaStats.ucCursando}</span>
-                                                </div>
-                                            ) : (
-                                                <span className="text-[10px] sm:text-xs font-black text-slate-800 leading-none">{mallaStats.ucCursando}</span>
-                                            )}
-                                        </div>
+                                        <SidebarStatLabel 
+                                            isExpanded={ui.isExpanded}
+                                            customIcon={
+                                                <Pencil className={`text-blue-500 shrink-0 animate-pulse ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
+                                            }
+                                            title="UC Cursando"
+                                            value={mallaStats.ucCursando}
+                                            smallCollapsedText={true}
+                                            onClick={ui.isMobile ? () => setIsCursandoDropdownOpen(!isCursandoDropdownOpen) : undefined}
+                                        />
 
                                         {/* Mobile Accordion */}
                                         {ui.isMobile && isCursandoDropdownOpen && ui.isExpanded && (
@@ -348,108 +332,15 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                         </>
                     ) : (
                         // Custom Mode Stats & Actions
-                        <>
-                            <div id="tour-stats" className={`flex flex-col gap-3 mb-4 ${ui.isExpanded ? 'px-2' : 'items-center'}`}>
-                                <div id="tour-modo-constructor" className={`flex justify-center items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <Wrench className={`text-purple-600 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'} animate-pulse`} />
-                                    {ui.isExpanded && <span className="font-bold text-sm text-slate-800">Modo Constructor</span>}
-                                </div>
-
-                                <div className={`flex items-center gap-3 p-4 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    {ui.isExpanded ? (
-                                        <div className="flex-1 flex flex-col items-center">
-                                            <span className="text-3xl font-black text-slate-800 leading-none">{customRouteState.currentSemesterUCs}/{customRouteState.totalCustomUCs}</span>
-                                            <span className="text-xs font-bold text-slate-700 uppercase tracking-widest mt-1">UCs</span>
-                                        </div>
-                                    ) : (
-                                        <span className="text-xs font-black text-slate-800 leading-none">{customRouteState.currentSemesterUCs}</span>
-                                    )}
-                                </div>
-
-                                <div className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!ui.isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2' : ''}`}>
-                                    <BookOpen className={`text-theme-500 shrink-0 ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
-                                    {ui.isExpanded ? (
-                                        <div className="flex-1 flex justify-between items-center">
-                                            <span className="text-sm font-semibold text-slate-700">Materias selec.</span>
-                                            <span className="text-slate-800 font-black">{customRouteState.customCurrentSemesterCount}</span>
-                                        </div>
-                                    ) : (
-                                        <span className="text-xs font-black text-slate-800 leading-none">{customRouteState.customCurrentSemesterCount}</span>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="h-px bg-slate-200 my-2 mx-2"></div>
-
-                            <SidebarButton
-                                id="tour-avanzar"
-                                isExpanded={ui.isExpanded}
-                                icon={<ArrowRight />}
-                                label="Avanzar Semestre"
-                                onClick={(e) => { e.stopPropagation(); actions.accionesCustom.advanceCustomSemester(); }}
-                                disabled={customRouteState.customCurrentSemesterCount === 0}
-                                color="theme"
-                                variant="solid"
-                            />
-
-                            {customRouteState.customSemestersCount > 1 && (
-                                <SidebarButton
-                                    isExpanded={ui.isExpanded}
-                                    icon={<ArrowRight className="rotate-180" />}
-                                    label="Retroceder Semestre"
-                                    onClick={(e) => { e.stopPropagation(); actions.accionesCustom.undoCustomSemester(); }}
-                                    color="gray"
-                                    variant="solid"
-                                />
-                            )}
-
-                            <SidebarButton
-                                id="tour-guardar"
-                                isExpanded={ui.isExpanded}
-                                icon={<Flag />}
-                                label="Guardar y Terminar"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsRouteModalOpen(true);
-                                }}
-                                disabled={customRouteState.customSemestersCount === 0 || (customRouteState.customSemestersCount === 1 && customRouteState.customCurrentSemesterCount === 0)}
-                                variant="light"
-                            />
-
-                            <SidebarButton
-                                isExpanded={ui.isExpanded}
-                                icon={<HelpCircle />}
-                                label="Tutorial"
-                                onClick={(e) => { e.stopPropagation(); startTourManually(); }}
-                                color="theme"
-                                variant="ghost"
-                            />
-
-                            {ui.modales.isMatriculaModalOpen !== undefined && (
-                                <SidebarButton
-                                    isExpanded={ui.isExpanded}
-                                    icon={<Calculator />}
-                                    label="Matrícula"
-                                    onClick={(e) => { e.stopPropagation(); ui.modales.setIsMatriculaModalOpen(true); }}
-                                />
-                            )}
-
-                            <SidebarButton
-                                isExpanded={ui.isExpanded}
-                                icon={<Trash2 />}
-                                label="Descartar"
-                                onClick={(e) => { e.stopPropagation(); actions.accionesCustom.deleteDraftRoute(); }}
-                                color="red"
-                            />
-
-                            <SidebarButton
-                                isExpanded={ui.isExpanded}
-                                icon={<X />}
-                                label="Cerrar Constructor"
-                                onClick={(e) => { e.stopPropagation(); actions.accionesCustom.cancelCustomRoute(); }}
-                                color="gray"
-                            />
-                        </>
+                        <SidebarRouteBuilder 
+                            isExpanded={ui.isExpanded}
+                            customRouteState={customRouteState}
+                            accionesCustom={actions.accionesCustom}
+                            setIsRouteModalOpen={setIsRouteModalOpen}
+                            startTourManually={startTourManually}
+                            isMatriculaModalOpen={ui.modales.isMatriculaModalOpen}
+                            setIsMatriculaModalOpen={ui.modales.setIsMatriculaModalOpen}
+                        />
                     )}
 
 

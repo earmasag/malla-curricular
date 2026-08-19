@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, X, Lightbulb, Calculator,
-    Menu, LayoutDashboard, Info, GraduationCap, Settings, Palette, HelpCircle, Pencil
+    Menu, Info, GraduationCap, Settings, Palette, HelpCircle, Pencil
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { SidebarStatLabel } from './SidebarStatLabel';
@@ -65,9 +65,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
             <div className={`${ui.isExpanded ? 'p-4 border-b border-gray-100' : ui.isMobile ? 'p-0 w-full h-full' : 'p-4'} flex items-center ${ui.isExpanded || ui.isMobile ? 'justify-between' : 'justify-center'} w-full shrink-0`}>
                 {ui.isExpanded && (
                     <div className="flex items-center gap-2 overflow-hidden">
-                        <div className="p-2 bg-theme-100 text-theme-600 rounded-xl">
-                            <LayoutDashboard className="w-5 h-5" />
-                        </div>
+                        <img src="/favicon.png" alt="Logo" className="w-9 h-9 object-contain drop-shadow-sm" />
                         <h1 className="text-lg font-bold text-gray-800 whitespace-nowrap">MallaSandBox</h1>
                     </div>
                 )}
@@ -91,7 +89,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     isExpanded={ui.isExpanded}
                                     icon={BookOpen}
                                     iconColorClass="text-theme-500"
-                                    title="Aprobadas"
+                                    title="Materias Aprobadas"
                                     value={`${mallaStats.cantidadAprobadas}/${totalMaterias}`}
                                     collapsedValue={mallaStats.cantidadAprobadas}
                                 />
@@ -101,7 +99,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     isExpanded={ui.isExpanded}
                                     icon={Lightbulb}
                                     iconColorClass="text-green-500"
-                                    title="UC Aprobadas"
+                                    title="Unidades de Crédito Acumuladas"
                                     value={mallaStats.ucAcumuladas}
                                 />
 
@@ -126,9 +124,10 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                             customIcon={
                                                 <Pencil className={`text-blue-500 shrink-0 animate-pulse ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                             }
-                                            title="UC Cursando"
+                                            title="Unidades de Crédito Cursando"
                                             value={mallaStats.ucCursando}
                                             smallCollapsedText={true}
+                                            disableTooltip={true}
                                             onClick={ui.isMobile ? () => setIsCursandoDropdownOpen(!isCursandoDropdownOpen) : undefined}
                                         />
 

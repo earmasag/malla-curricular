@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 export interface SidebarButtonProps {
     isExpanded: boolean;
@@ -10,6 +11,7 @@ export interface SidebarButtonProps {
     disabled?: boolean;
     id?: string;
     showBadge?: boolean;
+    tooltipText?: string;
 }
 
 const colorStyles = {
@@ -30,7 +32,7 @@ const colorStyles = {
     }
 };
 
-export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, label, onClick, color = 'theme', variant = 'ghost', disabled = false, id, showBadge = false }) => {
+export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, label, onClick, color = 'theme', variant = 'ghost', disabled = false, id, showBadge = false, tooltipText }) => {
     const baseClasses = "flex items-center rounded-xl transition-colors duration-200 relative group overflow-hidden shrink-0 border";
     const sizeClasses = isExpanded ? "p-3 px-4 w-full gap-3" : "justify-center p-3 w-14 h-14";
     const disabledClasses = disabled ? "opacity-50 cursor-not-allowed grayscale" : "cursor-pointer";
@@ -53,27 +55,91 @@ export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, 
         iconColorClass = "";
     }
 
+    const [isHovered, setIsHovered] = useState(false);
+    const [rect, setRect] = useState<DOMRect | null>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const handleMouseEnter = () => {
+        // Solo mostramos el tooltip en dispositivos que soportan hover (mouse/puntero)
+        // para evitar que un tap en móvil lo active de forma extraña.
+        if (window.matchMedia('(hover: hover)').matches) {
+            if (!isExpanded && buttonRef.current) {
+                setRect(buttonRef.current.getBoundingClientRect());
+                setIsHovered(true);
+            }
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
+    // Update rect on scroll to keep tooltip attached correctly if user scrolls while hovering
+    useEffect(() => {
+        const handleScroll = () => {
+            if (isHovered && buttonRef.current) {
+                setRect(buttonRef.current.getBoundingClientRect());
+            }
+        };
+
+        if (isHovered) {
+            window.addEventListener('scroll', handleScroll, true);
+            window.addEventListener('resize', handleScroll, true);
+        }
+        return () => {
+            window.removeEventListener('scroll', handleScroll, true);
+            window.removeEventListener('resize', handleScroll, true);
+        };
+    }, [isHovered]);
+
     return (
-        <button
-            id={id}
-            onClick={(e) => {
-                if (!disabled) onClick(e);
-            }}
-            disabled={disabled}
-            className={`${baseClasses} ${sizeClasses} ${disabledClasses} ${colorClass}`}
-            title={!isExpanded ? label : undefined}
-        >
-            <div className={`shrink-0 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 relative ${iconColorClass}`}>
-                {icon}
-                {showBadge && (
-                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border-2 border-white shadow-sm"></span>
+        <>
+            <button
+                ref={buttonRef}
+                id={id}
+                onClick={(e) => {
+                    if (!disabled) onClick(e);
+                }}
+                disabled={disabled}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className={`${baseClasses} ${sizeClasses} ${disabledClasses} ${colorClass}`}
+            >
+                <div className={`shrink-0 flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5 relative ${iconColorClass}`}>
+                    {icon}
+                    {showBadge && (
+                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border-2 border-white shadow-sm"></span>
+                    )}
+                </div>
+                {isExpanded && (
+                    <span className="text-[14px] whitespace-nowrap text-left truncate">
+                        {label}
+                    </span>
                 )}
-            </div>
-            {isExpanded && (
-                <span className="text-[14px] whitespace-nowrap text-left truncate">
-                    {label}
-                </span>
+            </button>
+
+            {/* Premium Tooltip Portal */}
+            {!isExpanded && isHovered && rect && createPortal(
+                <div
+                    className="fixed z-99999 pointer-events-none animate-fade-in-up"
+                    style={{
+                        top: rect.top + (rect.height / 2),
+                        left: rect.right + 12,
+                        transform: 'translateY(-50%)'
+                    }}
+                >
+                    <div className="relative">
+                        {/* Little triangle arrow */}
+                        <div className="absolute top-1/2 -left-1 w-2 h-2 bg-slate-800 rotate-45 transform -translate-y-1/2"></div>
+                        {/* Tooltip body */}
+                        <div className="bg-slate-800 text-white px-3 py-1.5 rounded-lg shadow-xl border border-slate-700/50 text-sm font-medium whitespace-nowrap">
+                            {tooltipText || label}
+                        </div>
+                    </div>
+                </div>,
+                document.body
             )}
-        </button>
+        </>
     );
 };
+

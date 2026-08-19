@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
+import { createPortal } from 'react-dom';
 
 export interface SidebarStatLabelProps {
     isExpanded: boolean;
@@ -13,6 +14,8 @@ export interface SidebarStatLabelProps {
     onClick?: () => void;
     className?: string;
     smallCollapsedText?: boolean;
+    tooltipText?: string;
+    disableTooltip?: boolean;
 }
 
 export const SidebarStatLabel: React.FC<SidebarStatLabelProps> = ({
@@ -25,26 +28,89 @@ export const SidebarStatLabel: React.FC<SidebarStatLabelProps> = ({
     collapsedValue,
     onClick,
     className = '',
-    smallCollapsedText = false
+    smallCollapsedText = false,
+    tooltipText,
+    disableTooltip = false
 }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const [rect, setRect] = useState<DOMRect | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const handleMouseEnter = () => {
+        if (window.matchMedia('(hover: hover)').matches && !disableTooltip) {
+            if (!isExpanded && containerRef.current) {
+                setRect(containerRef.current.getBoundingClientRect());
+                setIsHovered(true);
+            }
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (isHovered && containerRef.current) {
+                setRect(containerRef.current.getBoundingClientRect());
+            }
+        };
+
+        if (isHovered) {
+            window.addEventListener('scroll', handleScroll, true);
+            window.addEventListener('resize', handleScroll, true);
+        }
+        return () => {
+            window.removeEventListener('scroll', handleScroll, true);
+            window.removeEventListener('resize', handleScroll, true);
+        };
+    }, [isHovered]);
+
     return (
-        <div 
-            className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2 mx-auto' : ''} ${onClick ? 'cursor-pointer active:scale-95' : 'cursor-default'} ${className}`}
-            onClick={onClick}
-        >
-            {customIcon ? customIcon : (Icon && (
-                <Icon className={`${iconColorClass} shrink-0 ${isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
-            ))}
-            {isExpanded ? (
-                <div className="flex-1 flex justify-between items-center">
-                    <span className="text-sm font-semibold text-slate-700">{title}</span>
-                    <span className="text-slate-800 font-black">{value}</span>
-                </div>
-            ) : (
-                <span className={`font-black text-slate-800 leading-none ${smallCollapsedText ? 'text-[10px] sm:text-xs' : 'text-xs'}`}>
-                    {collapsedValue !== undefined ? collapsedValue : value}
-                </span>
+        <>
+            <div 
+                ref={containerRef}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className={`flex items-center gap-3 p-3 bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl transition-all ${!isExpanded ? 'w-14 justify-center aspect-square flex-col gap-1 p-2 mx-auto' : ''} ${onClick ? 'cursor-pointer active:scale-95' : 'cursor-default'} ${className}`}
+                onClick={onClick}
+            >
+                {customIcon ? customIcon : (Icon && (
+                    <Icon className={`${iconColorClass} shrink-0 ${isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
+                ))}
+                {isExpanded ? (
+                    <div className="flex-1 flex justify-between items-center">
+                        <span className="text-sm font-semibold text-slate-700">{title}</span>
+                        <span className="text-slate-800 font-black">{value}</span>
+                    </div>
+                ) : (
+                    <span className={`font-black text-slate-800 leading-none ${smallCollapsedText ? 'text-[10px] sm:text-xs' : 'text-xs'}`}>
+                        {collapsedValue !== undefined ? collapsedValue : value}
+                    </span>
+                )}
+            </div>
+
+            {/* Premium Tooltip Portal */}
+            {!isExpanded && !disableTooltip && isHovered && rect && createPortal(
+                <div
+                    className="fixed z-99999 pointer-events-none animate-fade-in-up"
+                    style={{
+                        top: rect.top + (rect.height / 2),
+                        left: rect.right + 12,
+                        transform: 'translateY(-50%)'
+                    }}
+                >
+                    <div className="relative">
+                        {/* Little triangle arrow */}
+                        <div className="absolute top-1/2 -left-1 w-2 h-2 bg-slate-800 rotate-45 transform -translate-y-1/2"></div>
+                        {/* Tooltip body */}
+                        <div className="bg-slate-800 text-white px-3 py-1.5 rounded-lg shadow-xl border border-slate-700/50 text-sm font-medium whitespace-nowrap">
+                            {tooltipText || title}
+                        </div>
+                    </div>
+                </div>,
+                document.body
             )}
-        </div>
+        </>
     );
 };

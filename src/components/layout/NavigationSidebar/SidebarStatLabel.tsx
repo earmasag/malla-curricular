@@ -35,17 +35,25 @@ export const SidebarStatLabel: React.FC<SidebarStatLabelProps> = ({
     const [isHovered, setIsHovered] = useState(false);
     const [rect, setRect] = useState<DOMRect | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleMouseEnter = () => {
         if (window.matchMedia('(hover: hover)').matches && !disableTooltip) {
             if (!isExpanded && containerRef.current) {
-                setRect(containerRef.current.getBoundingClientRect());
-                setIsHovered(true);
+                const currentRect = containerRef.current.getBoundingClientRect();
+                hoverTimer.current = setTimeout(() => {
+                    setRect(currentRect);
+                    setIsHovered(true);
+                }, 300); // 300ms delay para evitar parpadeos accidentales
             }
         }
     };
 
     const handleMouseLeave = () => {
+        if (hoverTimer.current) {
+            clearTimeout(hoverTimer.current);
+            hoverTimer.current = null;
+        }
         setIsHovered(false);
     };
 
@@ -101,10 +109,8 @@ export const SidebarStatLabel: React.FC<SidebarStatLabelProps> = ({
                     }}
                 >
                     <div className="relative">
-                        {/* Little triangle arrow */}
-                        <div className="absolute top-1/2 -left-1 w-2 h-2 bg-slate-800 rotate-45 transform -translate-y-1/2"></div>
                         {/* Tooltip body */}
-                        <div className="bg-slate-800 text-white px-3 py-1.5 rounded-lg shadow-xl border border-slate-700/50 text-sm font-medium whitespace-nowrap">
+                        <div className="bg-white/60 backdrop-blur-2xl border border-white/60 shadow-2xl transform-gpu text-slate-800 px-3 py-1.5 rounded-xl text-sm font-bold whitespace-nowrap">
                             {tooltipText || title}
                         </div>
                     </div>

@@ -58,19 +58,27 @@ export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, 
     const [isHovered, setIsHovered] = useState(false);
     const [rect, setRect] = useState<DOMRect | null>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleMouseEnter = () => {
         // Solo mostramos el tooltip en dispositivos que soportan hover (mouse/puntero)
         // para evitar que un tap en móvil lo active de forma extraña.
         if (window.matchMedia('(hover: hover)').matches) {
             if (!isExpanded && buttonRef.current) {
-                setRect(buttonRef.current.getBoundingClientRect());
-                setIsHovered(true);
+                const currentRect = buttonRef.current.getBoundingClientRect();
+                hoverTimer.current = setTimeout(() => {
+                    setRect(currentRect);
+                    setIsHovered(true);
+                }, 300); // 300ms delay para evitar parpadeos accidentales
             }
         }
     };
 
     const handleMouseLeave = () => {
+        if (hoverTimer.current) {
+            clearTimeout(hoverTimer.current);
+            hoverTimer.current = null;
+        }
         setIsHovered(false);
     };
 
@@ -129,10 +137,8 @@ export const SidebarButton: React.FC<SidebarButtonProps> = ({ isExpanded, icon, 
                     }}
                 >
                     <div className="relative">
-                        {/* Little triangle arrow */}
-                        <div className="absolute top-1/2 -left-1 w-2 h-2 bg-slate-800 rotate-45 transform -translate-y-1/2"></div>
                         {/* Tooltip body */}
-                        <div className="bg-slate-800 text-white px-3 py-1.5 rounded-lg shadow-xl border border-slate-700/50 text-sm font-medium whitespace-nowrap">
+                        <div className="bg-white/60 backdrop-blur-2xl border border-white/60 shadow-2xl transform-gpu text-slate-800 px-3 py-1.5 rounded-xl text-sm font-bold whitespace-nowrap">
                             {tooltipText || label}
                         </div>
                     </div>

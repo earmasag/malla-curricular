@@ -1,4 +1,5 @@
-import { memo, useRef } from 'react';
+import { memo, useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Check, Pencil } from 'lucide-react';
 import type { MateriaNode } from '../../types/materia';
 import { useCarrera } from '../../contexts/CarreraContext';
@@ -44,6 +45,47 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
 
     // Colores del borde y acento basados puramente en su estado
     const currentHexColor = colorArea;
+
+    // --- Tooltip Prolongado para el Listón ---
+    const [tooltipState, setTooltipState] = useState<{ show: boolean, rect: DOMRect | null }>({ show: false, rect: null });
+    const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    const handleMouseEnterCard = () => {
+        if (onMouseEnter) onMouseEnter();
+        
+        // Solo para dispositivos con hover. Mostramos la leyenda tras un hover prolongado.
+        if (window.matchMedia('(hover: hover)').matches) {
+            if (cardRef.current) {
+                const currentRect = cardRef.current.getBoundingClientRect();
+                hoverTimer.current = setTimeout(() => {
+                    setTooltipState({ show: true, rect: currentRect });
+                }, 1000); // 1000ms para un hover "prolongado"
+            }
+        }
+    };
+
+    const handleMouseLeaveCard = () => {
+        if (onMouseLeave) onMouseLeave();
+        
+        if (hoverTimer.current) {
+            clearTimeout(hoverTimer.current);
+            hoverTimer.current = null;
+        }
+        setTooltipState({ show: false, rect: null });
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (tooltipState.show) {
+                setTooltipState({ show: false, rect: null });
+            }
+        };
+        if (tooltipState.show) {
+            window.addEventListener('scroll', handleScroll, true);
+        }
+        return () => window.removeEventListener('scroll', handleScroll, true);
+    }, [tooltipState.show]);
 
     // --- Interacción Táctil: mostrar prelaciones al tocar (equivalente al hover de desktop) ---
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -120,14 +162,15 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
 
     return (
         <div
+            ref={cardRef}
             id={codigoMateria}
             onClick={handleClick}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchMove}
             onContextMenu={handleContextMenu}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+            onMouseEnter={handleMouseEnterCard}
+            onMouseLeave={handleMouseLeaveCard}
             className={`materia-card relative w-48 h-20 rounded-br-[20px] my-1 border-[3px] select-none ${opacityClass} transition-all duration-300 transform-gpu ${onClick ? 'cursor-pointer [@media(hover:hover)]:hover:scale-105 active:scale-95' : ''} ${isHovered ? 'ring-4 ring-offset-2 ring-theme-500 z-50' : 'z-10'} ${isCursando ? 'shadow-[0_0_15px_rgba(59,130,246,0.6)] ring-2 ring-blue-400 ring-offset-1' : 'shadow-sm'}`}
             style={{
                 backgroundColor: currentHexColor,
@@ -242,6 +285,36 @@ const MateriaCardContent = ({ materia, onClick, onRightClick, onMouseEnter, onMo
             >
                 {unidadesCredito}
             </div>
+
+            {/* Premium Tooltip Portal (Mini Leyenda) */}
+            {tooltipState.show && tooltipState.rect && createPortal(
+                <div
+                    className="fixed z-99999 pointer-events-none animate-fade-in-up"
+                    style={{
+                        top: tooltipState.rect.top - 8,
+                        left: tooltipState.rect.left + (tooltipState.rect.width / 2),
+                        transform: 'translate(-50%, -100%)'
+                    }}
+                >
+                    <div className="relative flex flex-col items-center">
+                        {/* Tooltip body */}
+                        <div className="bg-white/60 backdrop-blur-2xl border border-white/60 shadow-2xl transform-gpu text-slate-800 p-2.5 rounded-2xl flex flex-col gap-2 min-w-max">
+                            <h4 className="text-[10px] uppercase text-slate-500 font-bold tracking-wider text-center leading-none">Listones de Estado</h4>
+                            <div className="flex flex-col gap-1.5">
+                                <div className="flex items-center gap-2 text-xs font-medium">
+                                    <div className="bg-emerald-500 rounded p-0.5 shadow-inner"><Check className="w-3.5 h-3.5 text-white" strokeWidth={3.5} /></div>
+                                    <span>Aprobada</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs font-medium">
+                                    <div className="bg-blue-500 rounded p-0.5 shadow-inner"><Pencil className="w-3.5 h-3.5 text-white" strokeWidth={3} /></div>
+                                    <span>Cursando</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>,
+                document.body
+            )}
 
         </div>
     );

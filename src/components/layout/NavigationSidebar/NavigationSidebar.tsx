@@ -99,7 +99,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                     isExpanded={ui.isExpanded}
                                     icon={Lightbulb}
                                     iconColorClass="text-green-500"
-                                    title="Unidades de Crédito Acumuladas"
+                                    title="UC Acumuladas"
                                     value={mallaStats.ucAcumuladas}
                                 />
 
@@ -124,7 +124,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                             customIcon={
                                                 <Pencil className={`text-blue-500 shrink-0 animate-pulse ${ui.isExpanded ? 'w-5 h-5' : 'w-4 h-4'}`} />
                                             }
-                                            title="Unidades de Crédito Cursando"
+                                            title="UC Cursando"
                                             value={mallaStats.ucCursando}
                                             smallCollapsedText={true}
                                             disableTooltip={true}

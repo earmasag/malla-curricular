@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calculator, Info, AlertTriangle, AlertCircle, Check } from 'lucide-react';
 import type { MateriaMatricula } from '../../services/MatriculaService';
+import type { Sede, TipoCooperacion } from '../../types/matricula';
 import { CustomSelect } from '../ui/CustomSelect';
 import { CustomCheckbox } from '../ui/CustomCheckbox';
 import { ModalHeader } from './shared/ModalHeader';
@@ -13,7 +14,7 @@ export interface MatriculaModalProps {
 }
 
 export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose, materiasCursando }) => {
-    const { perfil, desglose, tasaBCV, updatePerfil, handleCoberturaChange, coberturaDisplayValue } = useMatriculaModal(materiasCursando, isOpen);
+    const { perfil, desglose, tasaBCV, updatePerfil, handleCoberturaChange, coberturaDisplayValue, recargosPorTaxonomia } = useMatriculaModal(materiasCursando, isOpen);
 
     if (!isOpen) return null;
 
@@ -21,7 +22,7 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
 
     return (
         <div className="fixed inset-0 z-60 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-4 animate-fade-in text-sm sm:text-base">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90dvh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-slide-up mb-2 sm:mb-0 mt-8 sm:mt-0 relative">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90dvh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-slide-up mb-2 sm:mb-0 mt-8 sm:mt-0 relative">
 
                 {/* Indicador visual móvil */}
                 <div className="w-full flex justify-center pt-2 pb-2 sm:hidden absolute top-0 left-0 z-10 pointer-events-none">
@@ -44,113 +45,116 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                         </div>
                     ) : (
                         <>
-                            {/* Panel de Configuración del Perfil */}
-                            <div className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm shrink-0">
-                                <h3 className="font-bold text-gray-800 mb-3 sm:mb-4 border-b pb-2">Configuración del Estudiante</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <label className="flex flex-col gap-1.5 focus-within:text-theme-600 transition-colors">
-                                        <span className="text-xs font-semibold uppercase tracking-wide">Carrera:</span>
-                                        <CustomSelect
-                                            value={perfil.carrera}
-                                            onChange={(val) => updatePerfil('carrera', val as string)}
-                                            options={[
-                                                { value: 'sinDescuento', label: 'Informática / Otra' },
-                                                { value: 'educacion', label: 'Educación' },
-                                                { value: 'letras', label: 'Letras' },
-                                                { value: 'filosofia', label: 'Filosofía' }
-                                            ]}
-                                        />
-                                    </label>
-
-                                    <label className="flex flex-col gap-1.5 focus-within:text-theme-600 transition-colors">
-                                        <span className="text-xs font-semibold uppercase tracking-wide">Sede:</span>
-                                        <CustomSelect
-                                            value={perfil.sede}
-                                            onChange={(val) => updatePerfil('sede', val as any)}
-                                            options={[
-                                                { value: 'ccs', label: 'Caracas' },
-                                                { value: 'g', label: 'Guayana' },
-                                                { value: 'tq', label: 'Los Teques' }
-                                            ]}
-                                        />
-                                    </label>
-
-                                    <label className="flex flex-col gap-1.5 focus-within:text-theme-600 transition-colors md:col-span-2">
-                                        <span className="text-xs font-semibold uppercase tracking-wide">Cooperación Económica:</span>
-                                        <CustomSelect
-                                            value={perfil.cooperacion}
-                                            onChange={(val) => updatePerfil('cooperacion', val as any)}
-                                            options={[
-                                                { value: 'ninguna', label: 'Ninguna' },
-                                                { value: 'beca', label: 'Beca' },
-                                                { value: 'prop', label: 'Proporcional' },
-                                                { value: 'fab', label: 'F.A.B.' },
-                                                { value: 'baup', label: 'Beca A Un Pana (BAUP)' }
-                                            ]}
-                                        />
-                                    </label>
-
-                                    {perfil.cooperacion !== 'ninguna' && (
-                                         <label className="flex flex-col gap-1.5 focus-within:text-theme-600 transition-colors md:col-span-2 relative">
-                                            <div className="flex justify-between items-end">
-                                                <span className="text-xs font-semibold uppercase tracking-wide">Porcentaje de Cobertura (%):</span>
-                                                <span className="text-[10px] text-gray-400 font-medium tracking-wide">MÍN: 0% - MÁX: 100%</span>
-                                            </div>
-                                            <div className="relative">
-                                                <input 
-                                                    type="number"
-                                                    min="0"
-                                                    max="100"
-                                                    className="w-full pl-4 pr-10 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl focus:outline-none focus:ring-4 focus:ring-theme-50 focus:border-theme-400 hover:border-theme-300 shadow-sm transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                                    value={coberturaDisplayValue}
-                                                    onChange={(e) => handleCoberturaChange(e.target.value)}
-                                                    placeholder="Ej: 60"
-                                                />
-                                                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                                    {perfil.coberturaPct > 0 && perfil.coberturaPct <= 100 ? (
-                                                        <Check className="w-5 h-5 text-theme-500" strokeWidth={3} />
-                                                    ) : (
-                                                        <span className="text-gray-400 font-bold">%</span>
-                                                    )}
+                            {/* Panel Superior (Grid 2 columnas) */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 shrink-0">
+                                
+                                {/* Lista de Materias Cursando (Primero) */}
+                                <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col">
+                                    <h3 className="font-bold text-gray-800 mb-2 sm:mb-3 border-b pb-2 text-sm">Materias a Cursar</h3>
+                                    <div className="flex flex-col gap-1.5 max-h-40 sm:max-h-56 overflow-y-auto pr-1">
+                                        {materiasCursando.map(materia => (
+                                            <div key={materia.codigoMateria} className="flex justify-between items-center text-sm p-2 rounded-md hover:bg-theme-50 border border-gray-100 transition-colors">
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-gray-700 leading-tight">{materia.nombre}</span>
+                                                    <span className="text-xs text-gray-500 font-mono mt-0.5">{materia.codigoMateria}</span>
+                                                </div>
+                                                <div className="bg-theme-100 text-theme-800 font-bold px-2 py-1 rounded text-xs border border-theme-200 shrink-0 ml-2">
+                                                    {materia.unidadesCredito} UC
                                                 </div>
                                             </div>
-                                        </label>
-                                    )}
-
-                                    <div className="flex flex-row flex-wrap justify-center gap-6 pt-2 md:col-span-2">
-                                        <div className="w-auto">
-                                            <CustomCheckbox
-                                                checked={perfil.esAlumnoNuevo}
-                                                onChange={(checked) => updatePerfil('esAlumnoNuevo', checked)}
-                                                label="Es Alumno Nuevo"
-                                            />
-                                        </div>
-                                        <div className="w-auto">
-                                            <CustomCheckbox
-                                                checked={perfil.aplicaRetraso}
-                                                onChange={(checked) => updatePerfil('aplicaRetraso', checked)}
-                                                label="Aplica Retraso Mensual"
-                                            />
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Lista de Materias Cursando */}
-                            <div className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm shrink-0">
-                                <h3 className="font-bold text-gray-800 mb-3 sm:mb-4 border-b pb-2">Materias a Cursar</h3>
-                                <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
-                                    {materiasCursando.map(materia => (
-                                        <div key={materia.codigoMateria} className="flex justify-between items-center text-sm p-2 sm:p-3 rounded-lg hover:bg-theme-50 border border-gray-100 transition-colors">
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-gray-700">{materia.nombre}</span>
-                                                <span className="text-xs text-gray-500 font-mono mt-0.5">{materia.codigoMateria}</span>
+                                {/* Panel de Configuración del Perfil (Segundo) */}
+                                <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col">
+                                    <h3 className="font-bold text-gray-800 mb-2 sm:mb-3 border-b pb-2 text-sm">Configuración del Estudiante</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
+                                        <label className="flex flex-col gap-1 focus-within:text-theme-600 transition-colors">
+                                            <span className="text-xs font-semibold uppercase tracking-wide">Carrera:</span>
+                                            <CustomSelect
+                                                value={perfil.carrera}
+                                                onChange={(val) => updatePerfil('carrera', val as string)}
+                                                options={[
+                                                    { value: 'sinDescuento', label: 'Informática / Otra' },
+                                                    { value: 'educacion', label: 'Educación' },
+                                                    { value: 'letras', label: 'Letras' },
+                                                    { value: 'filosofia', label: 'Filosofía' }
+                                                ]}
+                                            />
+                                        </label>
+
+                                        <label className="flex flex-col gap-1 focus-within:text-theme-600 transition-colors">
+                                            <span className="text-xs font-semibold uppercase tracking-wide">Sede:</span>
+                                            <CustomSelect
+                                                value={perfil.sede}
+                                                onChange={(val) => updatePerfil('sede', val as Sede)}
+                                                options={[
+                                                    { value: 'ccs', label: 'Caracas' },
+                                                    { value: 'g', label: 'Guayana' },
+                                                    { value: 'tq', label: 'Los Teques' }
+                                                ]}
+                                            />
+                                        </label>
+
+                                        <label className="flex flex-col gap-1 focus-within:text-theme-600 transition-colors sm:col-span-2">
+                                            <span className="text-xs font-semibold uppercase tracking-wide">Cooperación Económica:</span>
+                                            <CustomSelect
+                                                value={perfil.cooperacion}
+                                                onChange={(val) => updatePerfil('cooperacion', val as TipoCooperacion)}
+                                                options={[
+                                                    { value: 'ninguna', label: 'Ninguna' },
+                                                    { value: 'beca', label: 'Beca' },
+                                                    { value: 'prop', label: 'Proporcional' },
+                                                    { value: 'fab', label: 'F.A.B.' },
+                                                    { value: 'baup', label: 'Beca A Un Pana (BAUP)' }
+                                                ]}
+                                            />
+                                        </label>
+
+                                        {perfil.cooperacion !== 'ninguna' && (
+                                             <label className="flex flex-col gap-1 focus-within:text-theme-600 transition-colors sm:col-span-2 relative">
+                                                <div className="flex justify-between items-end">
+                                                    <span className="text-xs font-semibold uppercase tracking-wide">Cobertura (%):</span>
+                                                </div>
+                                                <div className="relative">
+                                                    <input 
+                                                        type="number"
+                                                        min="0"
+                                                        max="100"
+                                                        className="w-full pl-3 pr-8 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-theme-50 focus:border-theme-400 hover:border-theme-300 shadow-sm transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                        value={coberturaDisplayValue}
+                                                        onChange={(e) => handleCoberturaChange(e.target.value)}
+                                                        placeholder="Ej: 60"
+                                                    />
+                                                    <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+                                                        {perfil.coberturaPct > 0 && perfil.coberturaPct <= 100 ? (
+                                                            <Check className="w-4 h-4 text-theme-500" strokeWidth={3} />
+                                                        ) : (
+                                                            <span className="text-gray-400 font-bold text-sm">%</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        )}
+
+                                        <div className="flex flex-row flex-wrap justify-start gap-4 pt-1 sm:col-span-2">
+                                            <div className="w-auto scale-90 origin-center">
+                                                <CustomCheckbox
+                                                    checked={perfil.esAlumnoNuevo}
+                                                    onChange={(checked) => updatePerfil('esAlumnoNuevo', checked)}
+                                                    label="Alumno Nuevo"
+                                                />
                                             </div>
-                                            <div className="bg-theme-100 text-theme-800 font-bold px-2.5 py-1 rounded-md text-xs border border-theme-200 shrink-0 ml-3">
-                                                {materia.unidadesCredito} UC
+                                            <div className="w-auto scale-90 origin-center">
+                                                <CustomCheckbox
+                                                    checked={perfil.aplicaRetraso}
+                                                    onChange={(checked) => updatePerfil('aplicaRetraso', checked)}
+                                                    label="Retraso Mensual"
+                                                />
                                             </div>
                                         </div>
-                                    ))}
+                                    </div>
                                 </div>
                             </div>
 
@@ -161,11 +165,11 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                         <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
                                             <div className="bg-white p-2 rounded-lg shadow-sm font-bold text-gray-700 text-center flex-1 sm:flex-none min-w-20">
                                                 <div className="text-xl leading-none text-theme-600">{materiasCursando.length}</div>
-                                                <div className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Materias</div>
+                                                <div className="text-xs uppercase tracking-wider text-gray-400 mt-1">Materias</div>
                                             </div>
                                             <div className="bg-white p-2 rounded-lg shadow-sm font-bold text-gray-700 text-center flex-1 sm:flex-none min-w-20">
                                                 <div className="text-xl leading-none text-theme-600">{totalUc}</div>
-                                                <div className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Total UC</div>
+                                                <div className="text-xs uppercase tracking-wider text-gray-400 mt-1">Total UC</div>
                                             </div>
                                         </div>
 
@@ -206,28 +210,79 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
 
                                     <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                                         {/* Columna 1: Desglose */}
-                                        <div className="flex flex-col">
-                                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Desglose General</h4>
-                                            <ul className="space-y-3 text-sm">
-                                                <li className="flex justify-between items-center text-gray-700 border-b pb-2">
-                                                    <span>Base / Valor UC:</span>
-                                                    <span className="font-semibold text-xs text-gray-500">${desglose.valorUC} (Real: ${desglose.vrealUC})</span>
-                                                </li>
-                                                <li className="flex justify-between items-center text-gray-700">
-                                                    <span>UC Puras:</span>
-                                                    <span className="font-semibold">{desglose.ucbase} UC</span>
-                                                </li>
-                                                {desglose.ucre > 0 && (
-                                                     <li className="flex justify-between items-center text-theme-600">
-                                                        <span>Recargos Taxonomía:</span>
-                                                        <span className="font-bold">+{desglose.ucre.toFixed(2)} UC</span>
-                                                    </li>
-                                                )}
-                                                <li className="flex justify-between items-center text-gray-700 border-t pt-2 mt-2">
-                                                    <span>UC a Pagar (Costo Neto):</span>
-                                                    <span className="font-semibold">{desglose.cooperacion.ucpagar.toFixed(2)} UC</span>
-                                                </li>
-                                            </ul>
+                                        <div className="flex flex-col w-full">
+                                            
+                                            <div className="bg-white border border-gray-200 rounded-lg overflow-x-auto text-sm shadow-sm">
+                                                <table className="w-full text-left">
+                                                    <thead className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider">
+                                                        <tr>
+                                                            <th className="px-2 py-2 font-semibold">Concepto</th>
+                                                            <th className="px-2 py-2 font-semibold text-right">P.U.</th>
+                                                            <th className="px-2 py-2 font-semibold text-right">Cant.</th>
+                                                            <th className="px-2 py-2 font-semibold text-right">Subtotal</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-gray-100">
+                                                        <tr>
+                                                            <td className="px-2 py-2.5 text-gray-700 font-medium text-xs sm:text-sm">Matrícula Base</td>
+                                                            <td className="px-2 py-2.5 text-gray-500 text-right text-xs sm:text-sm whitespace-nowrap">${desglose.valorUC.toFixed(2)}</td>
+                                                            <td className="px-2 py-2.5 text-gray-500 text-right text-xs sm:text-sm whitespace-nowrap">{desglose.ucbase} UC</td>
+                                                            <td className="px-2 py-2.5 font-semibold text-right text-gray-700 whitespace-nowrap text-xs sm:text-sm">${(desglose.valorUC * desglose.ucbase).toFixed(2)}</td>
+                                                        </tr>
+                                                        {Object.entries(recargosPorTaxonomia).map(([tax, data]) => {
+                                                            const costoExtraPorUC = desglose.valorUC * data.porcentaje;
+                                                            const totalExtra = costoExtraPorUC * data.ucBase;
+                                                            return (
+                                                                <tr key={tax}>
+                                                                    <td className="px-2 py-2.5 text-theme-600 font-medium text-xs sm:text-sm">Recargo {tax}</td>
+                                                                    <td className="px-2 py-2.5 text-theme-500/80 text-right text-xs sm:text-sm whitespace-nowrap">+${costoExtraPorUC.toFixed(2)}</td>
+                                                                    <td className="px-2 py-2.5 text-theme-500/80 text-right text-xs sm:text-sm whitespace-nowrap">{data.ucBase} UC</td>
+                                                                    <td className="px-2 py-2.5 text-theme-600 font-semibold text-right whitespace-nowrap text-xs sm:text-sm">+${totalExtra.toFixed(2)}</td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                        {/* Descuentos si aplican */}
+                                                        {(() => {
+                                                            const descInst = desglose.uctotal * (desglose.valorUC - desglose.vrealUC);
+                                                            const descBeca = (desglose.uctotal - desglose.cooperacion.ucpagar) * desglose.vrealUC;
+                                                            const totalDesc = descInst + descBeca;
+                                                            
+                                                            if (totalDesc === 0) return null;
+
+                                                            return (
+                                                                <>
+                                                                    {descInst > 0 && (
+                                                                        <tr className="bg-emerald-50/30">
+                                                                            <td className="px-2 py-2 text-emerald-700 text-xs sm:text-sm">Sede/Carrera</td>
+                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">-${(desglose.valorUC - desglose.vrealUC).toFixed(2)}</td>
+                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">{desglose.uctotal} UC</td>
+                                                                            <td className="px-2 py-2 text-emerald-700 font-medium text-right whitespace-nowrap text-xs sm:text-sm">-${descInst.toFixed(2)}</td>
+                                                                        </tr>
+                                                                    )}
+                                                                    {descBeca > 0 && (
+                                                                        <tr className="bg-emerald-50/30">
+                                                                            <td className="px-2 py-2 text-emerald-700 text-xs sm:text-sm">Exoneración Coop.</td>
+                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">-${desglose.vrealUC.toFixed(2)}</td>
+                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">{(desglose.uctotal - desglose.cooperacion.ucpagar).toFixed(2)} UC</td>
+                                                                            <td className="px-2 py-2 text-emerald-700 font-medium text-right whitespace-nowrap text-xs sm:text-sm">-${descBeca.toFixed(2)}</td>
+                                                                        </tr>
+                                                                    )}
+                                                                    <tr className="bg-emerald-50/60 border-t border-emerald-100/50">
+                                                                        <td colSpan={3} className="px-2 py-2 text-right font-bold text-emerald-800 text-xs uppercase tracking-wide">Total Descuentos:</td>
+                                                                        <td className="px-2 py-2 font-bold text-emerald-700 text-right whitespace-nowrap text-xs sm:text-sm">-${totalDesc.toFixed(2)}</td>
+                                                                    </tr>
+                                                                </>
+                                                            );
+                                                        })()}
+                                                    </tbody>
+                                                    <tfoot className="bg-gray-50 border-t border-gray-200">
+                                                        <tr>
+                                                            <td colSpan={3} className="px-2 py-3 text-right font-bold text-gray-700 uppercase text-xs tracking-wider">Total a Pagar (Neto):</td>
+                                                            <td className="px-2 py-3 font-black text-base sm:text-lg text-theme-600 text-right whitespace-nowrap">${desglose.mensualidadUSD.toFixed(2)}</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
                                         </div>
 
                                         {/* Columna 2: Pagos */}
@@ -241,17 +296,17 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                                         <div className="flex justify-between items-center">
                                                             <span className="flex items-center gap-2">
                                                                 {pago.numero}° Pago
-                                                                <span className="text-[10px] bg-theme-200 px-1.5 py-0.5 rounded text-theme-800 hidden sm:inline">{pago.descripcion}</span>
+                                                                <span className="text-xs bg-theme-200 px-1.5 py-0.5 rounded text-theme-800 hidden sm:inline">{pago.descripcion}</span>
                                                             </span>
                                                             <span className="font-bold shrink-0">${pago.montoUSD.toFixed(2)}</span>
                                                         </div>
-                                                        <div className="text-right text-[10px] text-gray-500 mt-0.5 opacity-80">
+                                                        <div className="text-right text-xs text-gray-500 mt-0.5 opacity-80">
                                                              Bs. {pago.montoBs.toFixed(2)}
                                                         </div>
                                                     </li>
                                                 ))}
                                             </ul>
-                                            <div className="text-[10px] text-center text-gray-400 mt-4 italic">
+                                            <div className="text-xs text-center text-gray-400 mt-4 italic">
                                                 Tasa BCV Estimada: Bs. {tasaBCV}
                                             </div>
                                         </div>

@@ -22,7 +22,7 @@
     },
     "descuentos_sede": {
         "ccs": 0.00,
-        "g": 0.10,
+        "g": 0.05,
         "tq": 0.20
     },
     "descuentos_carrera": {
@@ -54,5 +54,5 @@
             "fab": 30
         }
     },
-    "tasa_bcv_mock": 750.00
+    "tasa_bcv_mock": 825.00
 }

@@ -4,10 +4,11 @@ import type { StudentProfile } from '../../types/matricula';
 import { useCarrera } from '../../contexts/CarreraContext';
 
 const STORAGE_KEY = 'calculadora_matricula_perfil';
+const EMPTY_MATRICULA = {};
 
 export function useMatriculaModal(materiasCursando: MateriaMatricula[], isOpen: boolean) {
     const { carreraData } = useCarrera();
-    const matriculaData = carreraData?.matricula || {};
+    const matriculaData = carreraData?.matricula || EMPTY_MATRICULA;
     
     // Función para obtener estado inicial
     const getInitialPerfil = (): StudentProfile => {
@@ -70,12 +71,25 @@ export function useMatriculaModal(materiasCursando: MateriaMatricula[], isOpen: 
 
     const coberturaDisplayValue = perfil.coberturaPct === 0 ? '' : perfil.coberturaPct.toString();
 
+    const recargosPorTaxonomia = useMemo(() => {
+        if (!desglose) return {};
+        return desglose.cooperacion.materiasConRecargo.reduce((acc, curr) => {
+            if (!acc[curr.taxonomia]) {
+                acc[curr.taxonomia] = { ucBase: 0, porcentaje: curr.porcentaje, ucRecargo: 0 };
+            }
+            acc[curr.taxonomia].ucBase += curr.ucBase;
+            acc[curr.taxonomia].ucRecargo += curr.ucRecargo;
+            return acc;
+        }, {} as Record<string, { ucBase: number, porcentaje: number, ucRecargo: number }>);
+    }, [desglose]);
+
     return {
         perfil,
         desglose,
         tasaBCV,
         updatePerfil,
         handleCoberturaChange,
-        coberturaDisplayValue
+        coberturaDisplayValue,
+        recargosPorTaxonomia
     };
 }

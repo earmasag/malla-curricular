@@ -2,29 +2,12 @@ import type { MateriaNode } from '../types/materia';
 import type { StudentProfile, MatriculaBreakdown, CooperacionResult, PagoMensual, Sede, TipoCooperacion, MateriaRecargo } from '../types/matricula';
 
 // Extendemos MateriaNode para documentar las propiedades que requiere el cálculo
-export interface MateriaMatricula extends MateriaNode {
-    // Para simplificar, este tipo se usa para materias seleccionadas para simulación de matrícula
-}
+export type MateriaMatricula = MateriaNode;
 
 export class MatriculaService {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(private config: any) {}
 
-    // UC-02: Calcular UC con Recargo por Taxonomía
-    private calcularUCConRecargo(uc: number, tax: string): number {
-        // Detectar modalidad virtual/semipresencial
-        if (tax.includes('(V)') || tax.includes('(SP)')) {
-            return uc; // Sin recargo adicional
-        }
-
-        let porcentajeTaxonomia = 0;
-        if (tax && this.config.recargos_taxonomia[tax] !== undefined) {
-            porcentajeTaxonomia = this.config.recargos_taxonomia[tax];
-        }
-
-        return uc * (1 + porcentajeTaxonomia);
-    }
-
-    // UC-03: Acumular UC por Selección de Materias
     private acumularUC(materias: MateriaMatricula[]): { ucbase: number, uctotal: number, materiasConRecargo: MateriaRecargo[] } {
         let ucbase = 0;
         let uctotal = 0;
@@ -32,7 +15,16 @@ export class MatriculaService {
 
         materias.forEach(materia => {
             const base = materia.unidadesCredito;
-            const conRecargo = this.calcularUCConRecargo(base, materia.taxonomia);
+            let conRecargo = base;
+            let porcentajeTaxonomia = 0;
+            const tax = materia.taxonomia;
+
+            if (!tax.includes('(V)') && !tax.includes('(SP)')) {
+                if (tax && this.config.recargos_taxonomia[tax] !== undefined) {
+                    porcentajeTaxonomia = this.config.recargos_taxonomia[tax];
+                }
+                conRecargo = base * (1 + porcentajeTaxonomia);
+            }
             
             ucbase += base;
             uctotal += conRecargo;
@@ -42,7 +34,9 @@ export class MatriculaService {
                 materiasConRecargo.push({
                     nombre: materia.nombre,
                     ucRecargo: recargo,
-                    taxonomia: materia.taxonomia
+                    taxonomia: materia.taxonomia,
+                    ucBase: base,
+                    porcentaje: porcentajeTaxonomia
                 });
             }
         });
@@ -136,11 +130,11 @@ export class MatriculaService {
             let descripcion = `Mes ${i}`;
 
             if (i === 1) {
-                let recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoInscripcion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
+                const recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoInscripcion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
                 montoUSD = totalbs + costoInscripcion + recargoRetraso;
                 descripcion = "Incluye Inscripción";
             } else if (i === 4) {
-                 let recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoConfirmacion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
+                 const recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoConfirmacion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
                 montoUSD = totalbs + costoConfirmacion + recargoRetraso;
                 descripcion = "Incluye Confirmación";
             }

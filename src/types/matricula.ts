@@ -14,6 +14,8 @@ export interface MateriaRecargo {
     nombre: string;
     ucRecargo: number;
     taxonomia: string;
+    ucBase: number;
+    porcentaje: number;
 }
 
 export interface CooperacionResult {

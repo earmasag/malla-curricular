@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator, Info, AlertTriangle, AlertCircle, Check } from 'lucide-react';
+import { Calculator, Info, AlertTriangle, Check } from 'lucide-react';
 import type { MateriaMatricula } from '../../services/MatriculaService';
 import type { Sede, TipoCooperacion } from '../../types/matricula';
 import { CustomSelect } from '../ui/CustomSelect';
@@ -13,12 +13,61 @@ export interface MatriculaModalProps {
     materiasCursando: MateriaMatricula[];
 }
 
+interface FacturaRowProps {
+    concepto: string;
+    pu: string;
+    cant: string;
+    subtotal: string;
+    variant?: 'default' | 'recargo' | 'descuento';
+    prefix?: '+' | '-';
+}
+
+const FacturaRow: React.FC<FacturaRowProps> = ({
+    concepto,
+    pu,
+    cant,
+    subtotal,
+    variant = 'default',
+    prefix
+}) => {
+    let rowBg = 'bg-white text-gray-700';
+    let conceptoClass = 'text-xs sm:text-sm font-medium';
+    let puClass = 'text-xs sm:text-sm text-gray-500';
+    let cantClass = 'text-xs sm:text-sm text-gray-500';
+    let subtotalClass = 'text-xs sm:text-sm font-semibold';
+
+    if (variant === 'recargo') {
+        rowBg = 'bg-theme-50/40 text-theme-800';
+        puClass = 'text-xs sm:text-sm text-theme-600/80';
+        cantClass = 'text-xs sm:text-sm text-theme-600/80';
+        subtotalClass = 'text-xs sm:text-sm font-semibold';
+    } else if (variant === 'descuento') {
+        rowBg = 'bg-gray-50 text-gray-600';
+        conceptoClass = 'text-xs sm:text-sm italic';
+        subtotalClass = 'text-xs sm:text-sm font-medium';
+    }
+
+    const formatValue = (val: string) => prefix ? `${prefix}${val}` : val;
+
+    return (
+        <li className={`flex justify-between items-center px-3 py-2 ${rowBg}`}>
+            <span className={`flex-1 min-w-0 pr-2 ${conceptoClass}`}>{concepto}</span>
+            <span className={`w-16 sm:w-20 text-right ${puClass} whitespace-nowrap shrink-0`}>{formatValue(pu)}</span>
+            <span className={`w-20 sm:w-24 text-right ${cantClass} whitespace-nowrap shrink-0`}>{cant}</span>
+            <span className={`w-20 sm:w-24 text-right ${subtotalClass} whitespace-nowrap shrink-0`}>{formatValue(subtotal)}</span>
+        </li>
+    );
+};
+
 export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose, materiasCursando }) => {
     const { perfil, desglose, tasaBCV, updatePerfil, handleCoberturaChange, coberturaDisplayValue, recargosPorTaxonomia } = useMatriculaModal(materiasCursando, isOpen);
 
     if (!isOpen) return null;
 
     const totalUc = materiasCursando.reduce((sum, m) => sum + m.unidadesCredito, 0);
+
+    const fmtUSD = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtBs  = (n: number) => n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     return (
         <div className="fixed inset-0 z-60 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-4 animate-fade-in text-sm sm:text-base">
@@ -175,139 +224,138 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
 
                                         <div className="text-center sm:text-right w-full sm:w-auto flex-1 bg-white sm:bg-transparent p-3 sm:p-0 rounded-lg shadow-sm sm:shadow-none border border-theme-100 sm:border-none">
                                             <div className="text-xs text-theme-600 font-bold uppercase tracking-wider mb-1">Total Semestre</div>
-                                            <div className="text-3xl font-black text-gray-800">${desglose.totalSemestreUSD.toFixed(2)}</div>
-                                            <div className="text-xs text-gray-500 font-medium mt-1">Bs. {desglose.totalSemestreBs.toFixed(2)}</div>
+                                            <div className="text-3xl font-black text-gray-800">${fmtUSD(desglose.totalSemestreUSD)}</div>
+                                            <div className="text-xs text-gray-500 font-medium mt-1">Bs. {fmtBs(desglose.totalSemestreBs)}</div>
                                         </div>
                                     </div>
 
-                                    {desglose.cooperacion.ucfuera > 0 && (
-                                        <div className="bg-red-50 p-4 border-b border-red-100 flex flex-col gap-3 text-red-800 text-sm">
-                                            <div className="flex items-start gap-2">
-                                                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-500" />
-                                                <p>
-                                                    Tienes <strong>{desglose.cooperacion.ucfuera.toFixed(2)} UC</strong> fuera de cobertura. Estas UC se cobrarán completas sin el porcentaje de cooperación.
+                                    {desglose.cooperacion.materiasConRecargo.length > 0 && (
+                                        <div className="bg-blue-50/60 px-4 py-3 border-b border-blue-100 flex items-start gap-2.5 text-blue-800 text-sm">
+                                            <Info className="w-4 h-4 shrink-0 mt-0.5 text-blue-400" />
+                                            <div className="flex flex-col gap-1">
+                                                <p className="text-blue-700">
+                                                    Nota: Las siguientes materias tienen un recargo por taxonomía que <span className="font-semibold">no está cubierto por tu cooperación económica</span>:
                                                 </p>
-                                            </div>
-                                            <div className="ml-7 pl-3 border-l-2 border-red-200 flex flex-col gap-1">
-                                                {desglose.cooperacion.excesoLimite > 0 && (
-                                                    <p>
-                                                        • <strong>{desglose.cooperacion.excesoLimite.toFixed(2)} UC</strong> por exceder el límite de tu beca ({desglose.cooperacion.limiteBeca} UC).
-                                                    </p>
-                                                )}
-                                                {desglose.cooperacion.materiasConRecargo.length > 0 && (
-                                                    <div>
-                                                        <p>• <strong>{desglose.ucre.toFixed(2)} UC</strong> por recargos de taxonomía en las siguientes materias:</p>
-                                                        <ul className="list-disc ml-5 mt-1 opacity-90">
-                                                            {desglose.cooperacion.materiasConRecargo.map((m, i) => (
-                                                                <li key={i}>{m.nombre} <i className="text-xs">({m.taxonomia})</i>: <strong>+{m.ucRecargo.toFixed(2)} UC</strong></li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
+                                                <ul className="flex flex-col gap-0.5 mt-0.5">
+                                                    {desglose.cooperacion.materiasConRecargo.map((m, i) => (
+                                                        <li key={i} className="flex flex-wrap gap-x-1.5 items-center text-blue-600 text-xs">
+                                                            <span className="font-medium text-blue-700">{m.nombre}</span>
+                                                            <span className="bg-blue-100 text-blue-600 rounded px-1.5 py-0.5 font-mono">{m.taxonomia}</span>
+                                                            <span className="text-blue-500">→ {(m.porcentaje * 100).toFixed(0)}% recargo sobre {m.ucBase} UC</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
                                         </div>
                                     )}
 
-                                    <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                                    <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                         {/* Columna 1: Desglose */}
-                                        <div className="flex flex-col w-full">
-                                            
-                                            <div className="bg-white border border-gray-200 rounded-lg overflow-x-auto text-sm shadow-sm">
-                                                <table className="w-full text-left">
-                                                    <thead className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider">
-                                                        <tr>
-                                                            <th className="px-2 py-2 font-semibold">Concepto</th>
-                                                            <th className="px-2 py-2 font-semibold text-right">P.U.</th>
-                                                            <th className="px-2 py-2 font-semibold text-right">Cant.</th>
-                                                            <th className="px-2 py-2 font-semibold text-right">Subtotal</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className="divide-y divide-gray-100">
-                                                        <tr>
-                                                            <td className="px-2 py-2.5 text-gray-700 font-medium text-xs sm:text-sm">Matrícula Base</td>
-                                                            <td className="px-2 py-2.5 text-gray-500 text-right text-xs sm:text-sm whitespace-nowrap">${desglose.valorUC.toFixed(2)}</td>
-                                                            <td className="px-2 py-2.5 text-gray-500 text-right text-xs sm:text-sm whitespace-nowrap">{desglose.ucbase} UC</td>
-                                                            <td className="px-2 py-2.5 font-semibold text-right text-gray-700 whitespace-nowrap text-xs sm:text-sm">${(desglose.valorUC * desglose.ucbase).toFixed(2)}</td>
-                                                        </tr>
-                                                        {Object.entries(recargosPorTaxonomia).map(([tax, data]) => {
-                                                            const costoExtraPorUC = desglose.valorUC * data.porcentaje;
-                                                            const totalExtra = costoExtraPorUC * data.ucBase;
-                                                            return (
-                                                                <tr key={tax}>
-                                                                    <td className="px-2 py-2.5 text-theme-600 font-medium text-xs sm:text-sm">Recargo {tax}</td>
-                                                                    <td className="px-2 py-2.5 text-theme-500/80 text-right text-xs sm:text-sm whitespace-nowrap">+${costoExtraPorUC.toFixed(2)}</td>
-                                                                    <td className="px-2 py-2.5 text-theme-500/80 text-right text-xs sm:text-sm whitespace-nowrap">{data.ucBase} UC</td>
-                                                                    <td className="px-2 py-2.5 text-theme-600 font-semibold text-right whitespace-nowrap text-xs sm:text-sm">+${totalExtra.toFixed(2)}</td>
-                                                                </tr>
-                                                            );
-                                                        })}
-                                                        {/* Descuentos si aplican */}
-                                                        {(() => {
-                                                            const descInst = desglose.uctotal * (desglose.valorUC - desglose.vrealUC);
-                                                            const descBeca = (desglose.uctotal - desglose.cooperacion.ucpagar) * desglose.vrealUC;
-                                                            const totalDesc = descInst + descBeca;
-                                                            
-                                                            if (totalDesc === 0) return null;
+                                        <div className="flex flex-col gap-2 h-full">
+                                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                                                <Info className="w-3 h-3 shrink-0" /> Factura Proforma (Mensualidad)
+                                            </h4>
+                                            <div className="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden flex flex-col flex-1">
+                                                {/* Cabecera de columnas */}
+                                                <div className="flex justify-between items-center px-3 py-2 bg-gray-100/80 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider font-semibold">
+                                                    <span className="flex-1 min-w-0 pr-2">Concepto</span>
+                                                    <span className="w-16 sm:w-20 text-right shrink-0">P.U.</span>
+                                                    <span className="w-20 sm:w-24 text-right shrink-0">Cant.</span>
+                                                    <span className="w-20 sm:w-24 text-right shrink-0">Subtotal</span>
+                                                </div>
+                                                <ul className="divide-y divide-gray-200 text-sm font-medium flex-1">
+                                                    {/* Matrícula Base */}
+                                                    <FacturaRow
+                                                        concepto="Matrícula Base"
+                                                        pu={`$${fmtUSD(desglose.valorUC)}`}
+                                                        cant={`${desglose.ucbase} UC`}
+                                                        subtotal={`$${fmtUSD(desglose.valorUC * desglose.ucbase)}`}
+                                                    />
 
-                                                            return (
-                                                                <>
-                                                                    {descInst > 0 && (
-                                                                        <tr className="bg-emerald-50/30">
-                                                                            <td className="px-2 py-2 text-emerald-700 text-xs sm:text-sm">Sede/Carrera</td>
-                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">-${(desglose.valorUC - desglose.vrealUC).toFixed(2)}</td>
-                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">{desglose.uctotal} UC</td>
-                                                                            <td className="px-2 py-2 text-emerald-700 font-medium text-right whitespace-nowrap text-xs sm:text-sm">-${descInst.toFixed(2)}</td>
-                                                                        </tr>
-                                                                    )}
-                                                                    {descBeca > 0 && (
-                                                                        <tr className="bg-emerald-50/30">
-                                                                            <td className="px-2 py-2 text-emerald-700 text-xs sm:text-sm">Exoneración Coop.</td>
-                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">-${desglose.vrealUC.toFixed(2)}</td>
-                                                                            <td className="px-2 py-2 text-emerald-600/80 text-right text-xs sm:text-sm whitespace-nowrap">{(desglose.uctotal - desglose.cooperacion.ucpagar).toFixed(2)} UC</td>
-                                                                            <td className="px-2 py-2 text-emerald-700 font-medium text-right whitespace-nowrap text-xs sm:text-sm">-${descBeca.toFixed(2)}</td>
-                                                                        </tr>
-                                                                    )}
-                                                                    <tr className="bg-emerald-50/60 border-t border-emerald-100/50">
-                                                                        <td colSpan={3} className="px-2 py-2 text-right font-bold text-emerald-800 text-xs uppercase tracking-wide">Total Descuentos:</td>
-                                                                        <td className="px-2 py-2 font-bold text-emerald-700 text-right whitespace-nowrap text-xs sm:text-sm">-${totalDesc.toFixed(2)}</td>
-                                                                    </tr>
-                                                                </>
-                                                            );
-                                                        })()}
-                                                    </tbody>
-                                                    <tfoot className="bg-gray-50 border-t border-gray-200">
-                                                        <tr>
-                                                            <td colSpan={3} className="px-2 py-3 text-right font-bold text-gray-700 uppercase text-xs tracking-wider">Total a Pagar (Neto):</td>
-                                                            <td className="px-2 py-3 font-black text-base sm:text-lg text-theme-600 text-right whitespace-nowrap">${desglose.mensualidadUSD.toFixed(2)}</td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
+                                                    {/* Recargos por Taxonomía */}
+                                                    {Object.entries(recargosPorTaxonomia).map(([tax, data]) => {
+                                                        const costoExtraPorUC = desglose.valorUC * data.porcentaje;
+                                                        const totalExtra = costoExtraPorUC * data.ucBase;
+                                                        return (
+                                                            <FacturaRow
+                                                                key={tax}
+                                                                variant="recargo"
+                                                                prefix="+"
+                                                                concepto={`Recargo ${tax}`}
+                                                                pu={`$${fmtUSD(costoExtraPorUC)}`}
+                                                                cant={`${data.ucBase} UC`}
+                                                                subtotal={`$${fmtUSD(totalExtra)}`}
+                                                            />
+                                                        );
+                                                    })}
+
+                                                    {/* Descuentos */}
+                                                    {(() => {
+                                                        const descInst = desglose.uctotal * (desglose.valorUC - desglose.vrealUC);
+                                                        const descBeca = (desglose.uctotal - desglose.cooperacion.ucpagar) * desglose.vrealUC;
+                                                        const totalDesc = descInst + descBeca;
+                                                        if (totalDesc === 0) return null;
+                                                        return (
+                                                            <>
+                                                                {descInst > 0 && (
+                                                                    <FacturaRow
+                                                                        variant="descuento"
+                                                                        prefix="-"
+                                                                        concepto="Dto. Sede/Carrera"
+                                                                        pu={`$${fmtUSD(desglose.valorUC - desglose.vrealUC)}`}
+                                                                        cant={`${desglose.uctotal} UC`}
+                                                                        subtotal={`$${fmtUSD(descInst)}`}
+                                                                    />
+                                                                )}
+                                                                {descBeca > 0 && (
+                                                                    <FacturaRow
+                                                                        variant="descuento"
+                                                                        prefix="-"
+                                                                        concepto="Dto. Cooperación"
+                                                                        pu={`$${fmtUSD(desglose.vrealUC)}`}
+                                                                        cant={`${(desglose.uctotal - desglose.cooperacion.ucpagar).toFixed(2)} UC`}
+                                                                        subtotal={`$${fmtUSD(descBeca)}`}
+                                                                    />
+                                                                )}
+                                                                <li className="flex justify-between items-center px-3 py-2 bg-gray-100/70 border-t border-gray-200 text-gray-700">
+                                                                    <span className="flex-1 text-right text-xs font-bold uppercase tracking-wide pr-2">Total Descuentos:</span>
+                                                                    <span className="w-20 sm:w-24 text-right text-xs sm:text-sm font-bold whitespace-nowrap shrink-0">-${fmtUSD(totalDesc)}</span>
+                                                                </li>
+                                                            </>
+                                                        );
+                                                    })()}
+                                                </ul>
+                                                {/* Total a Pagar */}
+                                                <div className="flex justify-between items-center px-3 py-2.5 bg-theme-50 border-t-2 border-theme-200 mt-auto">
+                                                    <span className="flex-1 text-right text-xs font-bold text-theme-700 uppercase tracking-wider pr-2">Total a Pagar (Neto):</span>
+                                                    <span className="font-black text-base sm:text-lg text-theme-600 whitespace-nowrap">${fmtUSD(desglose.mensualidadUSD)}</span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         {/* Columna 2: Pagos */}
-                                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col">
-                                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1">
+                                        <div className="flex flex-col gap-2 h-full">
+                                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
                                                 <Info className="w-3 h-3 shrink-0" /> Cronograma (5 Cuotas)
                                             </h4>
-                                            <ul className="space-y-2 text-sm font-medium">
-                                                {desglose.pagosMensuales.map((pago, idx) => (
-                                                    <li key={idx} className={`flex flex-col p-2 rounded ${idx === 0 || idx === 3 ? 'bg-theme-100 text-theme-800' : 'text-gray-600 hover:bg-gray-100'}`}>
-                                                        <div className="flex justify-between items-center">
+                                            <div className="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden flex flex-col flex-1">
+                                                <ul className="divide-y divide-gray-200 text-sm font-medium flex-1 flex flex-col justify-between">
+                                                    {desglose.pagosMensuales.map((pago, idx) => (
+                                                        <li key={idx} className={`flex justify-between items-center px-3 py-2 flex-1 ${idx === 0 || idx === 3 ? 'bg-theme-50 text-theme-800' : 'bg-white text-gray-600'}`}>
                                                             <span className="flex items-center gap-2">
-                                                                {pago.numero}° Pago
-                                                                <span className="text-xs bg-theme-200 px-1.5 py-0.5 rounded text-theme-800 hidden sm:inline">{pago.descripcion}</span>
+                                                                <span className="font-semibold text-xs sm:text-sm">{pago.numero}° Pago</span>
+                                                                <span className={`text-xs px-1.5 py-0.5 rounded font-normal hidden sm:inline ${idx === 0 || idx === 3 ? 'bg-theme-100 text-theme-700' : 'bg-gray-100 text-gray-500'}`}>{pago.descripcion}</span>
                                                             </span>
-                                                            <span className="font-bold shrink-0">${pago.montoUSD.toFixed(2)}</span>
-                                                        </div>
-                                                        <div className="text-right text-xs text-gray-500 mt-0.5 opacity-80">
-                                                             Bs. {pago.montoBs.toFixed(2)}
-                                                        </div>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                            <div className="text-xs text-center text-gray-400 mt-4 italic">
-                                                Tasa BCV Estimada: Bs. {tasaBCV}
+                                                            <span className="flex flex-col items-end shrink-0">
+                                                                <span className="font-bold text-xs sm:text-sm">${fmtUSD(pago.montoUSD)}</span>
+                                                                <span className="text-xs text-gray-400 font-normal">Bs. {fmtBs(pago.montoBs)}</span>
+                                                            </span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                                <div className="text-xs text-center text-gray-400 py-1.5 border-t border-gray-200 italic bg-white mt-auto">
+                                                    Tasa BCV Estimada: Bs. {tasaBCV}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -60,8 +60,7 @@ export class MatriculaService {
         ucRecargo: number,
         coop: TipoCooperacion,
         coberturaPct: number,
-        materiasConRecargo: MateriaRecargo[],
-    ): CooperacionResult {
+    ): { ucPagar: number; ucFuera: number; excesoLimite: number; limiteBeca: number } {
         const fraccionAPagar = 1 - coberturaPct / 100; // ej: beca 80% → 0.20
         const limites = this.config.cooperacion.limites;
 
@@ -90,7 +89,7 @@ export class MatriculaService {
             ucPagar = ucBase + ucRecargo;
         }
 
-        return { ucPagar, ucFuera, excesoLimite, limiteBeca, materiasConRecargo };
+        return { ucPagar, ucFuera, excesoLimite, limiteBeca };
     }
 
     // ─── Etapa 5: Cuotas ─────────────────────────────────────────────────────
@@ -106,23 +105,28 @@ export class MatriculaService {
             : total;
     }
 
-    /** Genera el plan de 5 cuotas con sus fees e conversión a Bs. */
-    private generarCuotas(mensualidadUSD: number, perfil: StudentProfile, tasaBCV: number): PagoMensual[] {
-        const insc = this.config.derecho_inscripcion_uc;
-        const vu   = this.config.costo_uc_base;
+    /** Genera el plan de 5 cuotas con sus fees y conversión a Bs. */
+    private generarCuotas(
+        mensualidadUSD: number,
+        esAlumnoNuevo: boolean,
+        aplicaRetraso: boolean,
+        tasaBCV: number,
+    ): PagoMensual[] {
+        const insc     = this.config.derecho_inscripcion_uc;
+        const valorUC  = this.config.costo_uc_base;
 
-        const costoInsc  = (perfil.esAlumnoNuevo ? insc.alumno_nuevo_inscripcion  : insc.alumno_regular_inscripcion)  * vu;
-        const costoCnfm  = (perfil.esAlumnoNuevo ? insc.alumno_nuevo_confirmacion : insc.alumno_regular_confirmacion) * vu;
+        const costoInsc = (esAlumnoNuevo ? insc.alumno_nuevo_inscripcion  : insc.alumno_regular_inscripcion)  * valorUC;
+        const costoCnfm = (esAlumnoNuevo ? insc.alumno_nuevo_confirmacion : insc.alumno_regular_confirmacion) * valorUC;
 
         const fees: Record<number, { fee: number; desc: string }> = {
-            1: { fee: costoInsc,  desc: 'Incluye Inscripción' },
+            1: { fee: costoInsc, desc: 'Incluye Inscripción' },
             4: { fee: costoCnfm, desc: 'Incluye Confirmación' },
         };
 
         return Array.from({ length: 5 }, (_, i) => {
             const n = i + 1;
             const { fee = 0, desc = `Mes ${n}` } = fees[n] ?? {};
-            const montoUSD = this.calcularCuota(mensualidadUSD, fee, perfil.aplicaRetraso);
+            const montoUSD = this.calcularCuota(mensualidadUSD, fee, aplicaRetraso);
             return { numero: n, descripcion: desc, montoUSD, montoBs: montoUSD * tasaBCV };
         });
     }
@@ -147,10 +151,9 @@ export class MatriculaService {
         const { ucBase, ucRecargo }   = this.sumarUC(materias);
         const materiasConRecargo      = this.getMateriasConRecargo(materias);
 
-        // Etapa 2
-        const cooperacion = this.calcularCooperacion(
-            ucBase, ucRecargo, perfil.cooperacion, perfil.coberturaPct, materiasConRecargo,
-        );
+        // Etapa 2: calcular UC a pagar + ensamblar resultado completo para UI
+        const coopCalc    = this.calcularCooperacion(ucBase, ucRecargo, perfil.cooperacion, perfil.coberturaPct);
+        const cooperacion: CooperacionResult = { ...coopCalc, materiasConRecargo };
 
         // Etapas 3 + 4: valorizar y luego descontar sobre el monto
         const descuentoCarreraPct = this.config.descuentos_carrera[perfil.carrera]?.porcentaje ?? 0;
@@ -160,7 +163,7 @@ export class MatriculaService {
         ) / 100;
 
         // Etapa 5
-        const pagosMensuales   = this.generarCuotas(mensualidadUSD, perfil, tasaBCV);
+        const pagosMensuales   = this.generarCuotas(mensualidadUSD, perfil.esAlumnoNuevo, perfil.aplicaRetraso, tasaBCV);
         const totalSemestreUSD = pagosMensuales.reduce((s, p) => s + p.montoUSD, 0);
 
         return {

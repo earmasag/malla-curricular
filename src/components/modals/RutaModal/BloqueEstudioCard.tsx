@@ -4,7 +4,8 @@ import MateriaCard from '../../malla/MateriaCard';
 import { MatriculaService, type MateriaMatricula } from '../../../services/MatriculaService';
 import type { StudentProfile } from '../../../types/matricula';
 import { Info } from 'lucide-react';
-import { useCarrera } from '../../../contexts/CarreraContext';
+
+const matriculaService = new MatriculaService();
 
 // Default profile for estimations. Users can change this in a real app via settings.
 const defaultProfile: StudentProfile = {
@@ -23,12 +24,6 @@ interface BloqueEstudioCardProps {
 }
 
 export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, index, grafo }) => {
-    const { carreraData } = useCarrera();
-    
-    // Instanciar el servicio con la data de la carrera actual
-    const matriculaService = React.useMemo(() => {
-        return new MatriculaService(carreraData?.matricula || {});
-    }, [carreraData?.matricula]);
 
     let ucBloque = 0;
     let horasBloque = 0;
@@ -74,8 +69,8 @@ export const BloqueEstudioCard: React.FC<BloqueEstudioCardProps> = ({ bloque, in
                             <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 shadow-xl pointer-events-none">
                                 <p className="font-bold border-b border-gray-700 pb-1 mb-2 text-theme-400">Desglose Estimado:</p>
                                 <ul className="space-y-1">
-                                    <li className="flex justify-between"><span>Valor UC:</span> <span>${desgloseInscripcion.vrealUC.toFixed(2)}</span></li>
-                                    <li className="flex justify-between"><span>UC a Pagar:</span> <span>{desgloseInscripcion.cooperacion.ucpagar.toFixed(2)} UC</span></li>
+                                    <li className="flex justify-between"><span>Valor UC:</span> <span>${desgloseInscripcion.valorUC.toFixed(2)}</span></li>
+                                    <li className="flex justify-between"><span>UC a Pagar:</span> <span>{desgloseInscripcion.cooperacion.ucPagar.toFixed(2)} UC</span></li>
                                 </ul>
                                 <p className="font-bold border-b border-gray-700 pb-1 mt-2 mb-2 text-theme-500">Plan de Pagos:</p>
                                 <ul className="space-y-1 text-gray-300">

@@ -60,7 +60,7 @@ const FacturaRow: React.FC<FacturaRowProps> = ({
 };
 
 export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose, materiasCursando }) => {
-    const { perfil, desglose, tasaBCV, updatePerfil, handleCoberturaChange, coberturaDisplayValue, recargosPorTaxonomia } = useMatriculaModal(materiasCursando, isOpen);
+    const { perfil, desglose, updatePerfil, handleCoberturaChange, coberturaDisplayValue, recargosPorTaxonomia } = useMatriculaModal(materiasCursando, isOpen);
 
     if (!isOpen) return null;
 
@@ -268,8 +268,8 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                                     <FacturaRow
                                                         concepto="Matrícula Base"
                                                         pu={`$${fmtUSD(desglose.valorUC)}`}
-                                                        cant={`${desglose.ucbase} UC`}
-                                                        subtotal={`$${fmtUSD(desglose.valorUC * desglose.ucbase)}`}
+                                                        cant={`${desglose.ucBase} UC`}
+                                                        subtotal={`$${fmtUSD(desglose.valorUC * desglose.ucBase)}`}
                                                     />
 
                                                     {/* Recargos por Taxonomía */}
@@ -291,30 +291,25 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
 
                                                     {/* Descuentos */}
                                                     {(() => {
-                                                        const descInst = desglose.uctotal * (desglose.valorUC - desglose.vrealUC);
-                                                        const descBeca = (desglose.uctotal - desglose.cooperacion.ucpagar) * desglose.vrealUC;
-                                                        const totalDesc = descInst + descBeca;
-                                                        if (totalDesc === 0) return null;
+                                                        // El descuento total es la diferencia entre
+                                                        // el monto bruto (sin descuentos ni beca) y la mensualidad neta.
+                                                        const ucPagarBruto = desglose.cooperacion.ucPagar;
+                                                        const montoBruto   = ucPagarBruto * desglose.valorUC;
+                                                        const totalDesc    = montoBruto - desglose.mensualidadUSD;
+
+                                                        if (totalDesc <= 0) return null;
+
+                                                        const pctDesc = (desglose.descuentoCarreraPct || 0) + (desglose.descuentoSedePct || 0);
                                                         return (
                                                             <>
-                                                                {descInst > 0 && (
+                                                                {pctDesc > 0 && (
                                                                     <FacturaRow
                                                                         variant="descuento"
                                                                         prefix="-"
                                                                         concepto="Dto. Sede/Carrera"
-                                                                        pu={`$${fmtUSD(desglose.valorUC - desglose.vrealUC)}`}
-                                                                        cant={`${desglose.uctotal} UC`}
-                                                                        subtotal={`$${fmtUSD(descInst)}`}
-                                                                    />
-                                                                )}
-                                                                {descBeca > 0 && (
-                                                                    <FacturaRow
-                                                                        variant="descuento"
-                                                                        prefix="-"
-                                                                        concepto="Dto. Cooperación"
-                                                                        pu={`$${fmtUSD(desglose.vrealUC)}`}
-                                                                        cant={`${(desglose.uctotal - desglose.cooperacion.ucpagar).toFixed(2)} UC`}
-                                                                        subtotal={`$${fmtUSD(descBeca)}`}
+                                                                        pu={`${(pctDesc * 100).toFixed(0)}%`}
+                                                                        cant={`${ucPagarBruto.toFixed(2)} UC`}
+                                                                        subtotal={`$${fmtUSD(totalDesc)}`}
                                                                     />
                                                                 )}
                                                                 <li className="flex justify-between items-center px-3 py-2 bg-gray-100/70 border-t border-gray-200 text-gray-700">
@@ -354,7 +349,7 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                                                     ))}
                                                 </ul>
                                                 <div className="text-xs text-center text-gray-400 py-1.5 border-t border-gray-200 italic bg-white mt-auto">
-                                                    Tasa BCV Estimada: Bs. {tasaBCV}
+                                                    Tasa BCV Estimada: Bs. {desglose.tasaBCV}
                                                 </div>
                                             </div>
                                         </div>

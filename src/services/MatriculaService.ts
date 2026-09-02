@@ -1,198 +1,181 @@
 import type { MateriaNode } from '../types/materia';
-import type { StudentProfile, MatriculaBreakdown, CooperacionResult, PagoMensual, Sede, TipoCooperacion, MateriaRecargo } from '../types/matricula';
+import type {
+    StudentProfile,
+    MatriculaBreakdown,
+    CooperacionResult,
+    PagoMensual,
+    MateriaRecargo,
+    TipoCooperacion,
+    MatriculaConfig,
+} from '../types/matricula';
+import CONFIG from '../data/matricula.json';
 
-// Extendemos MateriaNode para documentar las propiedades que requiere el cálculo
+// MateriaMatricula es un alias de MateriaNode; se exporta para que los consumidores lo usen como tipo
 export type MateriaMatricula = MateriaNode;
 
 export class MatriculaService {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(private config: any) {}
+    private readonly config: MatriculaConfig = CONFIG as MatriculaConfig;
 
-    private acumularUC(materias: MateriaMatricula[]): { ucbase: number, uctotal: number, materiasConRecargo: MateriaRecargo[] } {
-        let ucbase = 0;
-        let uctotal = 0;
-        const materiasConRecargo: MateriaRecargo[] = [];
+    // ─── Etapa 1: Acumular UC ────────────────────────────────────────────────
 
-        materias.forEach(materia => {
-            const base = materia.unidadesCredito;
-            let conRecargo = base;
-            let porcentajeTaxonomia = 0;
-            const tax = materia.taxonomia;
-
-            if (!tax.includes('(V)') && !tax.includes('(SP)')) {
-                if (tax && this.config.recargos_taxonomia[tax] !== undefined) {
-                    porcentajeTaxonomia = this.config.recargos_taxonomia[tax];
-                }
-                conRecargo = base * (1 + porcentajeTaxonomia);
-            }
-            
-            ucbase += base;
-            uctotal += conRecargo;
-
-            const recargo = conRecargo - base;
-            if (recargo > 0) {
-                materiasConRecargo.push({
-                    nombre: materia.nombre,
-                    ucRecargo: recargo,
-                    taxonomia: materia.taxonomia,
-                    ucBase: base,
-                    porcentaje: porcentajeTaxonomia
-                });
-            }
-        });
-
-        return { ucbase, uctotal, materiasConRecargo };
+    /** Retorna el porcentaje de recargo por taxonomía (0 si exenta: virtual o semipresencial). */
+    private getRecargoPct(taxonomia: string): number {
+        if (taxonomia.includes('(V)') || taxonomia.includes('(SP)')) return 0;
+        return this.config.recargos_taxonomia[taxonomia] ?? 0;
     }
 
-    // UC-04: Aplicar Descuento por Carrera y Sede
-    private calcularVrealUC(valorUC: number, carrera: string, sede: Sede): { vrealUC: number, descCarrera: number, descSede: number } {
-        let vrealUC = valorUC;
-        let descCarrera = 0;
-        let descSede = 0;
-
-        // Descuento por carrera (aplicar primero)
-        if (this.config.descuentos_carrera[carrera]) {
-            descCarrera = this.config.descuentos_carrera[carrera].porcentaje;
-            vrealUC = vrealUC * (1 - descCarrera);
+    /** Acumula las UC base y las UC de recargo (cálculo puro, sin efectos de display). */
+    private sumarUC(materias: MateriaMatricula[]): { ucBase: number; ucRecargo: number } {
+        let ucBase    = 0;
+        let ucRecargo = 0;
+        for (const m of materias) {
+            ucBase    += m.unidadesCredito;
+            ucRecargo += m.unidadesCredito * this.getRecargoPct(m.taxonomia);
         }
-
-        // Descuento por sede (aplicar sobre vrealUC del paso anterior)
-        if (this.config.descuentos_sede && this.config.descuentos_sede[sede] !== undefined) {
-            descSede = this.config.descuentos_sede[sede];
-            vrealUC = vrealUC * (1 - descSede);
-        }
-
-        return { vrealUC, descCarrera, descSede };
+        return { ucBase, ucRecargo };
     }
 
-    // UC-05: Calcular UC a Pagar según Cooperación Económica
-    private calcularUCPagar(ucbase: number, uctotal: number, coop: TipoCooperacion, coberturaPct: number): Omit<CooperacionResult, 'materiasConRecargo'> {
-        const cobertura = 1 - (coberturaPct / 100);
-        const ucre = uctotal - ucbase;
-        let ucpagar = 0;
-        let ucfuera = 0;
+    /** Construye el detalle de materias con recargo para mostrar en la UI. */
+    private getMateriasConRecargo(materias: MateriaMatricula[]): MateriaRecargo[] {
+        return materias
+            .map(m => ({ m, pct: this.getRecargoPct(m.taxonomia) }))
+            .filter(({ pct }) => pct > 0)
+            .map(({ m, pct }) => ({
+                nombre:     m.nombre,
+                taxonomia:  m.taxonomia,
+                ucBase:     m.unidadesCredito,
+                ucRecargo:  m.unidadesCredito * pct,
+                porcentaje: pct,
+            }));
+    }
+
+    // ─── Etapa 2: Cooperación económica ─────────────────────────────────────
+
+    /**
+     * Determina las UC a pagar según el tipo de cooperación.
+     * La beca cubre solo ucBase (hasta el límite); ucRecargo siempre lo paga el estudiante.
+     */
+    private calcularCooperacion(
+        ucBase: number,
+        ucRecargo: number,
+        coop: TipoCooperacion,
+        coberturaPct: number,
+        materiasConRecargo: MateriaRecargo[],
+    ): CooperacionResult {
+        const fraccionAPagar = 1 - coberturaPct / 100; // ej: beca 80% → 0.20
+        const limites = this.config.cooperacion.limites;
+
+        let ucPagar      = 0;
+        let ucFuera      = 0;
         let excesoLimite = 0;
-        let limiteBeca = 0;
+        let limiteBeca   = 0;
 
-        const limites = this.config.cooperacion?.limites || { beca: 30, prop: 27, fab: 30 };
+        if (coop === 'beca' || coop === 'prop' || coop === 'fab') {
+            const limite = limites[coop];
+            limiteBeca = limite;
 
-        if (coop === "beca" || coop === "prop" || coop === "fab") {
-            const limit = coop === "prop" ? limites.prop : (coop === "beca" ? limites.beca : limites.fab);
-            limiteBeca = limit;
-            
-            if (ucbase <= limit) {
-                ucpagar = (ucbase * cobertura) + ucre;
-                ucfuera = ucre;
+            if (ucBase <= limite) {
+                ucPagar = (ucBase * fraccionAPagar) + ucRecargo;
+                ucFuera = ucRecargo;
             } else {
-                ucpagar = (ucbase - limit) + ucre + (limit * cobertura);
-                ucfuera = (ucbase - limit) + ucre;
-                excesoLimite = ucbase - limit;
+                const exceso = ucBase - limite;
+                ucPagar      = exceso + ucRecargo + (limite * fraccionAPagar);
+                ucFuera      = exceso + ucRecargo;
+                excesoLimite = exceso;
             }
-        } else if (coop === "baup") {
-            ucpagar = uctotal * cobertura;
-            ucfuera = 0;
-        } else { // "ninguna"
-            ucpagar = uctotal;
-            ucfuera = 0;
+        } else if (coop === 'baup') {
+            ucPagar = (ucBase + ucRecargo) * fraccionAPagar;
+        } else {
+            // ninguna
+            ucPagar = ucBase + ucRecargo;
         }
 
-        return { ucpagar, ucfuera, excesoLimite, limiteBeca };
+        return { ucPagar, ucFuera, excesoLimite, limiteBeca, materiasConRecargo };
     }
 
-    // UC-06: Calcular Monto Base Mensual
-    private calcularMontoBase(ucpagar: number, vrealUC: number): number {
-        // Redondear a 2 decimales para precisión de moneda
-        return Math.round((ucpagar * vrealUC) * 100) / 100;
+    // ─── Etapa 5: Cuotas ─────────────────────────────────────────────────────
+
+    /**
+     * Calcula el monto de una cuota individual aplicando el fee adicional
+     * y el recargo por retraso de forma uniforme sobre (mensualidad + fee).
+     */
+    private calcularCuota(mensualidad: number, fee: number, aplicaRetraso: boolean): number {
+        const total = mensualidad + fee;
+        return aplicaRetraso
+            ? total * (1 + this.config.recargos_adicionales.retraso_pago)
+            : total;
     }
 
-    // UC-07: Generar Plan de Pagos (Mensual)
-    private calcularPagosMensuales(totalbs: number, perfil: StudentProfile, valorUC: number, tasaBCV: number): PagoMensual[] {
-        const derechoInscripcion = perfil.esAlumnoNuevo ?
-            this.config.derecho_inscripcion_uc.alumno_nuevo_inscripcion :
-            this.config.derecho_inscripcion_uc.alumno_regular_inscripcion;
+    /** Genera el plan de 5 cuotas con sus fees e conversión a Bs. */
+    private generarCuotas(mensualidadUSD: number, perfil: StudentProfile, tasaBCV: number): PagoMensual[] {
+        const insc = this.config.derecho_inscripcion_uc;
+        const vu   = this.config.costo_uc_base;
 
-        const derechoConfirmacion = perfil.esAlumnoNuevo ?
-            this.config.derecho_inscripcion_uc.alumno_nuevo_confirmacion :
-            this.config.derecho_inscripcion_uc.alumno_regular_confirmacion;
+        const costoInsc  = (perfil.esAlumnoNuevo ? insc.alumno_nuevo_inscripcion  : insc.alumno_regular_inscripcion)  * vu;
+        const costoCnfm  = (perfil.esAlumnoNuevo ? insc.alumno_nuevo_confirmacion : insc.alumno_regular_confirmacion) * vu;
 
-        const costoInscripcion = derechoInscripcion * valorUC;
-        const costoConfirmacion = derechoConfirmacion * valorUC;
-
-        const pagos: PagoMensual[] = [];
-        
-        let mensualidadConRetraso = totalbs;
-        if (perfil.aplicaRetraso) {
-             mensualidadConRetraso += totalbs * (this.config.recargos_adicionales?.retraso_pago || 0.10);
-        }
-
-        for (let i = 1; i <= 5; i++) {
-            let montoUSD = mensualidadConRetraso;
-            let descripcion = `Mes ${i}`;
-
-            if (i === 1) {
-                const recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoInscripcion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
-                montoUSD = totalbs + costoInscripcion + recargoRetraso;
-                descripcion = "Incluye Inscripción";
-            } else if (i === 4) {
-                 const recargoRetraso = perfil.aplicaRetraso ? (totalbs + costoConfirmacion) * (this.config.recargos_adicionales?.retraso_pago || 0.10) : 0;
-                montoUSD = totalbs + costoConfirmacion + recargoRetraso;
-                descripcion = "Incluye Confirmación";
-            }
-
-            pagos.push({
-                numero: i,
-                descripcion,
-                montoUSD,
-                montoBs: montoUSD * tasaBCV
-            });
-        }
-
-        return pagos;
-    }
-
-    // Método orquestador
-    public calcularDesglose(materias: MateriaMatricula[], perfil: StudentProfile): MatriculaBreakdown {
-        const tasaBCV = this.config.tasa_bcv_mock || 75.00;
-        const valorUC = this.config.costo_uc_base;
-
-        // 1. Acumular UC
-        const { ucbase, uctotal, materiasConRecargo } = this.acumularUC(materias);
-        const ucre = uctotal - ucbase;
-
-        // 2. Calcular VrealUC
-        const { vrealUC, descCarrera, descSede } = this.calcularVrealUC(valorUC, perfil.carrera, perfil.sede);
-
-        // 3. Cooperación Económica
-        const coopResult = this.calcularUCPagar(ucbase, uctotal, perfil.cooperacion, perfil.coberturaPct);
-        const cooperacion: CooperacionResult = {
-            ...coopResult,
-            materiasConRecargo
+        const fees: Record<number, { fee: number; desc: string }> = {
+            1: { fee: costoInsc,  desc: 'Incluye Inscripción' },
+            4: { fee: costoCnfm, desc: 'Incluye Confirmación' },
         };
 
-        // 4. Monto Base
-        const mensualidadUSD = this.calcularMontoBase(cooperacion.ucpagar, vrealUC);
-        
-        // 5. Pagos Mensuales
-        const pagosMensuales = this.calcularPagosMensuales(mensualidadUSD, perfil, valorUC, tasaBCV);
+        return Array.from({ length: 5 }, (_, i) => {
+            const n = i + 1;
+            const { fee = 0, desc = `Mes ${n}` } = fees[n] ?? {};
+            const montoUSD = this.calcularCuota(mensualidadUSD, fee, perfil.aplicaRetraso);
+            return { numero: n, descripcion: desc, montoUSD, montoBs: montoUSD * tasaBCV };
+        });
+    }
 
-        // 6. Total Semestre
-        const totalSemestreUSD = pagosMensuales.reduce((sum, pago) => sum + pago.montoUSD, 0);
+    // ─── Orquestador (pipeline completo) ─────────────────────────────────────
+
+    /**
+     * Calcula el desglose completo de matrícula para un conjunto de materias y un perfil.
+     *
+     * Pipeline:
+     *   1. Acumular UC (base + recargo taxonomía por separado)
+     *   2. Cooperación económica → ucPagar
+     *   3. Valorizar: montoBase = ucPagar × valorUC
+     *   4. Descuentos: aplicar carrera y sede al monto (no al valorUC)
+     *   5. Cuotas: 5 pagos con fees de inscripción/confirmación y recargo de retraso
+     */
+    public calcularDesglose(materias: MateriaMatricula[], perfil: StudentProfile): MatriculaBreakdown {
+        const tasaBCV = this.config.tasa_bcv_mock;
+        const valorUC = this.config.costo_uc_base;
+
+        // Etapa 1: sumar UC (cálculo) + detalle para UI (display)
+        const { ucBase, ucRecargo }   = this.sumarUC(materias);
+        const materiasConRecargo      = this.getMateriasConRecargo(materias);
+
+        // Etapa 2
+        const cooperacion = this.calcularCooperacion(
+            ucBase, ucRecargo, perfil.cooperacion, perfil.coberturaPct, materiasConRecargo,
+        );
+
+        // Etapas 3 + 4: valorizar y luego descontar sobre el monto
+        const descuentoCarreraPct = this.config.descuentos_carrera[perfil.carrera]?.porcentaje ?? 0;
+        const descuentoSedePct    = this.config.descuentos_sede[perfil.sede] ?? 0;
+        const mensualidadUSD = Math.round(
+            cooperacion.ucPagar * valorUC * (1 - descuentoCarreraPct) * (1 - descuentoSedePct) * 100
+        ) / 100;
+
+        // Etapa 5
+        const pagosMensuales   = this.generarCuotas(mensualidadUSD, perfil, tasaBCV);
+        const totalSemestreUSD = pagosMensuales.reduce((s, p) => s + p.montoUSD, 0);
 
         return {
-            ucbase,
-            uctotal,
-            ucre,
+            ucBase,
+            ucRecargo,
             valorUC,
-            vrealUC,
-            descuentoCarreraPct: descCarrera,
-            descuentoSedePct: descSede,
+            descuentoCarreraPct,
+            descuentoSedePct,
             cooperacion,
             mensualidadUSD,
             totalSemestreUSD,
             pagosMensuales,
             tasaBCV,
-            mensualidadBs: mensualidadUSD * tasaBCV,
-            totalSemestreBs: totalSemestreUSD * tasaBCV
+            mensualidadBs:    mensualidadUSD * tasaBCV,
+            totalSemestreBs:  totalSemestreUSD * tasaBCV,
         };
     }
 }

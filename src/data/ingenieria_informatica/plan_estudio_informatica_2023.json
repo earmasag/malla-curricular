@@ -961,10 +961,10 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "-",
-        "prelacion": [],
+        "prelacion": ["INFO-02025"],
         "semestre": 8,
         "areaFormacion": "Prácticas Profesionales",
-        "ucRequeridas": 151,
+        "ucRequeridas": 0,
         "correquisito": []
       },
       {
@@ -1086,7 +1086,7 @@
         "horasTotales": 10,
         "unidadesCredito": 5,
         "tipo": "C*",
-        "modalidad": "PRE-1",
+        "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
           "FING-02011",
@@ -1121,7 +1121,7 @@
       },
       {
         "departamento": "FING",
-        "codigoMateria": "FING-RANGO",
+        "codigoMateria": "FING-RANGO-1",
         "nombre": "Electiva (Informática) I",
         "horasTeoricas": 2,
         "horasPracticas": 1,
@@ -1269,7 +1269,7 @@
       },
       {
         "departamento": "FING",
-        "codigoMateria": "FING-RANGO",
+        "codigoMateria": "FING-RANGO-2",
         "nombre": "Electiva (Informática) II",
         "horasTeoricas": 2,
         "horasPracticas": 1,
@@ -1289,7 +1289,7 @@
       },
       {
         "departamento": "FING",
-        "codigoMateria": "FING-RANGO",
+        "codigoMateria": "FING-RANGO-3",
         "nombre": "Electiva (Complementaria)",
         "horasTeoricas": 2,
         "horasPracticas": 1,
@@ -1321,14 +1321,11 @@
         "tipo": "C",
         "modalidad": "PRE",
         "taxonomia": "TA-7",
-        "prelacion": [
-          "INFO-IILCT",
-          "INFO-02025"
-        ],
+        "prelacion": [],
         "semestre": 8,
         "areaFormacion": "Prácticas Profesionales",
         "ucRequeridas": 0,
-        "correquisito": []
+        "correquisito": ["INFO-IILCT"]
       }
     ]
   }

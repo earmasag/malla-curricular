@@ -140,6 +140,49 @@
     "nombre": "Servicio Comunitario"
   },
   {
+    "key": "ELECTIVA-1-MAP",
+    "tipo": "N_of_M",
+    "minAprobadas": 1,
+    "maxAprobadas": 1,
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "newCodes": ["FING-ELEC2"],
+    "nombre": "1 Electiva aprobada → Electiva Complementaria en plan nuevo"
+  },
+  {
+    "key": "ELECTIVAS-2-MAP",
+    "tipo": "N_of_M",
+    "minAprobadas": 2,
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "newCodes": ["FING-ELEC1", "FING-ELEC2"],
+    "nombre": "2+ Electivas aprobadas → Electiva Informática + Complementaria en plan nuevo"
+  },
+  {
+    "key": "ELECTIVA-1-AJUSTE-UC",
+    "tipo": "ajuste_condicional",
+    "minAprobadas": 1,
+    "maxAprobadas": 1,
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "uc": 1,
+    "nombre": "Compensación UC: 1 electiva vieja (4 UC) → Complementaria nueva (3 UC) = +1 UC"
+  },
+  {
+    "key": "ELECTIVAS-2-AJUSTE-UC",
+    "tipo": "ajuste_condicional",
+    "minAprobadas": 2,
+    "maxAprobadas": 2,
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "uc": 2,
+    "nombre": "Compensación UC: 2 electivas viejas (8 UC) → 2 electivas nuevas (6 UC) = +2 UC"
+  },
+  {
+    "key": "ELECTIVAS-3-AJUSTE-UC",
+    "tipo": "ajuste_condicional",
+    "minAprobadas": 3,
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "uc": 6,
+    "nombre": "Compensación UC: 3 electivas viejas (12 UC) → 2 electivas nuevas (6 UC) = +6 UC"
+  },
+  {
     "key": "VARIABLE-MAP",
     "tipo": "1:1",
     "oldCodes": ["VARIABLE"],
@@ -179,13 +222,5 @@
     "tipo": "excluida",
     "oldCodes": ["INFO-02006"],
     "nombre": "Prog Web (no mapear a Inglés Técnico)"
-  },
-  {
-    "key": "ELECTIVAS-INFORMATICA-MAP",
-    "tipo": "N_of_M",
-    "minAprobadas": 2,
-    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
-    "newCodes": ["FING-ELEC1", "FING-ELEC2"],
-    "nombre": "2 Electivas (Informática) aprobadas → Electiva Informática I + II en plan nuevo"
   }
 ]

@@ -10,7 +10,9 @@ import { calcularUCPensumAnterior } from "../utils/mallaUtils";
 //    "newCodes": ["nuevo_1"],
 //    "nombre": "Descripción",
 //    "uc": 4, // Opcional, usado para derogadas/ajustes
-//    "tipo": "derogada" | "ajuste" | "1:1" | "N:1" | "1:N" | "excluida"
+//    "tipo": "derogada" | "ajuste" | "1:1" | "N:1" | "1:N" | "excluida" | "N_of_M" | "ajuste_condicional"
+//    // N_of_M: mapea newCodes si entre minAprobadas y maxAprobadas de oldCodes están aprobados
+//    // ajuste_condicional: igual condición que N_of_M pero agrega al pensumAnterior para compensar UC
 // }
 
 export class MigrationService {
@@ -55,13 +57,23 @@ export class MigrationService {
                     });
                 }
             } else if (tipo === "N_of_M") {
-                // Si al menos 'minAprobadas' de los oldCodes están aprobados, mapear todos los newCodes
+                // Si entre minAprobadas y maxAprobadas (inclusive) de los oldCodes están aprobados, mapear newCodes
                 const minAprobadas: number = rule.minAprobadas ?? oldCodes?.length ?? 0;
+                const maxAprobadas: number = rule.maxAprobadas ?? Infinity;
                 const approvedCount = (oldCodes ?? []).filter((code: string) => isApprovedInOld(code)).length;
-                if (approvedCount >= minAprobadas && newCodes) {
+                if (approvedCount >= minAprobadas && approvedCount <= maxAprobadas && newCodes) {
                     newCodes.forEach((code: string) => {
                         baseNewProgreso[code] = "aprobada";
                     });
+                }
+            } else if (tipo === "ajuste_condicional") {
+                // Igual que N_of_M pero en lugar de mapear materias, añade una entrada al pensumAnterior
+                // para compensar la diferencia de UC (se procesará en calcularUCPensumAnterior)
+                const minAprobadas: number = rule.minAprobadas ?? oldCodes?.length ?? 0;
+                const maxAprobadas: number = rule.maxAprobadas ?? Infinity;
+                const approvedCount = (oldCodes ?? []).filter((code: string) => isApprovedInOld(code)).length;
+                if (approvedCount >= minAprobadas && approvedCount <= maxAprobadas && key) {
+                    pensumAnterior[key] = true;
                 }
             }
         });

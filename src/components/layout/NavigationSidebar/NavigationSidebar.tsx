@@ -13,10 +13,10 @@ import { AVAILABLE_THEMES } from '../../../constants/theme';
 import type { MateriaNode } from '../../../types/materia';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
-const RouteBuilderTour = React.lazy(() => import('../../ui/RouteBuilderTour').then(m => ({ default: m.RouteBuilderTour })));
+import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
 import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
 import { useMainAppTour } from '../../../hooks/ui/useMainAppTour';
-const MainAppTour = React.lazy(() => import('../../ui/MainAppTour').then(m => ({ default: m.MainAppTour })));
+import { MainAppTour } from '../../ui/MainAppTour';
 import { RouteNameModal } from '../../modals/RouteNameModal';
 
 export interface NavigationSidebarProps {
@@ -347,7 +347,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
 
 
-            <React.Suspense fallback={null}>
+            <>
                 <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
                 <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
                 
@@ -356,8 +356,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                     onClose={() => setIsRouteModalOpen(false)}
                     onConfirm={(name) => actions.handlers.handleFinishCustomRoute?.(name)}
                 />
-            </React.Suspense>
+            </>
         </aside>
     );
 };
-

@@ -9,13 +9,13 @@ import { useIsMobile } from "../hooks/ui/useIsMobile";
 import { MallaProvider, useMallaData, useMallaUI, useMallaHover } from "../contexts/MallaContexts";
 import { NavigationSidebar } from "../components/layout/NavigationSidebar/NavigationSidebar";
 import { ZoomControls } from "../components/ui/ZoomControls";
-const RutaModal = React.lazy(() => import("../components/modals/RutaModal/RutaModal").then(m => ({ default: m.RutaModal })));
-const MisRutasModal = React.lazy(() => import("../components/modals/MisRutasModal").then(m => ({ default: m.MisRutasModal })));
-const FeedbackModal = React.lazy(() => import("../components/modals/FeedbackModal").then(m => ({ default: m.FeedbackModal })));
-const MatriculaModal = React.lazy(() => import("../components/modals/MatriculaModal").then(m => ({ default: m.MatriculaModal })));
-const SettingsModal = React.lazy(() => import("../components/modals/SettingsModal").then(m => ({ default: m.SettingsModal })));
-const LeyendaModal = React.lazy(() => import("../components/modals/LeyendaModal").then(m => ({ default: m.LeyendaModal })));
-const PensumAnteriorModal = React.lazy(() => import("../components/modals/PensumAnteriorModal").then(m => ({ default: m.PensumAnteriorModal })));
+import { RutaModal } from "../components/modals/RutaModal/RutaModal";
+import { MisRutasModal } from "../components/modals/MisRutasModal";
+import { FeedbackModal } from "../components/modals/FeedbackModal";
+import { MatriculaModal } from "../components/modals/MatriculaModal";
+import { SettingsModal } from "../components/modals/SettingsModal";
+import { LeyendaModal } from "../components/modals/LeyendaModal";
+import { PensumAnteriorModal } from "../components/modals/PensumAnteriorModal";
 
 
 import { usePlanEstudio } from "../contexts/PlanContext";
@@ -57,7 +57,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                 totalMaterias={totalMaterias}
             />
 
-            <React.Suspense fallback={null}>
+            <>
                 {modales.isMatriculaModalOpen && (
                     <MatriculaModal
                         isOpen={modales.isMatriculaModalOpen}
@@ -121,7 +121,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                         customRoute={datos.customRouteResult}
                     />
                 )}
-            </React.Suspense>
+            </>
 
             {/* Main Content Area (Grilla Horizontal Libre de Zoom y Paneo) */}
             <div className="w-full h-full relative cursor-grab active:cursor-grabbing">

@@ -2,6 +2,7 @@ import React from 'react';
 import { BookCheck } from 'lucide-react';
 import { useCarrera } from '../../contexts/CarreraContext';
 import { ModalHeader } from './shared/ModalHeader';
+import { AnimatedModalWrapper } from './shared/AnimatedModalWrapper';
 
 export interface PensumAnteriorModalProps {
     isOpen: boolean;
@@ -10,10 +11,8 @@ export interface PensumAnteriorModalProps {
     updatePensumAnterior: (key: string, value: boolean) => void;
 }
 
-export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen, onClose, pensumAnterior, updatePensumAnterior }) => {
+export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ onClose, pensumAnterior, updatePensumAnterior }) => {
     const { carreraData } = useCarrera();
-    if (!isOpen) return null;
-
     const ajustesData = carreraData?.ajustes_pensum_viejo || [];
     const materias = ajustesData.map((item: any) => ({
         key: item.key,
@@ -22,11 +21,10 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
     }));
 
     return (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">
-            <div
-                className="bg-white rounded-3xl w-full max-w-md shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-            >
+        <AnimatedModalWrapper 
+            className="bg-white rounded-3xl w-full max-w-lg shadow-2xl relative overflow-hidden"
+            containerClassName="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm"
+        >
                 <ModalHeader
                     title={
                         <div className="flex flex-col">
@@ -67,7 +65,6 @@ export const PensumAnteriorModal: React.FC<PensumAnteriorModalProps> = ({ isOpen
                         Listo
                     </button>
                 </div>
-            </div>
-        </div>
+        </AnimatedModalWrapper>
     );
 };

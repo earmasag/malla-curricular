@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRightLeft, CheckCircle2 } from 'lucide-react';
 import { ModalHeader } from './shared/ModalHeader';
+import { AnimatedModalWrapper } from './shared/AnimatedModalWrapper';
 
 export interface MigrationConfirmModalProps {
     isOpen: boolean;
@@ -9,18 +10,14 @@ export interface MigrationConfirmModalProps {
 }
 
 export const MigrationConfirmModal: React.FC<MigrationConfirmModalProps> = ({ 
-    isOpen, 
     onClose, 
     onConfirm
 }) => {
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-110 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm transition-opacity">
-            <div
-                className="bg-white rounded-3xl w-full max-w-md shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-            >
+        <AnimatedModalWrapper 
+            className="bg-white rounded-3xl w-full max-w-md shadow-2xl relative overflow-hidden"
+            containerClassName="fixed inset-0 z-110 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm"
+        >
                 <ModalHeader 
                     title="Migración de Progreso"
                     icon={<ArrowRightLeft />}
@@ -59,7 +56,6 @@ export const MigrationConfirmModal: React.FC<MigrationConfirmModalProps> = ({
                         Sí, migrar progreso
                     </button>
                 </div>
-            </div>
-        </div>
+        </AnimatedModalWrapper>
     );
 };

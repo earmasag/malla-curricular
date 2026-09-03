@@ -2,6 +2,7 @@ import React from 'react';
 import MateriaCard from '../malla/MateriaCard';
 import type { MateriaNode } from '../../types/materia';
 import { ModalHeader } from './shared/ModalHeader';
+import { AnimatedModalWrapper } from './shared/AnimatedModalWrapper';
 
 interface LeyendaModalProps {
     isOpen: boolean;
@@ -13,22 +14,17 @@ interface LeyendaModalProps {
 }
 
 export const LeyendaModal: React.FC<LeyendaModalProps> = ({
-    isOpen,
     onClose,
     tituloCarrera,
     totalSemestres,
     totalUc,
     areasFormacion
 }) => {
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">
-            <div
-                className="bg-[#f0f2f5] rounded-3xl w-full max-w-2xl max-h-[90vh] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-                style={{ fontFamily: 'sans-serif' }}
-            >
+        <AnimatedModalWrapper 
+            className="bg-[#f0f2f5] rounded-3xl w-full max-w-2xl max-h-[90vh] shadow-2xl relative flex flex-col overflow-hidden"
+            containerClassName="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm"
+        >
                 <ModalHeader
                     title={
                         <div className="font-extrabold text-[12px] sm:text-lg tracking-wider uppercase flex-1 text-[#1e293b] flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center w-full">
@@ -162,7 +158,6 @@ export const LeyendaModal: React.FC<LeyendaModalProps> = ({
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+        </AnimatedModalWrapper>
     );
 };

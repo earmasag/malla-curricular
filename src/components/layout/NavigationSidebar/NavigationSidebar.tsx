@@ -18,6 +18,7 @@ import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions
 import { useMainAppTour } from '../../../hooks/ui/useMainAppTour';
 import { MainAppTour } from '../../ui/MainAppTour';
 import { RouteNameModal } from '../../modals/RouteNameModal';
+import { AnimatePresence } from 'framer-motion';
 
 export interface NavigationSidebarProps {
     totalMaterias: number;
@@ -351,11 +352,16 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                 <RouteBuilderTour run={run} handleJoyrideCallback={handleJoyrideCallback} />
                 <MainAppTour run={mainTour.run} handleJoyrideCallback={mainTour.handleJoyrideCallback} />
                 
-                <RouteNameModal 
-                    isOpen={isRouteModalOpen}
-                    onClose={() => setIsRouteModalOpen(false)}
-                    onConfirm={(name) => actions.handlers.handleFinishCustomRoute?.(name)}
-                />
+                <AnimatePresence>
+                    {isRouteModalOpen && (
+                        <RouteNameModal 
+                            key="route-name-modal"
+                            isOpen={isRouteModalOpen}
+                            onClose={() => setIsRouteModalOpen(false)}
+                            onConfirm={(name) => actions.handlers.handleFinishCustomRoute?.(name)}
+                        />
+                    )}
+                </AnimatePresence>
             </>
         </aside>
     );

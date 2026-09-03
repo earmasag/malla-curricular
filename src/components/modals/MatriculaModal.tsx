@@ -6,6 +6,7 @@ import { CustomSelect } from '../ui/CustomSelect';
 import { CustomCheckbox } from '../ui/CustomCheckbox';
 import { ModalHeader } from './shared/ModalHeader';
 import { useMatriculaModal } from '../../hooks/ui/useMatriculaModal';
+import { AnimatedModalWrapper } from './shared/AnimatedModalWrapper';
 
 export interface MatriculaModalProps {
     isOpen: boolean;
@@ -62,21 +63,20 @@ const FacturaRow: React.FC<FacturaRowProps> = ({
 export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose, materiasCursando }) => {
     const { perfil, desglose, updatePerfil, handleCoberturaChange, coberturaDisplayValue, recargosPorTaxonomia } = useMatriculaModal(materiasCursando, isOpen);
 
-    if (!isOpen) return null;
-
     const totalUc = materiasCursando.reduce((sum, m) => sum + m.unidadesCredito, 0);
 
     const fmtUSD = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const fmtBs  = (n: number) => n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     return (
-        <div className="fixed inset-0 z-60 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-4 animate-fade-in text-sm sm:text-base">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90dvh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-slide-up mb-2 sm:mb-0 mt-8 sm:mt-0 relative">
-
-                {/* Indicador visual móvil */}
-                <div className="w-full flex justify-center pt-2 pb-2 sm:hidden absolute top-0 left-0 z-10 pointer-events-none">
-                    <div className="w-12 h-1.5 bg-white/30 rounded-full"></div>
-                </div>
+        <AnimatedModalWrapper 
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90dvh] sm:max-h-[90vh] flex flex-col overflow-hidden mb-2 sm:mb-0 mt-8 sm:mt-0 relative"
+            containerClassName="fixed inset-0 z-60 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-4 text-sm sm:text-base"
+        >
+            {/* Indicador visual móvil */}
+            <div className="w-full flex justify-center pt-2 pb-2 sm:hidden absolute top-0 left-0 z-10 pointer-events-none">
+                <div className="w-12 h-1.5 bg-white/30 rounded-full"></div>
+            </div>
 
                 <ModalHeader 
                     title="Cálculo de Matrícula" 
@@ -368,7 +368,6 @@ export const MatriculaModal: React.FC<MatriculaModalProps> = ({ isOpen, onClose,
                         </>
                     )}
                 </div>
-            </div>
-        </div>
+        </AnimatedModalWrapper>
     );
 };

@@ -8,6 +8,7 @@ import { MigrationMallaEvaluator } from '../../rules/MigrationMallaEvaluator';
 import { MallaCurricularBuilder } from '../../core/MallaCurricularBuilder';
 import { useCarrera } from '../../contexts/CarreraContext';
 import { RefreshCw } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 
 export const PlanSwitcherFloat: React.FC = () => {
     const { activePlanId, setActivePlanId } = usePlanEstudio();
@@ -39,11 +40,15 @@ export const PlanSwitcherFloat: React.FC = () => {
 
     return (
         <>
-            <MigrationConfirmModal 
-                isOpen={showMigrationModal}
-                onClose={() => setShowMigrationModal(false)}
-                onConfirm={confirmMigration}
-            />
+            <AnimatePresence>
+                {showMigrationModal && (
+                    <MigrationConfirmModal 
+                        isOpen={showMigrationModal}
+                        onClose={() => setShowMigrationModal(false)}
+                        onConfirm={confirmMigration}
+                    />
+                )}
+            </AnimatePresence>
             
             <div className="fixed top-3 left-1/2 -translate-x-1/2 sm:top-6 landscape:top-1 landscape:scale-90 z-40 flex items-center gap-1 sm:gap-2">
                 {/* Selector de Plan */}

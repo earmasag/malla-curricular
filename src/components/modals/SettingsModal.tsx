@@ -1,5 +1,6 @@
 import { MousePointer2, Settings } from 'lucide-react';
 import { ModalHeader } from './shared/ModalHeader';
+import { AnimatedModalWrapper } from './shared/AnimatedModalWrapper';
 
 export interface SettingsModalProps {
     isOpen: boolean;
@@ -10,15 +11,12 @@ export interface SettingsModalProps {
     };
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, configuraciones }) => {
-    if (!isOpen) return null;
-
+export const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, configuraciones }) => {
     return (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm transition-opacity">
-                <div
-                className="bg-white rounded-3xl w-full max-w-sm shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-            >
+        <AnimatedModalWrapper 
+            className="bg-white rounded-3xl w-full max-w-sm shadow-2xl relative overflow-hidden"
+            containerClassName="fixed inset-0 z-100 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm"
+        >
                 {/* Header */}
                 <ModalHeader
                     title={
@@ -55,7 +53,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, c
 
 
                 </div>
-            </div>
-        </div>
+        </AnimatedModalWrapper>
     );
 };

@@ -16,6 +16,7 @@ import { MatriculaModal } from "../components/modals/MatriculaModal";
 import { SettingsModal } from "../components/modals/SettingsModal";
 import { LeyendaModal } from "../components/modals/LeyendaModal";
 import { PensumAnteriorModal } from "../components/modals/PensumAnteriorModal";
+import { AnimatePresence } from "framer-motion";
 
 
 import { usePlanEstudio } from "../contexts/PlanContext";
@@ -57,9 +58,10 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                 totalMaterias={totalMaterias}
             />
 
-            <>
+            <AnimatePresence>
                 {modales.isMatriculaModalOpen && (
                     <MatriculaModal
+                        key="matricula-modal"
                         isOpen={modales.isMatriculaModalOpen}
                         onClose={() => modales.setIsMatriculaModalOpen(false)}
                         materiasCursando={materiasCursando}
@@ -68,6 +70,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
 
                 {modales.isMisRutasModalOpen && (
                     <MisRutasModal
+                        key="mis-rutas-modal"
                         isOpen={modales.isMisRutasModalOpen}
                         onClose={() => modales.setIsMisRutasModalOpen(false)}
                         savedRoutes={datos.savedRoutesList}
@@ -78,6 +81,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
 
                 {modales.isFeedbackModalOpen && (
                     <FeedbackModal
+                        key="feedback-modal"
                         isOpen={modales.isFeedbackModalOpen}
                         onClose={() => modales.setIsFeedbackModalOpen(false)}
                     />
@@ -85,6 +89,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
 
                 {modales.isSettingsOpen && (
                     <SettingsModal
+                        key="settings-modal"
                         isOpen={modales.isSettingsOpen}
                         onClose={() => modales.setIsSettingsOpen(false)}
                         configuraciones={configuraciones}
@@ -93,6 +98,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
 
                 {modales.isPensumAnteriorModalOpen && (
                     <PensumAnteriorModal
+                        key="pensum-anterior-modal"
                         isOpen={modales.isPensumAnteriorModalOpen}
                         onClose={() => modales.setIsPensumAnteriorModalOpen(false)}
                         pensumAnterior={estadoMalla.pensumAnterior}
@@ -102,6 +108,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
 
                 {ui.isLeyendaOpen && (
                     <LeyendaModal
+                        key="leyenda-modal"
                         isOpen={ui.isLeyendaOpen}
                         onClose={() => ui.setIsLeyendaOpen(false)}
                         tituloCarrera="Ingeniería Informática"
@@ -113,6 +120,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
 
                 {modales.isModalOpen && (
                     <RutaModal
+                        key="ruta-modal"
                         isOpen={modales.isModalOpen}
                         onClose={() => modales.setIsModalOpen(false)}
                         generarRutaOptima={accionesMalla.generarRutaOptima}
@@ -121,7 +129,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                         customRoute={datos.customRouteResult}
                     />
                 )}
-            </>
+            </AnimatePresence>
 
             {/* Main Content Area (Grilla Horizontal Libre de Zoom y Paneo) */}
             <div className="w-full h-full relative cursor-grab active:cursor-grabbing">

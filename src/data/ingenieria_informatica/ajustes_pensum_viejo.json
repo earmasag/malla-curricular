@@ -179,5 +179,13 @@
     "tipo": "excluida",
     "oldCodes": ["INFO-02006"],
     "nombre": "Prog Web (no mapear a Inglés Técnico)"
+  },
+  {
+    "key": "ELECTIVAS-INFORMATICA-MAP",
+    "tipo": "N_of_M",
+    "minAprobadas": 2,
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "newCodes": ["FING-ELEC1", "FING-ELEC2"],
+    "nombre": "2 Electivas (Informática) aprobadas → Electiva Informática I + II en plan nuevo"
   }
 ]

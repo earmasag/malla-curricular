@@ -54,6 +54,15 @@ export class MigrationService {
                         baseNewProgreso[code] = "aprobada";
                     });
                 }
+            } else if (tipo === "N_of_M") {
+                // Si al menos 'minAprobadas' de los oldCodes están aprobados, mapear todos los newCodes
+                const minAprobadas: number = rule.minAprobadas ?? oldCodes?.length ?? 0;
+                const approvedCount = (oldCodes ?? []).filter((code: string) => isApprovedInOld(code)).length;
+                if (approvedCount >= minAprobadas && newCodes) {
+                    newCodes.forEach((code: string) => {
+                        baseNewProgreso[code] = "aprobada";
+                    });
+                }
             }
         });
 

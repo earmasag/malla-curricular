@@ -35,11 +35,31 @@
     "tipo": "derogada"
   },
   {
-    "key": "VARIABLE-1",
-    "oldCodes": ["VARIABLE-1"],
-    "nombre": "Electiva (Informática) II",
-    "uc": 4,
-    "tipo": "derogada"
+    "key": "ELECTIVA-1-AJUSTE-UC",
+    "tipo": "ajuste_condicional",
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "minAprobadas": 1,
+    "maxAprobadas": 1,
+    "uc": 1,
+    "nombre": "1 Electiva (4 UC) -> Compensa 1 UC extra"
+  },
+  {
+    "key": "ELECTIVAS-2-AJUSTE-UC",
+    "tipo": "ajuste_condicional",
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "minAprobadas": 2,
+    "maxAprobadas": 2,
+    "uc": 2,
+    "nombre": "2 Electivas (8 UC) -> Compensa 2 UC extra"
+  },
+  {
+    "key": "ELECTIVAS-3-AJUSTE-UC",
+    "tipo": "ajuste_condicional",
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "minAprobadas": 3,
+    "maxAprobadas": 3,
+    "uc": 6,
+    "nombre": "3 Electivas (12 UC) -> Compensa 6 UC extra"
   },
   {
     "key": "FING-02001-AJUSTE",
@@ -142,59 +162,20 @@
   {
     "key": "ELECTIVA-1-MAP",
     "tipo": "N_of_M",
+    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
     "minAprobadas": 1,
     "maxAprobadas": 1,
-    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
     "newCodes": ["FING-ELEC2"],
-    "nombre": "1 Electiva aprobada → Electiva Complementaria en plan nuevo"
+    "nombre": "1 Electiva aprobada -> Electiva Complementaria"
   },
   {
     "key": "ELECTIVAS-2-MAP",
     "tipo": "N_of_M",
-    "minAprobadas": 2,
     "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
+    "minAprobadas": 2,
+    "maxAprobadas": 3,
     "newCodes": ["FING-ELEC1", "FING-ELEC2"],
-    "nombre": "2+ Electivas aprobadas → Electiva Informática + Complementaria en plan nuevo"
-  },
-  {
-    "key": "ELECTIVA-1-AJUSTE-UC",
-    "tipo": "ajuste_condicional",
-    "minAprobadas": 1,
-    "maxAprobadas": 1,
-    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
-    "uc": 1,
-    "nombre": "Compensación UC: 1 electiva vieja (4 UC) → Complementaria nueva (3 UC) = +1 UC"
-  },
-  {
-    "key": "ELECTIVAS-2-AJUSTE-UC",
-    "tipo": "ajuste_condicional",
-    "minAprobadas": 2,
-    "maxAprobadas": 2,
-    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
-    "uc": 2,
-    "nombre": "Compensación UC: 2 electivas viejas (8 UC) → 2 electivas nuevas (6 UC) = +2 UC"
-  },
-  {
-    "key": "ELECTIVAS-3-AJUSTE-UC",
-    "tipo": "ajuste_condicional",
-    "minAprobadas": 3,
-    "oldCodes": ["FING-RANGO-1", "FING-RANGO-2", "FING-RANGO-3"],
-    "uc": 6,
-    "nombre": "Compensación UC: 3 electivas viejas (12 UC) → 2 electivas nuevas (6 UC) = +6 UC"
-  },
-  {
-    "key": "VARIABLE-MAP",
-    "tipo": "1:1",
-    "oldCodes": ["VARIABLE"],
-    "newCodes": ["FING-ELEC1"],
-    "nombre": "Electiva Informatica I"
-  },
-  {
-    "key": "VARIABLE-2-MAP",
-    "tipo": "1:1",
-    "oldCodes": ["VARIABLE-2"],
-    "newCodes": ["FING-ELEC2"],
-    "nombre": "Electiva Complementaria"
+    "nombre": "2+ Electivas aprobadas -> Electiva Prof. y Complementaria"
   },
   {
     "key": "INFO-02001-MAP",

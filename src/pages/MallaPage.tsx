@@ -26,18 +26,21 @@ import { PlanSwitcherFloat } from "../components/layout/PlanSwitcherFloat";
 import { ConstructorToolbar } from "../components/layout/ConstructorToolbar";
 import { useTourPanHandler } from "../hooks/ui/useTourPanHandler";
 
-const TourPanHandler = ({ zoomToElement, currentScale }: { zoomToElement: any, currentScale: number }) => {
+const TourPanHandler = ({ zoomToElement, currentScale }: { zoomToElement: (node: HTMLElement | string, scale?: number, animationTime?: number) => void, currentScale: number }) => {
     useTourPanHandler(zoomToElement, currentScale);
     return null;
 };
 
-const MallaLayout = ({ planData }: { planData: any }) => {
+import type { MallaCurricularGraph } from "../core/MallaCurricularGraph";
+import type { MateriaNode } from "../types/materia";
+
+const MallaLayout = ({ planData }: { planData: { grafo: MallaCurricularGraph; semestresArray: number[]; semestresMaterias: MateriaNode[][]; semestresAcumUC: number[]; totalMaterias: number; totalUc: number; totalSemestres: number } }) => {
     const { grafo, semestresArray, semestresMaterias, semestresAcumUC, totalMaterias, totalUc, totalSemestres } = planData;
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
     const { ui, modales, configuraciones, datos, handlers } = useMallaUI();
     const { hover: { hoveredMateria } } = useMallaHover();
-    const { carreraData } = useCarrera();
+    const { carreraData, areasColorMap } = useCarrera();
 
     // 2. Estado local para renders del componente (Zoom, Mobile, Flechas)
     const isMobile = useIsMobile();
@@ -161,6 +164,7 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                                         progreso={activeProgreso}
                                         hoveredMateria={hoveredMateria}
                                         containerRef={ui.contentRef}
+                                        areasColorMap={areasColorMap}
                                     />
                                     <div className={`relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-48 landscape:pt-28 min-w-max min-h-max ${estadoCustom.isCustomRouteMode ? 'pb-48 landscape:pb-48' : 'pb-32 landscape:pb-16'}`}>
                                         {semestresArray.map((numeroSemestre: number, index: number) => {

@@ -8,7 +8,7 @@ export interface SvgPathData {
     opacity: number;
     strokeDasharray?: string;
     animated: boolean;
-    arrowheadPoints: string;
+    markerId: string;
 }
 
 const getRelativeOffset = (element: HTMLElement, container: HTMLElement) => {
@@ -67,27 +67,28 @@ export const useConnectionPaths = (
             if (!startPos || !endPos) return null;
 
             // Start at the right-center of the start element
-            const startX = startPos.x + startPos.width;
+            let startX = startPos.x + startPos.width;
             const startY = startPos.y + (startPos.height / 2);
 
-            // End at the left-center of the end element
-            // We subtract a few pixels so the arrowhead doesn't overlap the border too much
-            const endX = endPos.x - 2; 
+            // End at the left-center of the end element (or right if routing backwards)
+            let endX = endPos.x - 10; 
             const endY = endPos.y + (endPos.height / 2);
             
-            // Midpoint for the grid path routing
-            const midX = (startX + endX) / 2;
+            let d = "";
 
-            // Generate path string: Move to start, Line horizontal to mid, Line vertical to endY, Line horizontal to end
-            const d = `M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`;
-
-            // Arrowhead points (pointing right)
-            const arrowSize = 6;
-            const arrowheadPoints = `
-                ${endX},${endY} 
-                ${endX - arrowSize},${endY - arrowSize/1.2} 
-                ${endX - arrowSize},${endY + arrowSize/1.2}
-            `;
+            // Si la materia origen está en la misma columna (o a la derecha) de la destino
+            if (startPos.x >= endPos.x - 20) {
+                // Salimos por la derecha y entramos por la derecha haciendo una curva "C"
+                startX = startPos.x + startPos.width;
+                endX = endPos.x + endPos.width + 10; 
+                const midX = Math.max(startX, endX) + 50; 
+                
+                d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
+            } else {
+                // Flujo normal de izquierda a derecha con curva suave
+                const midX = (startX + endX) / 2;
+                d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
+            }
 
             let strokeDasharray = undefined;
             let animated = false;
@@ -108,7 +109,7 @@ export const useConnectionPaths = (
                 opacity: arrow.passProps?.opacity ?? 1,
                 strokeDasharray,
                 animated,
-                arrowheadPoints
+                markerId: `marker-${arrow.color.replace('#', '')}`
             };
         }).filter(Boolean) as SvgPathData[];
 

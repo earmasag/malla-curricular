@@ -14,7 +14,8 @@ export interface ArrowConfig {
 export const useMallaConnections = (
     grafo: MallaCurricularGraph,
     progreso: ProgresoMalla,
-    hoveredMateria: string | null
+    hoveredMateria: string | null,
+    areasColorMap: Record<string, string>
 ) => {
 
     // Memoizamos el cálculo de las flechas para que solo cambie si cambia el grafo o el progreso
@@ -39,19 +40,20 @@ export const useMallaConnections = (
 
                 // Solo dibujar si la materia actual o su destino es la que estamos haciendo hover
                 if (hoveredMateria !== null && (isPrerequisiteQuery || isUnlockQuery)) {
-                    // Propiedades base
-                    let color = "#94a3b8"; // slate-400 por defecto
-                    let opacity = 0.6;
+                    // Obtener el nodo origen para saber su área de formación
+                    const nodoOrigen = grafo.getNode(codigoOrigen);
+                    const baseColor = (nodoOrigen?.areaFormacion && areasColorMap[nodoOrigen.areaFormacion]) 
+                        ? areasColorMap[nodoOrigen.areaFormacion] 
+                        : "#94a3b8";
 
-                    // Colores por estados (opcional para dar más contexto al progreso)
-                    if (estadoOrigen === "aprobada" && estadoDestino === "disponible") {
-                        color = "#3b82f6"; // Azul brillante (Ruta recien abierta)
-                        opacity = 1;
-                    } else if (estadoOrigen === "aprobada" && estadoDestino === "aprobada") {
-                        color = "#22c55e"; // Verde éxito (Ruta superada)
-                        opacity = 0.4;
+                    const color = baseColor;
+                    let opacity = 0.8;
+
+                    // Ajustar opacidad según el estado para dar retroalimentación visual
+                    if (estadoOrigen === "aprobada" && estadoDestino === "aprobada") {
+                        opacity = 0.3; // Ruta ya superada (más transparente)
                     } else if (estadoOrigen !== "aprobada" && estadoDestino !== "aprobada") {
-                        color = "#ef4444"; // Rojo (Bloqueada)
+                        opacity = 0.5; // Ruta bloqueada
                     }
 
                     // Prerrequisitos / Desbloqueos son siempre continuos
@@ -74,18 +76,18 @@ export const useMallaConnections = (
                 const isTargetOfCorrequisito = hoveredMateria === codigoCorrequisito;
 
                 if (hoveredMateria !== null && (isCorrequisitoQuery || isTargetOfCorrequisito)) {
-                    let color = "#94a3b8"; // slate-400 por defecto
-                    let opacity = 0.6;
+                    const nodoCorreq = grafo.getNode(codigoCorrequisito);
+                    const baseColor = (nodoCorreq?.areaFormacion && areasColorMap[nodoCorreq.areaFormacion]) 
+                        ? areasColorMap[nodoCorreq.areaFormacion] 
+                        : "#94a3b8";
 
-                    // Usar la misma lógica de colores que las prelaciones
-                    if (estadoCorrequisito === "aprobada" && estadoDestino === "disponible") {
-                        color = "#3b82f6"; // Azul brillante
-                        opacity = 1;
-                    } else if (estadoCorrequisito === "aprobada" && estadoDestino === "aprobada") {
-                        color = "#22c55e"; // Verde éxito
-                        opacity = 0.4;
+                    const color = baseColor;
+                    let opacity = 0.8;
+
+                    if (estadoCorrequisito === "aprobada" && estadoDestino === "aprobada") {
+                        opacity = 0.3; // Ruta ya superada
                     } else if (estadoCorrequisito !== "aprobada" && estadoDestino !== "aprobada") {
-                        color = "#ef4444"; // Rojo (Bloqueada)
+                        opacity = 0.5; // Ruta bloqueada
                     }
 
                     arrows.push({
@@ -100,7 +102,7 @@ export const useMallaConnections = (
         });
 
         return arrows;
-    }, [grafo, progreso, hoveredMateria]); // Recalcular solo cuando cambian estas variables
+    }, [grafo, progreso, hoveredMateria, areasColorMap]); // Recalcular solo cuando cambian estas variables
 
     return connections;
 };

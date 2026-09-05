@@ -8,11 +8,12 @@ interface MallaConnectionsProps {
     progreso: ProgresoMalla;
     hoveredMateria: string | null;
     containerRef: React.RefObject<HTMLElement | null>;
+    areasColorMap: Record<string, string>;
 }
 
-export default function MallaConnections({ grafo, progreso, hoveredMateria, containerRef }: MallaConnectionsProps) {
+export default function MallaConnections({ grafo, progreso, hoveredMateria, containerRef, areasColorMap }: MallaConnectionsProps) {
     // 1. Obtener la lista abstracta de flechas (QUÉ dibujar)
-    const arrowsToRender = useMallaConnections(grafo, progreso, hoveredMateria);
+    const arrowsToRender = useMallaConnections(grafo, progreso, hoveredMateria, areasColorMap);
 
     // 2. Traducirlas a rutas SVG según posiciones del DOM (DÓNDE dibujar)
     const paths = useConnectionPaths(arrowsToRender, containerRef);
@@ -35,11 +36,26 @@ export default function MallaConnections({ grafo, progreso, hoveredMateria, cont
                     }
                     `}
                 </style>
+                {/* Definir marcadores dinámicamente según colores en uso */}
+                {Array.from(new Set(paths.map(p => p.color))).map(color => (
+                    <marker
+                        key={`marker-${color}`}
+                        id={`marker-${color.replace('#', '')}`}
+                        markerWidth="12"
+                        markerHeight="12"
+                        refX="2"
+                        refY="6"
+                        orient="auto-start-reverse"
+                        markerUnits="userSpaceOnUse"
+                    >
+                        <polygon points="0,2 10,6 0,10" fill={color} />
+                    </marker>
+                ))}
             </defs>
 
             {paths.map((path) => (
                 <g key={path.id}>
-                    {/* Línea principal */}
+                    {/* Línea principal curva con marcador nativo */}
                     <path
                         d={path.d}
                         stroke={path.color}
@@ -47,15 +63,10 @@ export default function MallaConnections({ grafo, progreso, hoveredMateria, cont
                         fill="none"
                         opacity={path.opacity}
                         strokeDasharray={path.strokeDasharray}
+                        markerEnd={`url(#${path.markerId})`}
                         style={{
                             animation: path.animated ? 'dashAnimation 1s linear infinite' : 'none'
                         }}
-                    />
-                    {/* Cabeza de flecha */}
-                    <polygon
-                        points={path.arrowheadPoints}
-                        fill={path.color}
-                        opacity={path.opacity}
                     />
                 </g>
             ))}

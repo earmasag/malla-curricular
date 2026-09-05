@@ -10,7 +10,7 @@ export interface CalculatedPath {
     color: string;
     opacity: number;
     strokeDasharray?: string;
-    arrowheadPoints: string;
+    markerId: string;
 }
 
 /**
@@ -166,16 +166,26 @@ export const exportMallaDocument = async ({
             const startPos = getOffset(startEl, clone);
             const endPos = getOffset(endEl, clone);
 
-            const startX = startPos.x + startPos.width;
+            let startX = startPos.x + startPos.width;
             const startY = startPos.y + (startPos.height / 2);
-            const endX = endPos.x - 2;
+            let endX = endPos.x - 10;
             const endY = endPos.y + (endPos.height / 2);
-            const midX = (startX + endX) / 2;
+            
+            let d = "";
 
-            const d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
-
-            const arrowSize = 6;
-            const arrowheadPoints = `${endX},${endY} ${endX - arrowSize},${endY - arrowSize / 1.2} ${endX - arrowSize},${endY + arrowSize / 1.2}`;
+            // Si la materia origen está en la misma columna (o a la derecha) de la destino
+            if (startPos.x >= endPos.x - 20) {
+                // Salimos por la derecha y entramos por la derecha haciendo una curva "C"
+                startX = startPos.x + startPos.width;
+                endX = endPos.x + endPos.width + 10; 
+                const midX = Math.max(startX, endX) + 50; // Punto de control empujado hacia la derecha
+                
+                d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
+            } else {
+                // Flujo normal de izquierda a derecha
+                const midX = (startX + endX) / 2;
+                d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
+            }
 
             let strokeDasharray: string | undefined = undefined;
             if (typeof arrow.dashness === 'object' && arrow.dashness !== null) {
@@ -192,7 +202,7 @@ export const exportMallaDocument = async ({
                 color: arrow.color,
                 opacity: arrow.passProps?.opacity ?? 0.8,
                 strokeDasharray,
-                arrowheadPoints
+                markerId: `marker-${arrow.color.replace('#', '')}`
             });
         });
 
@@ -210,6 +220,28 @@ export const exportMallaDocument = async ({
         fullSvg.style.pointerEvents = "none";
         fullSvg.style.zIndex = "0";
 
+        // Definir marcadores de flechas en defs para cada color único
+        const uniqueColors = Array.from(new Set(allPaths.map(p => p.color)));
+        const defs = document.createElementNS(svgNS, "defs");
+        uniqueColors.forEach((color) => {
+            const marker = document.createElementNS(svgNS, "marker");
+            marker.setAttribute("id", `marker-${color.replace('#', '')}`);
+            marker.setAttribute("markerWidth", "12");
+            marker.setAttribute("markerHeight", "12");
+            marker.setAttribute("refX", "2");
+            marker.setAttribute("refY", "6");
+            marker.setAttribute("orient", "auto-start-reverse");
+            marker.setAttribute("markerUnits", "userSpaceOnUse");
+            
+            const polygon = document.createElementNS(svgNS, "polygon");
+            polygon.setAttribute("points", "0,2 10,6 0,10");
+            polygon.setAttribute("fill", color);
+            marker.appendChild(polygon);
+            
+            defs.appendChild(marker);
+        });
+        fullSvg.appendChild(defs);
+
         allPaths.forEach((p) => {
             const g = document.createElementNS(svgNS, "g");
 
@@ -219,16 +251,11 @@ export const exportMallaDocument = async ({
             pathEl.setAttribute("stroke-width", "2.5");
             pathEl.setAttribute("fill", "none");
             pathEl.setAttribute("opacity", String(p.opacity));
+            pathEl.setAttribute("marker-end", `url(#${p.markerId})`);
             if (p.strokeDasharray) {
                 pathEl.setAttribute("stroke-dasharray", p.strokeDasharray);
             }
             g.appendChild(pathEl);
-
-            const polygon = document.createElementNS(svgNS, "polygon");
-            polygon.setAttribute("points", p.arrowheadPoints);
-            polygon.setAttribute("fill", p.color);
-            polygon.setAttribute("opacity", String(p.opacity));
-            g.appendChild(polygon);
 
             fullSvg.appendChild(g);
         });

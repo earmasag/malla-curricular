@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { SemestreColumn } from "../components/malla/SemestreColumn";
 import MallaConnections from "../components/malla/MallaConnections";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -33,7 +33,6 @@ const TourPanHandler = ({ zoomToElement, currentScale }: { zoomToElement: any, c
 
 const MallaLayout = ({ planData }: { planData: any }) => {
     const { grafo, semestresArray, semestresMaterias, semestresAcumUC, totalMaterias, totalUc, totalSemestres } = planData;
-    const contentRef = useRef<HTMLDivElement>(null);
     // 1. Extraemos los Contextos Globales (Mitigación Prop Bloat)
     const { estadoMalla, estadoCustom, accionesMalla } = useMallaData();
     const { ui, modales, configuraciones, datos, handlers } = useMallaUI();
@@ -156,12 +155,12 @@ const MallaLayout = ({ planData }: { planData: any }) => {
                                 wrapperStyle={{ width: "100%", height: "100%" }}
                                 wrapperClass="will-change-transform transform-gpu"
                             >
-                                <div ref={contentRef} className="relative flex flex-col min-w-max min-h-max items-start will-change-transform transform-gpu">
+                                <div id="malla-content-grid" ref={ui.contentRef} className="relative flex flex-col min-w-max min-h-max items-start will-change-transform transform-gpu">
                                     <MallaConnections
                                         grafo={grafo}
                                         progreso={activeProgreso}
                                         hoveredMateria={hoveredMateria}
-                                        containerRef={contentRef}
+                                        containerRef={ui.contentRef}
                                     />
                                     <div className={`relative flex flex-row gap-12 px-20 pl-32 md:pl-32 items-start pt-48 landscape:pt-28 min-w-max min-h-max ${estadoCustom.isCustomRouteMode ? 'pb-48 landscape:pb-48' : 'pb-32 landscape:pb-16'}`}>
                                         {semestresArray.map((numeroSemestre: number, index: number) => {

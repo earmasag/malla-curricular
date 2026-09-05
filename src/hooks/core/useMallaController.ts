@@ -33,6 +33,7 @@ export const useMallaController = (
 
     const leyendaRef = useRef<HTMLDivElement>(null);
     const botonLeyendaRef = useRef<HTMLButtonElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -109,7 +110,8 @@ export const useMallaController = (
             isLeyendaOpen,
             setIsLeyendaOpen,
             leyendaRef,
-            botonLeyendaRef
+            botonLeyendaRef,
+            contentRef
         },
         modales: {
             isModalOpen,

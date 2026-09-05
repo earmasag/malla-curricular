@@ -11,6 +11,7 @@ type MallaControllerReturn = ReturnType<typeof useMallaController>;
 
 // 2. Interfaces para nuestros Contextos Separados (Re-render Trap Avoidance)
 interface MallaDataContextType {
+    grafo: MallaCurricularGraph;
     estadoMalla: MallaCurricularReturn['estado'];
     accionesMalla: MallaCurricularReturn['acciones'];
     estadoCustom: CustomRouteReturn['estado'];
@@ -76,11 +77,12 @@ export const MallaProvider: React.FC<MallaProviderProps> = ({ grafo, activePlanI
 
     // C) Empaquetado
     const dataContextValue: MallaDataContextType = React.useMemo(() => ({
+        grafo,
         estadoMalla,
         accionesMalla,
         estadoCustom,
         accionesCustom,
-    }), [estadoMalla, accionesMalla, estadoCustom, accionesCustom]);
+    }), [grafo, estadoMalla, accionesMalla, estadoCustom, accionesCustom]);
 
     const hoverContextValue: MallaHoverContextType = React.useMemo(() => ({
         hover

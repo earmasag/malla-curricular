@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import {
     Map as MapPath, Library, MessageSquareHeart, Trash2,
     Wrench, BookOpen, X, Lightbulb, Calculator,
-    Menu, Info, GraduationCap, Settings, Palette, HelpCircle, Pencil
+    Menu, Info, GraduationCap, Settings, Palette, HelpCircle, Pencil,
+    Printer, Image, FileText, Loader2
 } from 'lucide-react';
 import { SidebarButton } from './SidebarButton';
 import { SidebarStatLabel } from './SidebarStatLabel';
@@ -12,6 +13,7 @@ import { useTheme } from '../../../hooks/useTheme';
 import { AVAILABLE_THEMES } from '../../../constants/theme';
 import type { MateriaNode } from '../../../types/materia';
 import { useNavigationSidebar } from '../../../hooks/ui/useNavigationSidebar';
+import { useMallaExport } from '../../../hooks/malla/useMallaExport';
 import { useRouteBuilderTour } from '../../../hooks/ui/useRouteBuilderTour';
 import { RouteBuilderTour } from '../../ui/RouteBuilderTour';
 import { useSidebarInteractions } from '../../../hooks/ui/useSidebarInteractions';
@@ -47,6 +49,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
     const { hasSeenSugerencias, shouldWiggle, handleSugerenciasClick } = sugerencias;
+    const exportTools = useMallaExport();
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
@@ -252,6 +255,75 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                                 onClick={(e) => { e.stopPropagation(); ui.setIsLeyendaOpen(true); }}
                                 color="theme"
                             />
+
+                            {/* Export Malla Button */}
+                            <div id="sidebar-export-malla" ref={exportTools.exportButtonRef} className="flex flex-col gap-1 relative">
+                                <SidebarButton
+                                    isExpanded={ui.isExpanded}
+                                    icon={exportTools.isExporting ? <Loader2 className="animate-spin text-theme-600" /> : <Printer />}
+                                    label={exportTools.isExporting ? (exportTools.exportFormat === 'pdf' ? "Generando PDF..." : "Generando PNG...") : "Imprimir / Exportar"}
+                                    onClick={exportTools.toggleExportMenu}
+                                    color="theme"
+                                    disabled={exportTools.isExporting}
+                                    tooltipText={exportTools.isExporting ? "Generando archivo..." : "Imprimir / Exportar Malla"}
+                                />
+                                {exportTools.showExportMenu && !exportTools.isExporting && (
+                                    ui.isMobile ? (
+                                        <div className="flex flex-col gap-1.5 p-2 bg-theme-100/50 rounded-xl mt-1 mx-2" onClick={(e) => e.stopPropagation()}>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('png'); }}
+                                                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer"
+                                            >
+                                                <Image className="w-4 h-4 text-theme-600" />
+                                                <span>Descargar Imagen PNG (HD)</span>
+                                            </button>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('pdf'); }}
+                                                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer"
+                                            >
+                                                <FileText className="w-4 h-4 text-theme-600" />
+                                                <span>Descargar Documento PDF</span>
+                                            </button>
+                                        </div>
+                                    ) : createPortal(
+                                        <div
+                                            style={{ top: exportTools.exportMenuPos.top, left: exportTools.exportMenuPos.left, transform: 'translateY(-50%)' }}
+                                            className="fixed z-9999 flex flex-col gap-1 p-2 bg-white/90 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/20 rounded-2xl min-w-56"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <div className="px-3 py-1.5 border-b border-slate-100 mb-1">
+                                                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Imprimir / Exportar</p>
+                                                <p className="text-[11px] text-slate-400 font-medium">Con todas las prelaciones a color</p>
+                                            </div>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('png'); }}
+                                                className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group"
+                                            >
+                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors">
+                                                    <Image className="w-4 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="leading-tight">Imagen PNG</span>
+                                                    <span className="text-[11px] text-slate-400 font-normal">Alta resolución (2x)</span>
+                                                </div>
+                                            </button>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('pdf'); }}
+                                                className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group"
+                                            >
+                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors">
+                                                    <FileText className="w-4 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="leading-tight">Documento PDF</span>
+                                                    <span className="text-[11px] text-slate-400 font-normal">Formato apaisado para imprimir</span>
+                                                </div>
+                                            </button>
+                                        </div>,
+                                        document.body
+                                    )
+                                )}
+                            </div>
 
                             <div className="h-px bg-slate-200 my-2 mx-2"></div>
 

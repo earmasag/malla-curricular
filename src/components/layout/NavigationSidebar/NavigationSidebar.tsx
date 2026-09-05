@@ -49,7 +49,15 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
     const { showThemeOptions, setShowThemeOptions, themeButtonRef, themeMenuPos } = themeMenu;
     const { hasSeenSugerencias, shouldWiggle, handleSugerenciasClick } = sugerencias;
-    const exportTools = useMallaExport();
+    const {
+        isExporting,
+        exportFormat,
+        showExportMenu,
+        exportMenuPos,
+        exportButtonRef,
+        toggleExportMenu,
+        handleExport
+    } = useMallaExport();
 
     // Responsive layout constants
     const mobileClasses = ui.isExpanded
@@ -257,67 +265,69 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                             />
 
                             {/* Export Malla Button */}
-                            <div id="sidebar-export-malla" ref={exportTools.exportButtonRef} className="flex flex-col gap-1 relative">
+                            <div id="sidebar-export-malla" ref={exportButtonRef} className="flex flex-col gap-1 relative">
                                 <SidebarButton
                                     isExpanded={ui.isExpanded}
-                                    icon={exportTools.isExporting ? <Loader2 className="animate-spin text-theme-600" /> : <Printer />}
-                                    label={exportTools.isExporting ? (exportTools.exportFormat === 'pdf' ? "Generando PDF..." : "Generando PNG...") : "Imprimir / Exportar"}
-                                    onClick={exportTools.toggleExportMenu}
+                                    icon={isExporting ? <Loader2 className="animate-spin text-theme-600" /> : <Printer />}
+                                    label={isExporting ? (exportFormat === 'pdf' ? "Generando PDF..." : "Generando PNG...") : "Imprimir / Exportar"}
+                                    onClick={toggleExportMenu}
                                     color="theme"
-                                    disabled={exportTools.isExporting}
-                                    tooltipText={exportTools.isExporting ? "Generando archivo..." : "Imprimir / Exportar Malla"}
+                                    disabled={isExporting}
+                                    tooltipText={isExporting ? "Generando archivo..." : "Imprimir / Exportar Malla"}
                                 />
-                                {exportTools.showExportMenu && !exportTools.isExporting && (
+                                {showExportMenu && !isExporting && (
                                     ui.isMobile ? (
                                         <div className="flex flex-col gap-1.5 p-2 bg-theme-100/50 rounded-xl mt-1 mx-2" onClick={(e) => e.stopPropagation()}>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('png'); }}
-                                                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer"
-                                            >
-                                                <Image className="w-4 h-4 text-theme-600" />
-                                                <span>Descargar Imagen PNG (HD)</span>
+                                            <div className="px-2 py-1 text-[10px] font-bold text-slate-500 uppercase">Como está en pantalla</div>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('png', 'current'); }} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer">
+                                                <Image className="w-4 h-4 text-theme-600" /><span>Imagen PNG (HD)</span>
                                             </button>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('pdf'); }}
-                                                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer"
-                                            >
-                                                <FileText className="w-4 h-4 text-theme-600" />
-                                                <span>Descargar Documento PDF</span>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('pdf', 'current'); }} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer">
+                                                <FileText className="w-4 h-4 text-theme-600" /><span>Documento PDF</span>
+                                            </button>
+                                            <div className="px-2 py-1 text-[10px] font-bold text-slate-500 uppercase border-t border-slate-200 mt-1 pt-2">Limpia (Malla completa)</div>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('png', 'clean'); }} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer">
+                                                <Image className="w-4 h-4 text-theme-600" /><span>Imagen PNG (HD)</span>
+                                            </button>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('pdf', 'clean'); }} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-theme-700 transition-colors cursor-pointer">
+                                                <FileText className="w-4 h-4 text-theme-600" /><span>Documento PDF</span>
                                             </button>
                                         </div>
                                     ) : createPortal(
                                         <div
-                                            style={{ top: exportTools.exportMenuPos.top, left: exportTools.exportMenuPos.left, transform: 'translateY(-50%)' }}
-                                            className="fixed z-9999 flex flex-col gap-1 p-2 bg-white/90 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/20 rounded-2xl min-w-56"
+                                            style={{ 
+                                                top: exportMenuPos.align === 'bottom' ? 'auto' : exportMenuPos.top,
+                                                bottom: exportMenuPos.align === 'bottom' ? exportMenuPos.bottom : 'auto',
+                                                left: exportMenuPos.left, 
+                                                transform: exportMenuPos.align === 'center' ? 'translateY(-50%)' : 'none' 
+                                            }}
+                                            className="fixed z-9999 flex flex-col gap-1 p-2 bg-white/90 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-theme-500/20 rounded-2xl min-w-64"
                                             onClick={(e) => e.stopPropagation()}
                                         >
                                             <div className="px-3 py-1.5 border-b border-slate-100 mb-1">
-                                                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Imprimir / Exportar</p>
-                                                <p className="text-[11px] text-slate-400 font-medium">Con todas las prelaciones a color</p>
+                                                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Como está en pantalla</p>
+                                                <p className="text-[11px] text-slate-400 font-medium">Mantiene selecciones y progreso</p>
                                             </div>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('png'); }}
-                                                className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group"
-                                            >
-                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors">
-                                                    <Image className="w-4 h-4" />
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="leading-tight">Imagen PNG</span>
-                                                    <span className="text-[11px] text-slate-400 font-normal">Alta resolución (2x)</span>
-                                                </div>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('png', 'current'); }} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group">
+                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors"><Image className="w-4 h-4" /></div>
+                                                <div className="flex flex-col"><span className="leading-tight">Imagen PNG</span><span className="text-[11px] text-slate-400 font-normal">Alta resolución (2x)</span></div>
                                             </button>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); exportTools.handleExport('pdf'); }}
-                                                className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group"
-                                            >
-                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors">
-                                                    <FileText className="w-4 h-4" />
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="leading-tight">Documento PDF</span>
-                                                    <span className="text-[11px] text-slate-400 font-normal">Formato apaisado para imprimir</span>
-                                                </div>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('pdf', 'current'); }} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group">
+                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors"><FileText className="w-4 h-4" /></div>
+                                                <div className="flex flex-col"><span className="leading-tight">Documento PDF</span><span className="text-[11px] text-slate-400 font-normal">Formato para imprimir</span></div>
+                                            </button>
+                                            
+                                            <div className="px-3 py-1.5 border-b border-t border-slate-100 mb-1 mt-1">
+                                                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Limpia (Malla Completa)</p>
+                                                <p className="text-[11px] text-slate-400 font-medium">Desbloqueado y con prelaciones</p>
+                                            </div>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('png', 'clean'); }} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group">
+                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors"><Image className="w-4 h-4" /></div>
+                                                <div className="flex flex-col"><span className="leading-tight">Imagen PNG</span><span className="text-[11px] text-slate-400 font-normal">Alta resolución (2x)</span></div>
+                                            </button>
+                                            <button onClick={(e) => { e.stopPropagation(); handleExport('pdf', 'clean'); }} className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-theme-50 hover:text-theme-800 transition-colors cursor-pointer text-left group">
+                                                <div className="p-1.5 rounded-lg bg-theme-100/60 text-theme-600 group-hover:bg-theme-200/60 transition-colors"><FileText className="w-4 h-4" /></div>
+                                                <div className="flex flex-col"><span className="leading-tight">Documento PDF</span><span className="text-[11px] text-slate-400 font-normal">Formato para imprimir</span></div>
                                             </button>
                                         </div>,
                                         document.body

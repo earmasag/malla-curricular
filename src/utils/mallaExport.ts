@@ -73,6 +73,7 @@ export interface ExportMallaOptions {
     planNombre?: string;
     filename: string;
     format: 'png' | 'pdf';
+    exportMode: 'current' | 'clean';
 }
 
 /**
@@ -87,7 +88,8 @@ export const exportMallaDocument = async ({
     tituloCarrera,
     planNombre,
     filename,
-    format
+    format,
+    exportMode
 }: ExportMallaOptions): Promise<void> => {
     // 1. Obtener dimensiones del contenedor original en layout no escalado
     const containerWidth = Math.ceil(container.scrollWidth);
@@ -96,9 +98,9 @@ export const exportMallaDocument = async ({
     // 2. Clonar el árbol DOM de la malla
     const clone = container.cloneNode(true) as HTMLElement;
 
-    // Remover SVG interactivo previo si existía en el clon
+    // Remover SVG interactivo previo si existía en el clon (solo en modo clean)
     const prevSvg = clone.querySelector('svg');
-    if (prevSvg) {
+    if (prevSvg && exportMode === 'clean') {
         prevSvg.remove();
     }
 
@@ -151,7 +153,8 @@ export const exportMallaDocument = async ({
             return { x, y, width: element.offsetWidth, height: element.offsetHeight };
         };
 
-        // 4. Calcular todas las flechas usando el clon montado (posiciones reales)
+        // 4. Calcular todas las flechas usando el clon montado (solo si es modo clean)
+        if (exportMode === 'clean') {
         const allArrows = getAllConnectionsWithAreaColors(grafo, areasColorMap);
         const allPaths: CalculatedPath[] = [];
 
@@ -275,6 +278,30 @@ export const exportMallaDocument = async ({
                 fullSvg.appendChild(g);
             }
         });
+
+        // 5.6 Limpiar estilos de las materias para que se vean vírgenes
+        clone.querySelectorAll('.materia-card').forEach(card => {
+            card.classList.remove('opacity-50');
+            card.classList.add('opacity-100');
+
+            const innerDiv = card.querySelector('.absolute.left-5.bg-white') as HTMLElement;
+            if (innerDiv) {
+                innerDiv.style.backgroundImage = 'none';
+                innerDiv.style.backgroundColor = '#ffffff';
+            }
+
+            card.querySelectorAll('.text-gray-500').forEach(el => {
+                el.classList.remove('text-gray-500');
+                el.classList.add('text-black');
+            });
+            
+            const ribbon = card.querySelector('.z-30');
+            if (ribbon) ribbon.remove();
+            
+            card.classList.remove('shadow-[0_0_15px_rgba(59,130,246,0.6)]', 'ring-2', 'ring-blue-400', 'ring-offset-1');
+            card.classList.add('shadow-sm');
+        });
+        } // Fin if exportMode === 'clean'
 
         // 6. Inyectar encabezado visible en la exportación
         if (tituloCarrera || planNombre) {

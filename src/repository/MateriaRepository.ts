@@ -16,6 +16,7 @@ export class MateriaRepository {
     private get customRouteDraftKey() { return `malla-custom-route-draft-${this.activePlanId}`; }
     private get savedRoutesKey() { return `malla-saved-routes-${this.activePlanId}`; }
     private get pensumAnteriorKey() { return `malla-pensum-anterior-${this.activePlanId}`; }
+    private get extraUCPre2024Key() { return `malla-extra-uc-pre2024-${this.activePlanId}`; }
 
     /**
      * Recupera el progreso de estudio previamente guardado.
@@ -50,6 +51,7 @@ export class MateriaRepository {
     public clearProgress(): void {
         this.storage.remove(this.storageKey);
         this.storage.remove(this.pensumAnteriorKey);
+        this.storage.remove(this.extraUCPre2024Key);
     }
 
     /**
@@ -89,6 +91,15 @@ export class MateriaRepository {
 
     public savePensumAnterior(data: Record<string, boolean>): void {
         this.storage.set(this.pensumAnteriorKey, data);
+    }
+
+    public getExtraUCPre2024(): number {
+        const data = this.storage.get<number>(this.extraUCPre2024Key);
+        return typeof data === 'number' ? data : 0;
+    }
+
+    public saveExtraUCPre2024(valor: number): void {
+        this.storage.set(this.extraUCPre2024Key, valor);
     }
 
     // --- Saved Routes Collection --- //

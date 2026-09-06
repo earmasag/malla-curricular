@@ -15,6 +15,17 @@ import { calcularUCPensumAnterior } from "../utils/mallaUtils";
 //    // ajuste_condicional: igual condición que N_of_M pero agrega al pensumAnterior para compensar UC
 // }
 
+export interface MigrationRule {
+    key?: string;
+    oldCodes?: string[];
+    newCodes?: string[];
+    nombre?: string;
+    uc?: number;
+    tipo: "derogada" | "ajuste" | "1:1" | "N:1" | "1:N" | "excluida" | "N_of_M" | "ajuste_condicional";
+    minAprobadas?: number;
+    maxAprobadas?: number;
+}
+
 export class MigrationService {
     constructor(private evaluator: IMallaEvaluator) { }
 
@@ -25,7 +36,7 @@ export class MigrationService {
      * @param rulesData Array con las reglas de transición (JSON)
      * @returns Nuevo Progreso evaluado
      */
-    public migrateTo2027(oldProgreso: ProgresoMalla, newGraph: MallaCurricularGraph, rulesData: any[] = []): { newProgreso: ProgresoMalla, pensumAnterior: Record<string, boolean> } {
+    public migrateTo2027(oldProgreso: ProgresoMalla, newGraph: MallaCurricularGraph, rulesData: MigrationRule[] = [], extraUC: number = 0): { newProgreso: ProgresoMalla, pensumAnterior: Record<string, boolean> } {
         const baseNewProgreso: ProgresoMalla = {};
         const pensumAnterior: Record<string, boolean> = {};
 
@@ -35,7 +46,7 @@ export class MigrationService {
         const excludedCodes = new Set<string>();
 
         // 1. Primer paso: Analizar todas las reglas
-        rulesData.forEach((rule: any) => {
+        rulesData.forEach((rule: MigrationRule) => {
             const { tipo, oldCodes, newCodes, key } = rule;
             
             // Verificar que se cumplen todos los prerequisitos de la regla en el pensum viejo
@@ -105,7 +116,7 @@ export class MigrationService {
         // Una vez que tenemos las aprobaciones crudas mapeadas, 
         // pasamos el progreso por el evaluador de reglas para desbloquear
         // las materias disponibles, cursando, etc.
-        const ucAdicionales = calcularUCPensumAnterior(pensumAnterior, rulesData);
+        const ucAdicionales = calcularUCPensumAnterior(pensumAnterior, rulesData, extraUC);
         const evaluatedProgreso = this.evaluator.evaluate(baseNewProgreso, newGraph, ucAdicionales);
 
         return {

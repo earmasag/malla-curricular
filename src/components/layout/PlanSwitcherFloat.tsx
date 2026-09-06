@@ -1,4 +1,5 @@
-    import React, { useState } from 'react';
+import React, { useState } from 'react';
+import type { MateriaJSON } from '../../types/materia';
 import { usePlanEstudio } from '../../contexts/PlanContext';
 import type { PlanId } from '../../contexts/PlanContext';
 import { MigrationConfirmModal } from '../modals/MigrationConfirmModal';
@@ -19,7 +20,7 @@ export const PlanSwitcherFloat: React.FC = () => {
         setActivePlanId(newPlan);
     };
 
-    const confirmMigration = () => {
+    const confirmMigration = (extraUC: number) => {
         const oldRepo = new MateriaRepository("202415");
         const newRepo = new MateriaRepository("202715");
         const oldProgress = oldRepo.getStudentProgress();
@@ -28,11 +29,12 @@ export const PlanSwitcherFloat: React.FC = () => {
         const migrationService = new MigrationService(evaluator);
         
         const builder = new MallaCurricularBuilder();
-        const newGraph = builder.build(carreraData?.plan_estudio_nuevo as any);
+        const newGraph = builder.build(carreraData?.plan_estudio_nuevo as MateriaJSON[]);
 
-        const { newProgreso, pensumAnterior } = migrationService.migrateTo2027(oldProgress, newGraph, carreraData?.ajustes_pensum_viejo || []);
+        const { newProgreso, pensumAnterior } = migrationService.migrateTo2027(oldProgress, newGraph, carreraData?.ajustes_pensum_viejo || [], extraUC);
         newRepo.saveStudentProgress(newProgreso);
         newRepo.savePensumAnterior(pensumAnterior); 
+        newRepo.saveExtraUCPre2024(extraUC);
         
         setActivePlanId("202715");
         setShowMigrationModal(false);

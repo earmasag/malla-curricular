@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRightLeft, CheckCircle2 } from 'lucide-react';
 import { ModalHeader } from './shared/ModalHeader';
 import { AnimatedModalWrapper } from './shared/AnimatedModalWrapper';
+import { NumberInput } from './RutaModal/NumberInput';
 
 export interface MigrationConfirmModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: () => void;
+    onConfirm: (extraUC: number) => void;
 }
 
 export const MigrationConfirmModal: React.FC<MigrationConfirmModalProps> = ({ 
     onClose, 
     onConfirm
 }) => {
+    const [extraUC, setExtraUC] = useState<number>(0);
+
     return (
         <AnimatedModalWrapper 
             className="bg-white rounded-3xl w-full max-w-md shadow-2xl relative overflow-hidden"
@@ -36,6 +39,22 @@ export const MigrationConfirmModal: React.FC<MigrationConfirmModalProps> = ({
                         <li className="flex gap-2"><CheckCircle2 className="w-5 h-5 text-green-500" /> Conservarás las Unidades de Crédito de materias derogadas.</li>
                         <li className="flex gap-2"><CheckCircle2 className="w-5 h-5 text-green-500" /> Se aplicarán las equivalencias automáticamente.</li>
                     </ul>
+                    
+                    <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between gap-4">
+                        <div className="flex-1">
+                            <label htmlFor="extraUC" className="block text-sm font-semibold text-gray-700">
+                                Unidades de Crédito Adicionales
+                            </label>
+                            <p className="text-xs text-gray-500 mt-0.5">Si cursaste pensums anteriores a 2024</p>
+                        </div>
+                        <NumberInput 
+                            id="extraUC" 
+                            min={0}
+                            value={extraUC.toString()}
+                            onChange={(val) => setExtraUC(parseInt(val) || 0)}
+                            placeholder="0"
+                        />
+                    </div>
                 </div>
 
                 {/* Actions */}
@@ -48,7 +67,7 @@ export const MigrationConfirmModal: React.FC<MigrationConfirmModalProps> = ({
                     </button>
                     <button
                         onClick={() => {
-                            onConfirm();
+                            onConfirm(extraUC);
                             onClose();
                         }}
                         className="px-5 py-2.5 text-sm font-semibold text-white bg-theme-500 hover:bg-theme-600 shadow-md shadow-theme-500/20 rounded-xl transition-all cursor-pointer"

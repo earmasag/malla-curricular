@@ -23,7 +23,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
         () => {
             // Intentamos recuperar el progreso guardado a través del Repository
             const progresoGuardado = repository.getStudentProgress();
-            const ucPensum = calcularUCPensumAnterior(repository.getPensumAnterior(), carreraData?.ajustes_pensum_viejo || []);
+            const ucPensum = calcularUCPensumAnterior(repository.getPensumAnterior(), carreraData?.ajustes_pensum_viejo || [], repository.getExtraUCPre2024());
 
             // Si el objeto no está vacío, cargamos los datos y los pasamos por el evaluador
             if (Object.keys(progresoGuardado).length > 0) {
@@ -59,8 +59,8 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
     }, [pensumAnterior, repository]);
 
     const ucPensumAnterior = useMemo(() => {
-        return calcularUCPensumAnterior(pensumAnterior, carreraData?.ajustes_pensum_viejo || []);
-    }, [pensumAnterior, carreraData?.ajustes_pensum_viejo]);
+        return calcularUCPensumAnterior(pensumAnterior, carreraData?.ajustes_pensum_viejo || [], repository.getExtraUCPre2024());
+    }, [pensumAnterior, carreraData?.ajustes_pensum_viejo, repository]);
 
     const ucAcumuladas = useMemo(() => {
         return calcularUCAcumuladas(progreso, grafo) + ucPensumAnterior;
@@ -79,7 +79,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             }
         }
         return Math.min(curr, 8); // Assuming 8 is the max semester in semestres.json
-    }, [ucAcumuladas, carreraData?.semestres]);
+    }, [ucAcumuladas, carreraData]);
 
     // Obtener las materias que actualmente están "cursando"
     const materiasCursando = useMemo(() => {
@@ -178,7 +178,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
             return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior, progresoActual);
         });
-    }, [grafo, evaluator, progreso, showToast]);
+    }, [grafo, evaluator, progreso, showToast, ucPensumAnterior]);
 
     // Función exclusiva para click derecho: transiciona entre disponible y cursando
     const toggleCursando = useCallback((codigoMateria: string) => {
@@ -234,7 +234,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             // Una vez que el usuario hizo su acción de click, recalculamos todo el grafo
             return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior, progresoActual);
         });
-    }, [grafo, evaluator, progreso, showToast]);
+    }, [grafo, evaluator, progreso, showToast, ucPensumAnterior]);
 
     // Función para aprobar/desaprobar un semestre completo
     const toggleSemestre = useCallback((numeroSemestre: number) => {
@@ -262,7 +262,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
             // bloquear materias que dependían de las que acabamos de desaprobar.
             return evaluator.evaluate(nuevoProgreso, grafo, ucPensumAnterior, progresoActual);
         });
-    }, [grafo, evaluator]);
+    }, [grafo, evaluator, ucPensumAnterior]);
 
     // Función que destruye todo el progreso almacenado y reinicia el grafo a Cero
     const resetProgreso = useCallback(() => {
@@ -274,7 +274,7 @@ export const useMallaCurricular = (grafo: MallaCurricularGraph, activePlanId: st
         });
 
         setProgreso(evaluator.evaluate(estadoInicial, grafo, ucPensumAnterior));
-    }, [grafo, evaluator]);
+    }, [grafo, evaluator, repository, ucPensumAnterior]);
 
     // Función que calcula y retorna los bloques óptimos de estudio (Topological Sort / Algoritmo de Kahn)
     const generarRutaOptima = useCallback((maxUcPorSemestre?: number, maxMateriasPorSemestre?: number, maxHorasPorSemestre?: number) => {

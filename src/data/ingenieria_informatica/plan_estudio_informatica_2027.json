@@ -711,7 +711,7 @@
         "unidadesCredito": 4,
         "tipo": "EVC",
         "modalidad": "PRE",
-        "taxonomia": "TA-4",
+        "taxonomia": "TA-9",
         "prelacion": [
           "INFO-02003"
         ],

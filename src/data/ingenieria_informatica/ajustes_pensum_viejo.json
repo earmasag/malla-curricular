@@ -203,5 +203,14 @@
     "tipo": "excluida",
     "oldCodes": ["INFO-02006"],
     "nombre": "Prog Web (no mapear a Inglés Técnico)"
+  },
+  {
+    "key": "INGLES-AJUSTE-UC",
+    "tipo": "ajuste_condicional",
+    "oldCodes": ["INFO-02014", "INFO-02021"],
+    "minAprobadas": 2,
+    "maxAprobadas": 2,
+    "uc": -3,
+    "nombre": "Ajuste de UC por tener Inglés I y II aprobados"
   }
 ]

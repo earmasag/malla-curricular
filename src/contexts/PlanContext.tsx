@@ -3,13 +3,16 @@ import type { ReactNode } from "react";
 import { MallaCurricularBuilder } from "../core/MallaCurricularBuilder";
 import { MallaCurricularGraph } from "../core/MallaCurricularGraph";
 import { useCarrera } from "./CarreraContext";
+import { LoadingScreen } from "../components/ui/LoadingScreen";
+import { useMinLoading } from "../hooks/ui/useMinLoading";
+import type { MateriaJSON, MateriaNode } from "../types/materia";
 
 export type PlanId = "202415" | "202715";
 
 export interface PlanData {
     grafo: MallaCurricularGraph;
     semestresArray: number[];
-    semestresMaterias: any[][];
+    semestresMaterias: MateriaNode[][];
     semestresAcumUC: number[];
     totalMaterias: number;
     totalUc: number;
@@ -26,18 +29,11 @@ const PlanContext = createContext<PlanContextType | undefined>(undefined);
 
 export const PlanProvider = ({ children }: { children: ReactNode }) => {
     const { carreraData, isLoading } = useCarrera();
-    const [activePlanId, setActivePlanId] = useState<PlanId | null>(null);
-
-    // Intentamos cargar el plan guardado en localStorage al iniciar
-    useEffect(() => {
+    const showLoading = useMinLoading(isLoading, 1000);
+    const [activePlanId, setActivePlanId] = useState<PlanId | null>(() => {
         const saved = localStorage.getItem("malla-active-plan") as PlanId;
-        if (saved === "202415" || saved === "202715") {
-            setActivePlanId(saved);
-        } else {
-            // Null si no hay nada guardado para forzar modal
-            setActivePlanId(null);
-        }
-    }, []);
+        return (saved === "202415" || saved === "202715") ? saved : null;
+    });
 
     // Actualizamos localStorage cuando cambia
     useEffect(() => {
@@ -55,23 +51,23 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         
         if (!json) return null;
 
-        const grafo = builder.build(json as any);
+        const grafo = builder.build(json as MateriaJSON[]);
 
         const totalSemestres = grafo.getTotalSemestres();
         const semestresArray = Array.from({ length: totalSemestres }, (_, i) => i + 1);
         const allNodes = grafo.getAllNodes();
         const totalMaterias = allNodes.length;
-        const totalUc = allNodes.reduce((acc: number, curr: any) => acc + curr.unidadesCredito, 0);
+        const totalUc = allNodes.reduce((acc: number, curr: MateriaNode) => acc + curr.unidadesCredito, 0);
 
         const semestresMaterias = semestresArray.map(numeroSemestre => {
             return grafo
                 .getMateriasPorSemestre(numeroSemestre)
-                .sort((a: any, b: any) => b.areaFormacion.localeCompare(a.areaFormacion));
+                .sort((a: MateriaNode, b: MateriaNode) => b.areaFormacion.localeCompare(a.areaFormacion));
         });
 
         let runningAcum = 0;
         const semestresAcumUC = semestresMaterias.map(materias => {
-            const sum = materias.reduce((acc: number, m: any) => acc + (m.unidadesCredito || 0), 0);
+            const sum = materias.reduce((acc: number, m: MateriaNode) => acc + (m.unidadesCredito || 0), 0);
             runningAcum += sum;
             return runningAcum;
         });
@@ -87,8 +83,8 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         };
     }, [activePlanId, carreraData]);
 
-    if (isLoading) {
-        return <div className="flex h-screen w-full items-center justify-center">Cargando malla...</div>;
+    if (showLoading) {
+        return <LoadingScreen message="Cargando malla..." />;
     }
 
     return (
@@ -98,6 +94,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const usePlanEstudio = () => {
     const context = useContext(PlanContext);
     if (!context) {

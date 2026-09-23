@@ -470,7 +470,8 @@
         "modalidad": "PRE",
         "taxonomia": "TA-4",
         "prelacion": [
-          "FING-02004"
+          "FING-02004",
+          "FING-02001"
         ],
         "semestre": 4,
         "areaFormacion": "Fundamentos de Ingeniería",
